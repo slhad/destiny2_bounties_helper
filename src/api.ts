@@ -11,7 +11,7 @@ const _axios = axios.create({
     }
 })
 
-export const authorize = () => console.log(`https://www.bungie.net/en/oauth/authorize?client_id=${client_id}&response_type=code&state=6i0mkLx79Hp91nzWVeHrzHG4`)
+export const authorize = (state: string) => `https://www.bungie.net/en/oauth/authorize?client_id=${client_id}&response_type=code&state=${state}`
 
 export const getToken = (code: string) => _axios.post(
     "platform/app/oauth/token/",
@@ -19,12 +19,12 @@ export const getToken = (code: string) => _axios.post(
         client_id,
         grant_type: "authorization_code",
         client_secret,
-        code,
+        code
     }),
     {
         headers: {
             "X-API-Key": api_key,
-            "Content-Type": "application/x-www-form-urlencoded",
+            "Content-Type": "application/x-www-form-urlencoded"
         }
     }
 )
@@ -35,7 +35,7 @@ export const refresh = (refresh_token: string) => _axios.post(
         client_id,
         client_secret,
         grant_type: "refresh_token",
-        refresh_token,
+        refresh_token
         // code,
     }),
     {
