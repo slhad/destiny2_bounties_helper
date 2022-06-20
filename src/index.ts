@@ -3,29 +3,34 @@ import express = require("express")
 import { readFileSync } from "fs"
 
 import * as https from "https"
-import { getRefreshToken, setMemberId, setRefreshToken, setToken } from "./cookie"
+
+import cookieParser from "cookie-parser"
+
 
 const keySSL = readFileSync("./files/server.key")
 const certSSL = readFileSync("./files/server.cert")
 
 const app = express()
 
+app.use(cookieParser())
 
+app.get("/", async (q, r) => {
 
-app.get("/", async (req, res) => {
-
-    const rToken = getRefreshToken()
+    const rToken = q.cookies["destinyRefreshToken"]
 
     if (!rToken) {
         const nanoid = await import("nanoid")
         const loginUrl = authorize(nanoid.nanoid())
-        res.status(200).send(`<body><a href="${loginUrl}">Login</body>`)
+        r.status(200).send(`<body><a href="${loginUrl}">Login</body>`)
     } else {
         const refreshedToken = await refresh(rToken)
-        setToken(refreshedToken.data.access_token)
-        setMemberId(refreshedToken.data.membership_id)
-        setRefreshToken(refreshedToken.data.refresh_token, refreshedToken.data.refresh_expires_in)
-        res.status(200).send("<body><a href=\"#\">Ok</body>")
+        r.cookie("destinyToken", refreshedToken.data.access_token)
+        r.cookie("memberId", refreshedToken.data.membership_id)
+        r.cookie("destinyRefreshToken", refreshedToken.data.refresh_token,
+            {
+                maxAge: refreshedToken.data.refresh_expires_in.expire
+            })
+        r.status(200).send("<body><a href=\"#\">Ok : You have a refresh token</body>")
     }
 
 })
@@ -35,9 +40,12 @@ app.get("/config/auth", async (q, r) => {
 
     try {
         const tokenData = await getToken(code as string)
-        setToken(tokenData.data.access_token)
-        setMemberId(tokenData.data.membership_id)
-        setRefreshToken(tokenData.data.refresh_token, tokenData.data.refresh_expires_in)
+        r.cookie("destinyToken", tokenData.data.access_token)
+        r.cookie("memberId", tokenData.data.membership_id)
+        r.cookie("destinyRefreshToken", tokenData.data.refresh_token,
+            {
+                maxAge: tokenData.data.refresh_expires_in
+            })
     } catch ({ message, stack }) {
         console.log(`${message} : ${stack}`)
     }

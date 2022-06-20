@@ -9,6 +9,12 @@
             "request": "launch",
             "preLaunchTask": "npm: prestart",
             "name": "Run",
+            "presentation": {
+                "hidden": false,
+                "group": "Run",
+                "order": 1,
+                "focus": true
+            },
             "skipFiles": [
                 "<node_internals>/**"
             ],
