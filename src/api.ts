@@ -1,6 +1,5 @@
 import axios from "axios"
 import { api_key, client_id, client_secret } from "../config.json"
-import * as cookie from "./cookie"
 
 const _axios = axios.create({
     baseURL: "https://www.bungie.net/",
@@ -49,7 +48,7 @@ export const getManifest = () => _axios.get("/Platform/Destiny2/Manifest/")
 
 export const getUser = (id: string) => _axios.get(`/User/GetBungieNetUserById/${id}/`)
 export const getLinkedProfile = (id: string) => _axios.get(`/Platform/Destiny2/254/Profile/${id}/LinkedProfiles/`)
-export const getInventory = (id: string, membershipType: string, token = cookie.getToken()) => _axios.get(
+export const getInventory = (id: string, membershipType: string, token: string) => _axios.get(
     `/Platform/Destiny2/${membershipType}/Profile/${id}/?components=200%2C201`,
     { headers: { Authorization: "Bearer " + token } }
 )

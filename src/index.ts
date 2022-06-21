@@ -1,4 +1,4 @@
-import { authorize, getToken, refresh } from "./api"
+import { authorize, getInventory, getLinkedProfile, getManifest, getToken, refresh } from "./api"
 import express = require("express")
 import { readFileSync } from "fs"
 
@@ -14,8 +14,16 @@ const app = express()
 
 app.use(cookieParser())
 
-app.get("/", async (q, r) => {
+const sortByLastPlayed = (a: any, b: any) => {
+    const atime = +new Date(a.dateLastPlayed)
+    const btime = +new Date(b.dateLastPlayed)
+    if (atime == btime) return 0
+    if (atime > btime) return 1
+    return -1
+}
 
+app.get("/", async (q, r) => {
+    const manifest = await getManifest() as any
     const rToken = q.cookies["destinyRefreshToken"]
 
     if (!rToken) {
@@ -30,6 +38,27 @@ app.get("/", async (q, r) => {
             {
                 maxAge: refreshedToken.data.refresh_expires_in.expire
             })
+
+        const profileResponse = await getLinkedProfile(refreshedToken.data.membership_id)
+        const profile = profileResponse.data.Response.profiles.sort(sortByLastPlayed)[0]
+        const inventoryResponse = await getInventory(profile.membershipId, profile.membershipType, refreshedToken.data.access_token)
+        const characters = inventoryResponse.data.Response.characters.data
+        const characterId = Object.keys(characters)[0]
+        const inventories = inventoryResponse.data.Response.characterInventories.data
+        const inventory = inventories[characterId].items
+
+        const items = inventory.filter((item: any) => {
+            try {
+                const _item = manifest.t(item.itemHash)
+                return !_item.itemCategoryHashes.includes(16) && !_item.sockets && _item.objectives && _item.objectives.objectiveVerbName
+                // return !(_item.objectives && _item.objectives.questlineItemHash) && _item.sockets
+            } catch (error) {
+                // console.log(error);
+                console.warn("skipping", item, manifest.t(item.itemHash))
+                return false
+            }
+        })
+        console.log(items)
         r.status(200).send("<body><a href=\"#\">Ok : You have a refresh token</body>")
     }
 
