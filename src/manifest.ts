@@ -1,9 +1,9 @@
 import axios from "axios"
 import { getManifest } from "./api"
 
-const cache: any = {}
-const set = (name: string, value: any) => cache[name] = value
-const get = (name: string) => cache[name]
+const cached: any = {}
+const set = (name: string, value: any) => cached[name] = value
+const get = async (name: string) => cached[name]
 class Manifest {
     urls: any = {}
     tables: any = {}

@@ -5,7 +5,7 @@ import { readFileSync } from "fs"
 import * as https from "https"
 
 import cookieParser from "cookie-parser"
-
+import manifest from "./manifest"
 
 const keySSL = readFileSync("./files/server.key")
 const certSSL = readFileSync("./files/server.cert")
@@ -22,8 +22,19 @@ const sortByLastPlayed = (a: any, b: any) => {
     return -1
 }
 
+const sortItemByBountyName = (a: any, b: any) => {
+    const aa = a.inventory.stackUniqueLabel.split(".") as string[]
+    const bb = b.inventory.stackUniqueLabel.split(".") as string[]
+    for (let i = 0; i < aa.length; i++) {
+        const cmp = aa[i].localeCompare(bb[i])
+        if (cmp !== 0) {
+            return cmp
+        }
+    }
+    return 0
+}
+
 app.get("/", async (q, r) => {
-    const manifest = await getManifest() as any
     const rToken = q.cookies["destinyRefreshToken"]
 
     if (!rToken) {
@@ -47,19 +58,28 @@ app.get("/", async (q, r) => {
         const inventories = inventoryResponse.data.Response.characterInventories.data
         const inventory = inventories[characterId].items
 
-        const items = inventory.filter((item: any) => {
+        const items = []
+        for (const item of inventory) {
             try {
                 const _item = manifest.t(item.itemHash)
-                return !_item.itemCategoryHashes.includes(16) && !_item.sockets && _item.objectives && _item.objectives.objectiveVerbName
-                // return !(_item.objectives && _item.objectives.questlineItemHash) && _item.sockets
-            } catch (error) {
-                // console.log(error);
-                console.warn("skipping", item, manifest.t(item.itemHash))
+                if (!_item.itemCategoryHashes.includes(16)
+                    && !_item.sockets
+                    && _item.objectives
+                    && _item.objectives.objectiveVerbName
+                    && _item.inventory.stackUniqueLabel.indexOf("bounties.") === 0) {
+                    items.push(_item)
+                }
+            } catch ({ message, stack }) {
+                console.warn(`skipping ${message} : ${stack}`, item, manifest.t(item.itemHash))
                 return false
             }
-        })
-        console.log(items)
-        r.status(200).send("<body><a href=\"#\">Ok : You have a refresh token</body>")
+        }
+        const displayI = []
+        for (const i of items.sort(sortItemByBountyName)) {
+            displayI.push(`<li>${i.inventory.stackUniqueLabel}</li>`)
+        }
+        const display = `<ul>${displayI.join("")}</ul>`
+        r.status(200).send(`<body><div>Ok : You have a refresh token</div><div>${display}</div></body>`)
     }
 
 })
@@ -85,4 +105,6 @@ app.get("/config/auth", async (q, r) => {
 https.createServer({
     key: keySSL,
     cert: certSSL
-}, app).listen(process.env["APP_PORT"] || 8888)
+}, app).listen(process.env["APP_PORT"] || 8888, async () => {
+    await manifest.fetchManifest()
+})
