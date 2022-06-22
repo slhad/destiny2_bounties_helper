@@ -15,8 +15,9 @@ class Manifest {
         this.urls = res.data.Response
 
         for (const definition of this.definitions) {
-            const res2 = await axios.get("https://www.bungie.net" + this.jsonUrl(definition))
-            console.log("fetched manifest: ", res2)
+            const manifestUrl = "https://www.bungie.net" + this.jsonUrl(definition)
+            const res2 = await axios.get(manifestUrl)
+            console.log(`fetched manifest: ${manifestUrl}`)
             this.tables[definition] = res2.data
         }
     }

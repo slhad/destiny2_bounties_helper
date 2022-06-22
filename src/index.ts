@@ -13,6 +13,8 @@ const certSSL = readFileSync("./files/server.cert")
 const bountiesType = ["crucible", "gambit", "strikes"]
 const bungiePath = "https://www.bungie.net"
 const sizeIcon = "24px"
+const bountyNeedCount = 8
+const backgroundColor = "transparent"
 
 const app = express()
 
@@ -38,6 +40,13 @@ const sortItemByBountyName = (a: any, b: any) => {
     return 0
 }
 
+const findItemComponentObjective = (objectivesMap: any, ichash: string, objectiveHashes: string[]) => {
+    const objectives = objectivesMap[ichash] && objectivesMap[ichash].objectives || { objectives: [] }.objectives
+    return objectives.find((objective: any) => {
+        return objectiveHashes.find(hash => objective.objectiveHash === hash)
+    })
+}
+
 app.get("/", async (q, r) => {
     const rToken = q.cookies["destinyRefreshToken"]
 
@@ -59,10 +68,12 @@ app.get("/", async (q, r) => {
         const inventoryResponse = await getInventory(profile.membershipId, profile.membershipType, refreshedToken.data.access_token)
         const characters = inventoryResponse.data.Response.characters.data
         const inventories = inventoryResponse.data.Response.characterInventories.data
+        const objectives = inventoryResponse.data.Response.itemComponents.objectives.data
 
         const displayCharacters = []
         for (const characterId of Object.keys(characters)) {
             const character = characters[characterId]
+            const classCharacter = manifest.t(character.classHash).displayProperties.name
             const inventory = inventories[characterId].items
             const items = []
             for (const item of inventory) {
@@ -71,8 +82,14 @@ app.get("/", async (q, r) => {
                     if (_item
                         && _item.inventory
                         && _item.inventory.stackUniqueLabel
-                        && _item.inventory.stackUniqueLabel.indexOf("bounties.") === 0) {
-                        items.push({ item: item, definition: _item })
+                        && _item.inventory.stackUniqueLabel.indexOf("bounties.") === 0
+                        && bountiesType.indexOf(_item.inventory.stackUniqueLabel.split(".")[1]) >= 0
+                    ) {
+                        const bountyType = _item.inventory.stackUniqueLabel.split(".")[1]
+                        const objectiveHashes = _item.objectives.objectiveHashes
+                        const objective = findItemComponentObjective(objectives, item.itemInstanceId, objectiveHashes)
+                        console.log(`${classCharacter} -> ${bountyType} -> ${_item.displayProperties.name} -> ${objective.complete}`)
+                        items.push({ item: item, definition: _item, objective: objective })
                     }
                 } catch ({ message, stack }) {
                     console.warn(`skipping ${message} : ${stack}`, item, manifest.t(item.itemHash))
@@ -84,9 +101,13 @@ app.get("/", async (q, r) => {
                 const bountyType = bounty.definition.inventory.stackUniqueLabel.split(".")[1]
                 if (bounties[bountyType]) {
                     bounties[bountyType].count++
+                    if (bounty.objective.complete) {
+                        bounties[bountyType].complete++
+                    }
                 } else {
                     bounties[bountyType] = {
                         count: 1,
+                        complete: bounty.objective.complete ? 1 : 0,
                         icon: bungiePath + bounty.definition.displayProperties.icon
                     }
                 }
@@ -96,16 +117,20 @@ app.get("/", async (q, r) => {
 
 
             const displayItems = []
+            const displayTotal = { complete: 0, count: 0, needed: 0 }
             for (const bountyGroupName in bountiesGroup) {
                 const bountyGroup = bountiesGroup[bountyGroupName]
-                displayItems.push(`<li><div style="display:inline-flex"><img style="height:${sizeIcon};width=${sizeIcon}" src=${bountyGroup.icon} /><span style="line-height:${sizeIcon}">8/${bountyGroup.count}</span></div></li>`)
+                displayTotal.complete += bountyGroup.complete
+                displayTotal.count += bountyGroup.count
+                displayTotal.needed += bountyNeedCount
+                displayItems.push(`<li><div style="display:inline-flex"><img style="height:${sizeIcon};width=${sizeIcon}" src=${bountyGroup.icon} />&nbsp;<span style="line-height:${sizeIcon}">${bountyNeedCount}/${bountyGroup.count}/${bountyGroup.complete}</span></div></li>`)
             }
+            displayItems.unshift(`<li><div style="display:inline-flex"><span style="line-height:${sizeIcon}">${displayTotal.needed}/${displayTotal.count}/${displayTotal.complete}</span></div></li>`)
 
-            const classCharacter = manifest.t(character.classHash).displayProperties.name
             displayCharacters.push(`<li>${classCharacter}<ul>${displayItems.join("")}</ul></li>`)
         }
         const display = `<ul>${displayCharacters.join("")}</ul>`
-        r.status(200).send(`<body><div>Connected</div><div>${display}</div></body>`)
+        r.status(200).send(`<body style="background-color:${backgroundColor}"><div>${display}</div></body>`)
     }
 
 })
@@ -127,10 +152,9 @@ app.get("/config/auth", async (q, r) => {
     r.redirect("/")
 })
 
-
-https.createServer({
-    key: keySSL,
-    cert: certSSL
-}, app).listen(process.env["APP_PORT"] || 8888, async () => {
-    await manifest.fetchManifest()
+manifest.fetchManifest().then(() => {
+    https.createServer({
+        key: keySSL,
+        cert: certSSL
+    }, app).listen(process.env["APP_PORT"] || 8888)
 })

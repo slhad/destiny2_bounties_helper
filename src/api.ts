@@ -45,11 +45,11 @@ export const refresh = (refresh_token: string) => _axios.post(
 )
 
 export const getManifest = () => _axios.get("/Platform/Destiny2/Manifest/")
-
 export const getUser = (id: string) => _axios.get(`/User/GetBungieNetUserById/${id}/`)
 export const getLinkedProfile = (id: string) => _axios.get(`/Platform/Destiny2/254/Profile/${id}/LinkedProfiles/`)
+export const inventoryComponents = [100, 101, 102, 103, 104, 200, 201, 202, 204, 205, 300, 301]
 export const getInventory = (id: string, membershipType: string, token: string) => _axios.get(
-    `/Platform/Destiny2/${membershipType}/Profile/${id}/?components=200%2C201`,
+    `/Platform/Destiny2/${membershipType}/Profile/${id}/?components=${inventoryComponents.join("%2C")}`,
     { headers: { Authorization: "Bearer " + token } }
 )
 
