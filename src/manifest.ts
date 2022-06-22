@@ -1,52 +1,42 @@
 import axios from "axios"
 import { getManifest } from "./api"
-
-const cached: any = {}
-const set = (name: string, value: any) => cached[name] = value
-const get = async (name: string) => cached[name]
 class Manifest {
     urls: any = {}
     tables: any = {}
-    ready = false
+
+    definitions = [
+        "DestinyInventoryItemDefinition",
+        "DestinyClassDefinition"
+    ]
 
 
     async fetchManifest() {
         const res = await getManifest()
         this.urls = res.data.Response
 
-        try {
-            const ver = await get("ver")
-            if (ver !== this.jsonUrl) throw "manifest is outdated"
-
-            const cache = await get("destiny2Manifest")
-            if (cache.DestinyInventoryItemDefinition) {
-                console.log("load manifest from cache: ", cache)
-                this.tables = cache
-                this.ready = true
-                return true
-            }
-        } catch (error) {
-            console.log("error: ", error)
+        for (const definition of this.definitions) {
+            const res2 = await axios.get("https://www.bungie.net" + this.jsonUrl(definition))
+            console.log("fetched manifest: ", res2)
+            this.tables[definition] = res2.data
         }
-
-        const res2 = await axios.get("https://www.bungie.net" + this.jsonUrl)
-        console.log("fetched manifest: ", res2)
-        this.ready = true
-        this.tables.DestinyInventoryItemDefinition = res2.data
-        set("destiny2Manifest", {
-            DestinyInventoryItemDefinition: this.tables.DestinyInventoryItemDefinition
-        })
-        set("ver", this.jsonUrl)
-        return true
     }
 
-    get jsonUrl() {
-        return this.urls["jsonWorldComponentContentPaths"]["en"]["DestinyInventoryItemDefinition"]
+    jsonUrl(
+        definition = "DestinyInventoryItemDefinition",
+        lang = "en",
+        path = "jsonWorldComponentContentPaths"
+    ) {
+        return this.urls[path][lang][definition]
     }
 
     t(hash: string) {
         try {
-            return this.tables.DestinyInventoryItemDefinition[hash]
+            for (const definition of this.definitions) {
+                const defined = this.tables[definition][hash]
+                if (defined) {
+                    return defined
+                }
+            }
         } catch (e) {
             return hash
         }

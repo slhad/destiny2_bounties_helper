@@ -1,4 +1,4 @@
-import { authorize, getInventory, getLinkedProfile, getManifest, getToken, refresh } from "./api"
+import { authorize, getInventory, getLinkedProfile, getToken, refresh } from "./api"
 import express = require("express")
 import { readFileSync } from "fs"
 
@@ -9,6 +9,10 @@ import manifest from "./manifest"
 
 const keySSL = readFileSync("./files/server.key")
 const certSSL = readFileSync("./files/server.cert")
+
+const bountiesType = ["crucible", "gambit", "strikes"]
+const bungiePath = "https://www.bungie.net"
+const sizeIcon = "24px"
 
 const app = express()
 
@@ -54,32 +58,54 @@ app.get("/", async (q, r) => {
         const profile = profileResponse.data.Response.profiles.sort(sortByLastPlayed)[0]
         const inventoryResponse = await getInventory(profile.membershipId, profile.membershipType, refreshedToken.data.access_token)
         const characters = inventoryResponse.data.Response.characters.data
-        const characterId = Object.keys(characters)[0]
         const inventories = inventoryResponse.data.Response.characterInventories.data
-        const inventory = inventories[characterId].items
 
-        const items = []
-        for (const item of inventory) {
-            try {
-                const _item = manifest.t(item.itemHash)
-                if (!_item.itemCategoryHashes.includes(16)
-                    && !_item.sockets
-                    && _item.objectives
-                    && _item.objectives.objectiveVerbName
-                    && _item.inventory.stackUniqueLabel.indexOf("bounties.") === 0) {
-                    items.push(_item)
+        const displayCharacters = []
+        for (const characterId of Object.keys(characters)) {
+            const character = characters[characterId]
+            const inventory = inventories[characterId].items
+            const items = []
+            for (const item of inventory) {
+                try {
+                    const _item = manifest.t(item.itemHash)
+                    if (_item
+                        && _item.inventory
+                        && _item.inventory.stackUniqueLabel
+                        && _item.inventory.stackUniqueLabel.indexOf("bounties.") === 0) {
+                        items.push({ item: item, definition: _item })
+                    }
+                } catch ({ message, stack }) {
+                    console.warn(`skipping ${message} : ${stack}`, item, manifest.t(item.itemHash))
+                    continue
                 }
-            } catch ({ message, stack }) {
-                console.warn(`skipping ${message} : ${stack}`, item, manifest.t(item.itemHash))
-                return false
             }
+
+            const bountiesGroup = items.reduce((bounties, bounty) => {
+                const bountyType = bounty.definition.inventory.stackUniqueLabel.split(".")[1]
+                if (bounties[bountyType]) {
+                    bounties[bountyType].count++
+                } else {
+                    bounties[bountyType] = {
+                        count: 1,
+                        icon: bungiePath + bounty.definition.displayProperties.icon
+                    }
+                }
+                return bounties
+            }, {} as any)
+
+
+
+            const displayItems = []
+            for (const bountyGroupName in bountiesGroup) {
+                const bountyGroup = bountiesGroup[bountyGroupName]
+                displayItems.push(`<li><div style="display:inline-flex"><img style="height:${sizeIcon};width=${sizeIcon}" src=${bountyGroup.icon} /><span style="line-height:${sizeIcon}">8/${bountyGroup.count}</span></div></li>`)
+            }
+
+            const classCharacter = manifest.t(character.classHash).displayProperties.name
+            displayCharacters.push(`<li>${classCharacter}<ul>${displayItems.join("")}</ul></li>`)
         }
-        const displayI = []
-        for (const i of items.sort(sortItemByBountyName)) {
-            displayI.push(`<li>${i.inventory.stackUniqueLabel}</li>`)
-        }
-        const display = `<ul>${displayI.join("")}</ul>`
-        r.status(200).send(`<body><div>Ok : You have a refresh token</div><div>${display}</div></body>`)
+        const display = `<ul>${displayCharacters.join("")}</ul>`
+        r.status(200).send(`<body><div>Connected</div><div>${display}</div></body>`)
     }
 
 })
