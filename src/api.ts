@@ -47,7 +47,52 @@ export const refresh = (refresh_token: string) => _axios.post(
 export const getManifest = () => _axios.get("/Platform/Destiny2/Manifest/")
 export const getUser = (id: string) => _axios.get(`/User/GetBungieNetUserById/${id}/`)
 export const getLinkedProfile = (id: string) => _axios.get(`/Platform/Destiny2/254/Profile/${id}/LinkedProfiles/`)
-export const inventoryComponents = [100, 101, 102, 103, 104, 200, 201, 202, 204, 205, 300, 301]
+
+export enum DestinyComponentType {
+    None = 0,
+    Profiles = 100,
+    VendorReceipts = 101,
+    ProfileInventories = 102,
+    ProfileCurrencies = 103,
+    ProfileProgression = 104,
+    PlatformSilver = 105,
+    Characters = 200,
+    CharacterInventories = 201,
+    CharacterProgressions = 202,
+    CharacterRenderData = 203,
+    CharacterActivities = 204,
+    CharacterEquipment = 205,
+    ItemInstances = 300,
+    ItemObjectives = 301,
+    ItemPerks = 302,
+    ItemRenderData = 303,
+    ItemStats = 304,
+    ItemSockets = 305,
+    ItemTalentGrids = 306,
+    ItemCommonData = 307,
+    ItemPlugStates = 308,
+    ItemPlugObjectives = 309,
+    ItemReusablePlugs = 310,
+    Vendors = 400,
+    VendorCategories = 401,
+    VendorSales = 402,
+    Kiosks = 500,
+    CurrencyLookups = 600,
+    PresentationNodes = 700,
+    Collectibles = 800,
+    Records = 900,
+    Transitory = 1000,
+    Metrics = 1100,
+    StringVariables = 1200,
+    Craftables = 1300
+
+}
+
+export const inventoryComponents = [
+    DestinyComponentType.Characters,
+    DestinyComponentType.CharacterInventories,
+    DestinyComponentType.ItemObjectives
+]
 export const getInventory = (id: string, membershipType: string, token: string) => _axios.get(
     `/Platform/Destiny2/${membershipType}/Profile/${id}/?components=${inventoryComponents.join("%2C")}`,
     { headers: { Authorization: "Bearer " + token } }
