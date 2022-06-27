@@ -2,12 +2,8 @@ node {
     checkout scm
     def builde
     stage('Build') {
-
         def argsDocker = "-f Dockerfile --pull ."
-
-        dir("nodejs") {
-            builde = docker.build("slhad/destiny2_bounties_helper:build-${env.BUILD_ID}", argsDocker)
-        }
+        builde = docker.build("slhad/destiny2_bounties_helper:build-${env.BUILD_ID}", argsDocker)
     }
     stage('Push') {
         if (env.BRANCH_NAME == "master") {
