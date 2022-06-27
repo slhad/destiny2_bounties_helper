@@ -1,0 +1,6 @@
+{
+    "authText": "Connection !",
+    "intro": "Fatigué de compter les contrats journaliers ? Voici la solution !",
+    "validToken": "Votre refresh token est valide,",
+    "timeValidity": "Le refesh token de Bungie  est valide pendant environ 90 jours"
+}

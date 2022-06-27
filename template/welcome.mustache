@@ -1,0 +1,12 @@
+<html>
+<body>
+<h1>Destiny 2 bounties helper</h1>
+<p>{{intro}}</p>
+{{^refreshToken}}
+<div><a href="{{authLink}}">${__("authText")}</a></div>
+{{/refreshToken}}
+{{#refreshToken}}
+{{__("validToken")}}&nbsp;${__("timeValidity")}
+{{/refreshToken}}
+</body>
+</html>

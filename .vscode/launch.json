@@ -21,7 +21,10 @@
             "program": "${workspaceFolder}\\lib\\src\\index.js",
             "outFiles": [
                 "${workspaceFolder}/**/*.js"
-            ]
+            ],
+            "env": {
+                "DEBUG": "i18n:*"
+            }
         }
     ]
 }
