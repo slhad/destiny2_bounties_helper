@@ -1,28 +1,32 @@
 import axios from "axios"
 import { api_key, client_id, client_secret } from "../config.json"
 
+const API_KEY = process.env["API_KEY"] || api_key
+const CLIENT_ID = process.env["CLIENT_ID"] || client_id
+const CLIENT_SECRET = process.env["CLIENT_SECRET"] || client_secret
+
 const _axios = axios.create({
     baseURL: "https://www.bungie.net/",
     timeout: 10000,
     withCredentials: true,
     headers: {
-        "X-API-Key": api_key,
+        "X-API-Key": API_KEY,
     }
 })
 
-export const authorize = (state: string) => `https://www.bungie.net/en/oauth/authorize?client_id=${client_id}&response_type=code&state=${state}`
+export const authorize = (state: string) => `https://www.bungie.net/en/oauth/authorize?client_id=${CLIENT_ID}&response_type=code&state=${state}`
 
 export const getToken = (code: string) => _axios.post(
     "platform/app/oauth/token/",
     createFormParams({
-        client_id,
+        CLIENT_ID,
+        CLIENT_SECRET,
         grant_type: "authorization_code",
-        client_secret,
         code
     }),
     {
         headers: {
-            "X-API-Key": api_key,
+            "X-API-Key": API_KEY,
             "Content-Type": "application/x-www-form-urlencoded"
         }
     }
@@ -31,8 +35,8 @@ export const getToken = (code: string) => _axios.post(
 export const refresh = (refresh_token: string) => _axios.post(
     "platform/app/oauth/token/",
     createFormParams({
-        client_id,
-        client_secret,
+        CLIENT_ID,
+        CLIENT_SECRET,
         grant_type: "refresh_token",
         refresh_token
         // code,
