@@ -6,14 +6,14 @@ node {
         builde = docker.build("slhad/destiny2_bounties_helper:build-${env.BUILD_ID}", argsDocker)
     }
     stage('Push') {
-        if (env.BRANCH_NAME == "master") {
+        if (env.BRANCH_NAME == "main") {
             docker.withRegistry("https://index.docker.io/v1/", "dockerId") {
                 builde.push("latest")
             }
         }
     }
     stage('Deploy') {
-        if (env.BRANCH_NAME == "master") {
+        if (env.BRANCH_NAME == "main") {
             sh "docker stop destiny2-bounties-helper || exit 0"
             sh "docker rm destiny2-bounties-helper || exit 0"
             sh "docker pull slhad/destiny2_bounties_helper"
