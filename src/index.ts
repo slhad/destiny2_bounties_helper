@@ -158,6 +158,7 @@ app.get("/config/auth", async (q, r) => {
     const code = q.query["code"]
 
     try {
+        // todo : manage error token
         const tokenData = await getToken(code as string)
         r.cookie("destinyToken", tokenData.data.access_token)
         r.cookie("memberId", tokenData.data.membership_id)
