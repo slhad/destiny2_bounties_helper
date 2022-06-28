@@ -33,7 +33,7 @@ export const getToken = (code: string) => {
             "Content-Type": "application/x-www-form-urlencoded"
         }
     }
-    console.log(JSON.stringify(config))
+    // console.log(JSON.stringify(config))
     return _axios.request(config)
 
 }
