@@ -1,12 +1,17 @@
+/* eslint-disable prefer-rest-params */
+import { readFileSync } from "fs"
+import { render } from "mustache"
 import { authorize, getInventory, getLinkedProfile, getToken, refresh } from "./api"
 import express = require("express")
-import { readFileSync } from "fs"
+import { mustache } from "consolidate"
 
 import * as https from "https"
 import * as http from "http"
 
 import cookieParser from "cookie-parser"
 import manifest from "./manifest"
+import { Cookie } from "./cookies"
+import * as i18n from "i18n"
 
 const keySSL = readFileSync("./files/server.key")
 const certSSL = readFileSync("./files/server.crt")
@@ -18,8 +23,25 @@ const bountyNeedCount = 8
 const backgroundColor = "transparent"
 
 const app = express()
+i18n.configure({
+    locales: ["en", "fr"],
+    directory: __dirname + "/../../locales"
+})
 
 app.use(cookieParser())
+app.use(i18n.init)
+app.engine("mustache", mustache)
+app.set("view engine", "mustache")
+app.set("views", __dirname + "/../../template")
+app.use(function (req, res, next) {
+    res.locals.__ = function () {
+        return function (text: any, render: any) {
+            return i18n.__.apply(req, arguments as any)
+        }
+    }
+
+    next()
+})
 
 const sortByLastPlayed = (a: any, b: any) => {
     const atime = +new Date(a.dateLastPlayed)
@@ -48,7 +70,7 @@ const findItemComponentObjective = (objectivesMap: any, ichash: string, objectiv
     })
 }
 
-app.get("/", async (q, r) => {
+app.get("/allCharacters", async (q, r) => {
     const rToken = q.cookies["destinyRefreshToken"]
 
     if (!rToken) {
@@ -61,7 +83,7 @@ app.get("/", async (q, r) => {
         r.cookie("memberId", refreshedToken.data.membership_id)
         r.cookie("destinyRefreshToken", refreshedToken.data.refresh_token,
             {
-                maxAge: refreshedToken.data.refresh_expires_in.expire
+                maxAge: refreshedToken.data.refresh_expires_in
             })
 
         const profileResponse = await getLinkedProfile(refreshedToken.data.membership_id)
@@ -141,20 +163,36 @@ app.get("/config/auth", async (q, r) => {
 
     try {
         const tokenData = await getToken(code as string)
-        r.cookie("destinyToken", tokenData.data.access_token)
-        r.cookie("memberId", tokenData.data.membership_id)
-        r.cookie("destinyRefreshToken", tokenData.data.refresh_token,
-            {
-                maxAge: tokenData.data.refresh_expires_in
-            })
+        // r.cookie("destinyToken", tokenData.data.access_token)
+        // r.cookie("memberId", tokenData.data.membership_id)
+        // r.cookie("destinyRefreshToken", tokenData.data.refresh_token,
+        //     {
+        //         maxAge: tokenData.data.refresh_expires_in
+        //     })
+        Cookie.setAuth(r, {
+            destinyRefreshToken: { value: tokenData.data.refresh_token, options: { maxAge: tokenData.data.refresh_expires_in } },
+            destinyToken: tokenData.data.access_token,
+            memberId: tokenData.data.membership_id
+        })
     } catch ({ message, stack }) {
         console.log(`${message} : ${stack}`)
     }
     r.redirect("/")
 })
 
+app.get("/", async (q, r) => {
+    const nanoid = await import("nanoid")
+    const authLink = authorize(nanoid.nanoid())
+    const refreshToken = Cookie.getRefresh(q)
+    r.render("welcome", {
+        refreshToken,
+        authLink
+    })
+})
+
 const httpEnabled = process.env["HTTP"] === "true"
 const httpsEnabled = process.env["HTTPS"] === "true"
+
 manifest.fetchManifest().then(() => {
     if (httpsEnabled || (!httpEnabled && !httpsEnabled)) {
         https.createServer({

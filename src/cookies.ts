@@ -1,24 +1,35 @@
+import { CookieOptions } from "express"
+
+export type CookieWithOptions = { value: string, options: CookieOptions }
+export type CookieContent = string | CookieWithOptions
 export type Auth = {
-    destinyToken: string
-    memberId: string
-    destinyRefreshToken: string
+    destinyToken: CookieContent
+    memberId: CookieContent
+    destinyRefreshToken: CookieContent
 }
 
-export type RequestWCookies = { cookie: (key: string, value: string) => void }
+export type RequestWCookies = { cookie: (key: string, value: string, options?: CookieOptions) => void }
+export type QueryWCookies = { cookies: { [key: string]: CookieContent } }
 
 export class Cookie {
 
-    static setCookies(r: RequestWCookies, cookies: { [key: string]: string }) {
+    static setCookies(r: RequestWCookies, cookies: { [key: string]: CookieContent }) {
         for (const key in cookies) {
-            r.cookie(key, cookies[key])
+            const value = typeof cookies[key] !== "string" ? (cookies[key] as CookieWithOptions).value : cookies[key] as string
+            const options = typeof cookies[key] !== "string" ? (cookies[key] as CookieWithOptions).options : undefined
+            r.cookie(key, value, options)
         }
     }
 
-    static readCookies(q: { cookies: { [key: string]: string } }, cookies: string[]) {
-        return cookies.map(key => q.cookies[key])
+    static readCookies(q: QueryWCookies, cookies: CookieContent[]) {
+        return cookies.map(key => q.cookies[key as string])
     }
 
     static setAuth(r: RequestWCookies, auth: Auth) {
         this.setCookies(r, auth)
+    }
+
+    static getRefresh(q: QueryWCookies) {
+        return q.cookies["destinyRefreshToken"]
     }
 }
