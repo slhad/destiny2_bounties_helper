@@ -104,10 +104,10 @@ app.get("/allCharacters", async (q, r) => {
                         && _item.inventory.stackUniqueLabel.indexOf("bounties.") === 0
                         && bountiesType.indexOf(_item.inventory.stackUniqueLabel.split(".")[1]) >= 0
                     ) {
-                        const bountyType = _item.inventory.stackUniqueLabel.split(".")[1]
+                        // const bountyType = _item.inventory.stackUniqueLabel.split(".")[1]
                         const objectiveHashes = _item.objectives.objectiveHashes
                         const objective = findItemComponentObjective(objectives, item.itemInstanceId, objectiveHashes)
-                        console.log(`${classCharacter} -> ${bountyType} -> ${_item.displayProperties.name} -> ${objective.complete}`)
+                        // console.log(`${classCharacter} -> ${bountyType} -> ${_item.displayProperties.name} -> ${objective.complete}`)
                         items.push({ item: item, definition: _item, objective: objective })
                     }
                 } catch ({ message, stack }) {
@@ -159,17 +159,17 @@ app.get("/config/auth", async (q, r) => {
 
     try {
         const tokenData = await getToken(code as string)
-        // r.cookie("destinyToken", tokenData.data.access_token)
-        // r.cookie("memberId", tokenData.data.membership_id)
-        // r.cookie("destinyRefreshToken", tokenData.data.refresh_token,
-        //     {
-        //         maxAge: tokenData.data.refresh_expires_in
-        //     })
-        Cookie.setAuth(r, {
-            destinyRefreshToken: { value: tokenData.data.refresh_token, options: { maxAge: tokenData.data.refresh_expires_in } },
-            destinyToken: tokenData.data.access_token,
-            memberId: tokenData.data.membership_id
-        })
+        r.cookie("destinyToken", tokenData.data.access_token)
+        r.cookie("memberId", tokenData.data.membership_id)
+        r.cookie("destinyRefreshToken", tokenData.data.refresh_token,
+            {
+                maxAge: tokenData.data.refresh_expires_in
+            })
+        // Cookie.setAuth(r, {
+        //     destinyRefreshToken: { value: tokenData.data.refresh_token, options: { maxAge: tokenData.data.refresh_expires_in } },
+        //     destinyToken: tokenData.data.access_token,
+        //     memberId: tokenData.data.membership_id
+        // })
     } catch ({ message, stack }) {
         console.log(`${message} : ${stack}`)
     }
