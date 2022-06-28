@@ -1,6 +1,5 @@
 /* eslint-disable prefer-rest-params */
 import { readFileSync } from "fs"
-import { render } from "mustache"
 import { authorize, getInventory, getLinkedProfile, getToken, refresh } from "./api"
 import express = require("express")
 import { mustache } from "consolidate"
@@ -12,9 +11,6 @@ import cookieParser from "cookie-parser"
 import manifest from "./manifest"
 import { Cookie } from "./cookies"
 import * as i18n from "i18n"
-
-const keySSL = readFileSync("./files/server.key")
-const certSSL = readFileSync("./files/server.crt")
 
 const bountiesType = ["crucible", "gambit", "strikes"]
 const bungiePath = "https://www.bungie.net"
@@ -195,6 +191,8 @@ const httpsEnabled = process.env["HTTPS"] === "true"
 
 manifest.fetchManifest().then(() => {
     if (httpsEnabled || (!httpEnabled && !httpsEnabled)) {
+        const keySSL = readFileSync("./files/server.key")
+        const certSSL = readFileSync("./files/server.crt")
         https.createServer({
             key: keySSL,
             cert: certSSL
