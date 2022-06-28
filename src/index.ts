@@ -3,6 +3,7 @@ import express = require("express")
 import { readFileSync } from "fs"
 
 import * as https from "https"
+import * as http from "http"
 
 import cookieParser from "cookie-parser"
 import manifest from "./manifest"
@@ -152,9 +153,16 @@ app.get("/config/auth", async (q, r) => {
     r.redirect("/")
 })
 
+const httpEnabled = process.env["HTTP"] === "true"
+const httpsEnabled = process.env["HTTPS"] === "true"
 manifest.fetchManifest().then(() => {
-    https.createServer({
-        key: keySSL,
-        cert: certSSL
-    }, app).listen(process.env["APP_PORT"] || 8888)
+    if (httpsEnabled || (!httpEnabled && !httpsEnabled)) {
+        https.createServer({
+            key: keySSL,
+            cert: certSSL
+        }, app).listen((process.env["APP_PORT_SSL"] ? process.env["APP_PORT_SSL"] : process.env["APP_PORT"]) || 8888)
+    }
+    if (httpEnabled) {
+        http.createServer({}, app).listen(process.env["APP_PORT"] || httpsEnabled ? 8887 : 8888)
+    }
 })
