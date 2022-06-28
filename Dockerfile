@@ -3,6 +3,7 @@ WORKDIR /app
 COPY ./src/ ./src/
 COPY ./files/ ./files/
 COPY ./test/ ./test/
+COPY ./template/ ./template/
 COPY ./package* ./
 COPY ./tsconfig.json ./
 
@@ -16,8 +17,10 @@ WORKDIR /app
 RUN echo 'color=false' > ~/.npmrc
 COPY --from=build /app/lib/ /app/lib/
 COPY ./files/ ./files/
+COPY ./template/ ./template/
 COPY ./package* ./
 RUN npm -g install npm@latest && npm -g install npm@latest && npm --omit-dev ci
 EXPOSE 8888
+EXPOSE 8887
 VOLUME [ "/app/files" ]
 ENTRYPOINT [ "node","." ]

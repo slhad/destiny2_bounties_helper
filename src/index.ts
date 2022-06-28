@@ -191,8 +191,8 @@ const httpsEnabled = process.env["HTTPS"] === "true"
 
 manifest.fetchManifest().then(() => {
     if (httpsEnabled || (!httpEnabled && !httpsEnabled)) {
-        const keySSL = readFileSync("./files/server.key")
-        const certSSL = readFileSync("./files/server.crt")
+        const keySSL = readFileSync(process.env["SSL_KEY"] || "./files/server.key")
+        const certSSL = readFileSync(process.env["SSL_CRT"] || "./files/server.crt")
         https.createServer({
             key: keySSL,
             cert: certSSL
