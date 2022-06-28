@@ -19,4 +19,5 @@ COPY ./files/ ./files/
 COPY ./package* ./
 RUN npm -g install npm@latest && npm -g install npm@latest && npm --omit-dev ci
 EXPOSE 8888
+VOLUME [ "/app/files" ]
 ENTRYPOINT [ "node","." ]

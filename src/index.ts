@@ -8,7 +8,7 @@ import cookieParser from "cookie-parser"
 import manifest from "./manifest"
 
 const keySSL = readFileSync("./files/server.key")
-const certSSL = readFileSync("./files/server.cert")
+const certSSL = readFileSync("./files/server.crt")
 
 const bountiesType = ["crucible", "gambit", "strikes"]
 const bungiePath = "https://www.bungie.net"
