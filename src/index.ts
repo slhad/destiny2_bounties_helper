@@ -6,6 +6,7 @@ import express = require("express")
 import { mustache } from "consolidate"
 
 import * as https from "https"
+import * as http from "http"
 
 import cookieParser from "cookie-parser"
 import manifest from "./manifest"
@@ -13,7 +14,7 @@ import { Cookie } from "./cookies"
 import * as i18n from "i18n"
 
 const keySSL = readFileSync("./files/server.key")
-const certSSL = readFileSync("./files/server.cert")
+const certSSL = readFileSync("./files/server.crt")
 
 const bountiesType = ["crucible", "gambit", "strikes"]
 const bungiePath = "https://www.bungie.net"
@@ -189,9 +190,17 @@ app.get("/", async (q, r) => {
     })
 })
 
+const httpEnabled = process.env["HTTP"] === "true"
+const httpsEnabled = process.env["HTTPS"] === "true"
+
 manifest.fetchManifest().then(() => {
-    https.createServer({
-        key: keySSL,
-        cert: certSSL
-    }, app).listen(process.env["APP_PORT"] || 8888)
+    if (httpsEnabled || (!httpEnabled && !httpsEnabled)) {
+        https.createServer({
+            key: keySSL,
+            cert: certSSL
+        }, app).listen((process.env["APP_PORT_SSL"] ? process.env["APP_PORT_SSL"] : process.env["APP_PORT"]) || 8888)
+    }
+    if (httpEnabled) {
+        http.createServer({}, app).listen(process.env["APP_PORT"] || httpsEnabled ? 8887 : 8888)
+    }
 })
