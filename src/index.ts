@@ -1,3 +1,4 @@
+/* eslint-disable prefer-rest-params */
 import { readFileSync } from "fs"
 import { render } from "mustache"
 import { authorize, getInventory, getLinkedProfile, getToken, refresh } from "./api"
@@ -31,6 +32,15 @@ app.use(i18n.init)
 app.engine("mustache", mustache)
 app.set("view engine", "mustache")
 app.set("views", __dirname + "/../../template")
+app.use(function (req, res, next) {
+    res.locals.__ = function () {
+        return function (text: any, render: any) {
+            return i18n.__.apply(req, arguments as any)
+        }
+    }
+
+    next()
+})
 
 const sortByLastPlayed = (a: any, b: any) => {
     const atime = +new Date(a.dateLastPlayed)
