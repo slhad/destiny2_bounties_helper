@@ -18,6 +18,12 @@ const sizeIcon = "24px"
 const bountyNeedCount = 8
 const backgroundColor = "transparent"
 
+export enum ROUTE {
+    ALL_CHARACTERS = "/allCharacters",
+    HOME = "/",
+    AUTH_ACCESS = "/config/auth"
+}
+
 const app = express()
 i18n.configure({
     locales: ["en", "fr"],
@@ -66,7 +72,7 @@ const findItemComponentObjective = (objectivesMap: any, ichash: string, objectiv
     })
 }
 
-app.get("/allCharacters", async (q, r) => {
+app.get(ROUTE.ALL_CHARACTERS, async (q, r) => {
     const rToken = q.cookies["destinyRefreshToken"]
 
     if (!rToken) {
@@ -154,7 +160,7 @@ app.get("/allCharacters", async (q, r) => {
 
 })
 
-app.get("/config/auth", async (q, r) => {
+app.get(ROUTE.AUTH_ACCESS, async (q, r) => {
     const code = q.query["code"]
 
     try {
@@ -174,16 +180,17 @@ app.get("/config/auth", async (q, r) => {
     } catch ({ message, stack }) {
         console.log(`${message} : ${stack}`)
     }
-    r.redirect("/")
+    r.redirect(ROUTE.HOME)
 })
 
-app.get("/", async (q, r) => {
+app.get(ROUTE.HOME, async (q, r) => {
     const nanoid = await import("nanoid")
     const authLink = authorize(nanoid.nanoid())
     const refreshToken = Cookie.getRefresh(q)
     r.render("welcome", {
         refreshToken,
-        authLink
+        authLink,
+        allCharacters: ROUTE.ALL_CHARACTERS
     })
 })
 
