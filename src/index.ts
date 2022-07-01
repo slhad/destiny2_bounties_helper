@@ -1,16 +1,16 @@
 /* eslint-disable prefer-rest-params */
+import { mustache } from "consolidate"
 import { readFileSync } from "fs"
 import { authorize, getInventory, getLinkedProfile, getToken, refresh } from "./api"
 import express = require("express")
-import { mustache } from "consolidate"
 
-import * as https from "https"
 import * as http from "http"
+import * as https from "https"
 
 import cookieParser from "cookie-parser"
-import manifest from "./manifest"
-import { Cookie } from "./cookies"
 import * as i18n from "i18n"
+import { Cookie } from "./cookies"
+import manifest from "./manifest"
 
 const bountiesType = ["crucible", "gambit", "strikes"]
 const bungiePath = "https://www.bungie.net"
@@ -128,7 +128,7 @@ app.get(ROUTE.ALL_CHARACTERS, async (q, r) => {
                     bounties[bountyType].count++
                     if (bounty.objective.complete) {
                         bounties[bountyType].complete++
-                    }else{
+                    } else {
                         bounties[bountyType].todo++
                     }
                 } else {
