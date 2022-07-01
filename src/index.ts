@@ -142,15 +142,17 @@ app.get(ROUTE.ALL_CHARACTERS, async (q, r) => {
 
 
             const displayItems = []
-            const displayTotal = { complete: 0, count: 0, needed: 0 }
+            const displayTotal = { complete: 0, count: 0, needed: 0, remaining: 0 }
             for (const bountyGroupName in bountiesGroup) {
                 const bountyGroup = bountiesGroup[bountyGroupName]
                 displayTotal.complete += bountyGroup.complete
                 displayTotal.count += bountyGroup.count
                 displayTotal.needed += bountyNeedCount
+                const remaining = bountyGroup.complete - bountyNeedCount
+                displayTotal.remaining += remaining > 0 ? remaining : 0
                 displayItems.push(`<li><div style="display:inline-flex"><img style="height:${sizeIcon};width=${sizeIcon}" src=${bountyGroup.icon} />&nbsp;<span style="line-height:${sizeIcon}">${bountyNeedCount}/${bountyGroup.count}/${bountyGroup.complete}</span></div></li>`)
             }
-            displayItems.unshift(`<li><div style="display:inline-flex"><span style="line-height:${sizeIcon}">${displayTotal.needed}/${displayTotal.count}/${displayTotal.complete}</span></div></li>`)
+            displayItems.unshift(`<li><div style="display:inline-flex"><span style="line-height:${sizeIcon}">${displayTotal.needed}/${displayTotal.count}/${displayTotal.complete}/${displayTotal.remaining}</span></div></li>`)
 
             displayCharacters.push(`<li>${classCharacter}<ul>${displayItems.join("")}</ul></li>`)
         }
