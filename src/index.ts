@@ -128,6 +128,8 @@ app.get(ROUTE.ALL_CHARACTERS, async (q, r) => {
                     bounties[bountyType].count++
                     if (bounty.objective.complete) {
                         bounties[bountyType].complete++
+                    }else{
+                        bounties[bountyType].todo++
                     }
                 } else {
                     bounties[bountyType] = {
