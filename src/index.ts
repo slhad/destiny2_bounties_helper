@@ -133,6 +133,7 @@ app.get(ROUTE.ALL_CHARACTERS, async (q, r) => {
                     bounties[bountyType] = {
                         count: 1,
                         complete: bounty.objective.complete ? 1 : 0,
+                        todo: bounty.objective.complete ? 0 : 1,
                         icon: bungiePath + bounty.definition.displayProperties.icon
                     }
                 }
@@ -142,7 +143,7 @@ app.get(ROUTE.ALL_CHARACTERS, async (q, r) => {
 
 
             const displayItems = []
-            const displayTotal = { complete: 0, count: 0, needed: 0, remaining: 0 }
+            const displayTotal = { complete: 0, count: 0, needed: 0, todo: 0, remaining: 0 }
             for (const bountyGroupName in bountiesGroup) {
                 const bountyGroup = bountiesGroup[bountyGroupName]
                 const remaining = bountyNeedCount - bountyGroup.complete
@@ -150,10 +151,11 @@ app.get(ROUTE.ALL_CHARACTERS, async (q, r) => {
                 displayTotal.complete += bountyGroup.complete
                 displayTotal.count += bountyGroup.count
                 displayTotal.needed += bountyNeedCount
+                displayTotal.todo += bountyGroup.todo
                 displayTotal.remaining += bountyGroup.remaining
-                displayItems.push(`<li><div style="display:inline-flex"><img style="height:${sizeIcon};width=${sizeIcon}" src=${bountyGroup.icon} />&nbsp;<span style="line-height:${sizeIcon}">${bountyNeedCount}/${bountyGroup.count}/${bountyGroup.complete}/${bountyGroup.remaining}</span></div></li>`)
+                displayItems.push(`<li><div style="display:inline-flex"><img style="height:${sizeIcon};width=${sizeIcon}" src=${bountyGroup.icon} />&nbsp;<span style="line-height:${sizeIcon}">${bountyNeedCount}/${bountyGroup.count}/${bountyGroup.complete}/${bountyGroup.todo}/${bountyGroup.remaining}</span></div></li>`)
             }
-            displayItems.unshift(`<li><div style="display:inline-flex"><span style="line-height:${sizeIcon}">${displayTotal.needed}/${displayTotal.count}/${displayTotal.complete}/${displayTotal.remaining}</span></div></li>`)
+            displayItems.unshift(`<li><div style="display:inline-flex"><span style="line-height:${sizeIcon}">${displayTotal.needed}/${displayTotal.count}/${displayTotal.complete}/${displayTotal.todo}/${displayTotal.remaining}</span></div></li>`)
 
             displayCharacters.push(`<li>${classCharacter}<ul>${displayItems.join("")}</ul></li>`)
         }
