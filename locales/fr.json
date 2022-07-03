@@ -3,5 +3,9 @@
 	"intro": "Fatigué de compter les contrats journaliers ? Voici la solution !",
 	"validToken": "Votre refresh token est valide,",
 	"timeValidity": "Le refesh token de Bungie  est valide pendant environ 90 jours",
-	"allCharacters": "Tous les personnages"
+	"allCharacters": "Tous les personnages",
+	"settings": "Paramètres",
+	"allCharactersSizeIcon": "Taille des icones",
+	"save": "Enregistrer",
+	"settingsSaved": "Paramètres enregistrés"
 }

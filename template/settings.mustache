@@ -1,0 +1,35 @@
+<!doctype html>
+<html>
+{{> header}}
+<body style="background-color:{{backgroundColor}}">
+{{#saved}}
+    <div class="alert alert-success" role="alert">
+        {{#__}}settingsSaved{{/__}}&nbsp;{{settingstimeSaved}}
+    </div>
+{{/saved}}
+<form method="post">
+    <div class="container">
+        <div class="row">
+            <div class="col-4 p-2">
+                <label for="allCharactersSizeIcon" class="form-label">{{#__}}allCharactersSizeIcon{{/__}}</label>
+            </div>
+            <div class="col-8 p-2" style="display:flex">
+                <input style="width:60px;margin-right:15px" type="number" class="form-range" min="8" max="200" name="allCharactersSizeIcon" id="allCharactersSizeIcon" value="{{allCharactersSizeIcon}}">
+                <input type="range" class="form-range" min="8" max="200" id="allCharactersSizeIconRange" value="{{allCharactersSizeIcon}}">
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-1">
+                <button class="btn btn-primary" type="submit">{{#__}}save{{/__}}</button>
+            </div>
+        <div>
+    </div>
+</form>
+<script>
+function updateInput(e){
+    const inputE = e.target.id.replace("Range","")
+    document.getElementById(inputE).value=e.target.value
+}
+document.getElementById("allCharactersSizeIconRange").addEventListener("change",updateInput)
+</script>
+</html>

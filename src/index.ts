@@ -11,17 +11,48 @@ import cookieParser from "cookie-parser"
 import * as i18n from "i18n"
 import { Cookie } from "./cookies"
 import manifest from "./manifest"
+import { urlencoded } from "body-parser"
 
 const bountiesType = ["crucible", "gambit", "strikes"]
 const bungiePath = "https://www.bungie.net"
-const sizeIcon = "24px"
+const allCharactersSizeIcon = "24"
 const bountyNeedCount = 8
 const backgroundColor = "transparent"
 
 export enum ROUTE {
     ALL_CHARACTERS = "/allCharacters",
     HOME = "/",
-    AUTH_ACCESS = "/config/auth"
+    AUTH_ACCESS = "/config/auth",
+    SETTINGS = "/settings"
+}
+
+export type TotalBounties = {
+    complete: number,
+    count: number,
+    needed: number,
+    todo: number,
+    remaining: number
+}
+
+export type GroupBounties = {
+    icon: string,
+    complete: number,
+    count: number,
+    needed: number,
+    todo: number,
+    remaining: number
+}
+
+export type CharacterBounties = { [key: string]: GroupBounties }
+
+export type CharacterWithBounties = {
+    total: TotalBounties,
+    groups: CharacterBounties,
+    "class": string
+}
+
+export type AllCharacters = {
+    characters: CharacterWithBounties[]
 }
 
 const app = express()
@@ -44,6 +75,28 @@ app.use(function (req, res, next) {
 
     next()
 })
+app.use(urlencoded({ extended: true }))
+
+export const mergeDataWOpts = (
+    data: any,
+    opts?: {
+        q?: { cookies: { [key: string]: string } },
+        partials?: string[],
+        variables?: { [key: string]: string }
+    }
+) => {
+    const partials: any = {}
+    for (const key of opts?.partials || []) {
+        partials[key] = key
+    }
+    const variables = { ...opts?.variables }
+    for (const key in opts?.q?.cookies || []) {
+        if (key in variables && opts?.q?.cookies[key]) {
+            variables[key] = opts?.q?.cookies[key]
+        }
+    }
+    return { ...{ partials }, ...variables, ...data }
+}
 
 const sortByLastPlayed = (a: any, b: any) => {
     const atime = +new Date(a.dateLastPlayed)
@@ -51,18 +104,6 @@ const sortByLastPlayed = (a: any, b: any) => {
     if (atime == btime) return 0
     if (atime > btime) return 1
     return -1
-}
-
-const sortItemByBountyName = (a: any, b: any) => {
-    const aa = a.inventory.stackUniqueLabel.split(".") as string[]
-    const bb = b.inventory.stackUniqueLabel.split(".") as string[]
-    for (let i = 0; i < aa.length; i++) {
-        const cmp = aa[i].localeCompare(bb[i])
-        if (cmp !== 0) {
-            return cmp
-        }
-    }
-    return 0
 }
 
 const findItemComponentObjective = (objectivesMap: any, ichash: string, objectiveHashes: string[]) => {
@@ -95,11 +136,19 @@ app.get(ROUTE.ALL_CHARACTERS, async (q, r) => {
         const inventories = inventoryResponse.data.Response.characterInventories.data
         const objectives = inventoryResponse.data.Response.itemComponents.objectives.data
 
-        const displayCharacters = []
+        const data: AllCharacters = {
+            characters: []
+        }
+
         for (const characterId of Object.keys(characters)) {
             const character = characters[characterId]
             const classCharacter = manifest.t(character.classHash).displayProperties.name
             const inventory = inventories[characterId].items
+            const characterBounties: CharacterWithBounties = {
+                class: classCharacter,
+                groups: {},
+                total: { complete: 0, count: 0, needed: 0, remaining: 0, todo: 0 }
+            }
             const items = []
             for (const item of inventory) {
                 try {
@@ -110,10 +159,8 @@ app.get(ROUTE.ALL_CHARACTERS, async (q, r) => {
                         && _item.inventory.stackUniqueLabel.indexOf("bounties.") === 0
                         && bountiesType.indexOf(_item.inventory.stackUniqueLabel.split(".")[1]) >= 0
                     ) {
-                        // const bountyType = _item.inventory.stackUniqueLabel.split(".")[1]
                         const objectiveHashes = _item.objectives.objectiveHashes
                         const objective = findItemComponentObjective(objectives, item.itemInstanceId, objectiveHashes)
-                        // console.log(`${classCharacter} -> ${bountyType} -> ${_item.displayProperties.name} -> ${objective.complete}`)
                         items.push({ item: item, definition: _item, objective: objective })
                     }
                 } catch ({ message, stack }) {
@@ -122,7 +169,7 @@ app.get(ROUTE.ALL_CHARACTERS, async (q, r) => {
                 }
             }
 
-            const bountiesGroup = items.reduce((bounties, bounty) => {
+            const bountiesGroup: CharacterBounties = items.reduce((bounties, bounty) => {
                 const bountyType = bounty.definition.inventory.stackUniqueLabel.split(".")[1]
                 if (bounties[bountyType]) {
                     bounties[bountyType].count++
@@ -136,33 +183,36 @@ app.get(ROUTE.ALL_CHARACTERS, async (q, r) => {
                         count: 1,
                         complete: bounty.objective.complete ? 1 : 0,
                         todo: bounty.objective.complete ? 0 : 1,
-                        icon: bungiePath + bounty.definition.displayProperties.icon
+                        icon: bungiePath + bounty.definition.displayProperties.icon,
                     }
                 }
                 return bounties
             }, {} as any)
 
+            characterBounties.groups = bountiesGroup
 
-
-            const displayItems = []
-            const displayTotal = { complete: 0, count: 0, needed: 0, todo: 0, remaining: 0 }
             for (const bountyGroupName in bountiesGroup) {
                 const bountyGroup = bountiesGroup[bountyGroupName]
                 const remaining = bountyNeedCount - bountyGroup.complete
                 bountyGroup.remaining = remaining > 0 ? remaining : 0
-                displayTotal.complete += bountyGroup.complete
-                displayTotal.count += bountyGroup.count
-                displayTotal.needed += bountyNeedCount
-                displayTotal.todo += bountyGroup.todo
-                displayTotal.remaining += bountyGroup.remaining
-                displayItems.push(`<li><div style="display:inline-flex"><img style="height:${sizeIcon};width=${sizeIcon}" src=${bountyGroup.icon} />&nbsp;<span style="line-height:${sizeIcon}">${bountyNeedCount}/${bountyGroup.count}/${bountyGroup.complete}/${bountyGroup.todo}/${bountyGroup.remaining}</span></div></li>`)
+                characterBounties.total.complete += bountyGroup.complete
+                characterBounties.total.count += bountyGroup.count
+                characterBounties.total.needed += bountyNeedCount
+                characterBounties.total.todo += bountyGroup.todo
+                characterBounties.total.remaining += bountyGroup.remaining
             }
-            displayItems.unshift(`<li><div style="display:inline-flex"><span style="line-height:${sizeIcon}">${displayTotal.needed}/${displayTotal.count}/${displayTotal.complete}/${displayTotal.todo}/${displayTotal.remaining}</span></div></li>`)
-
-            displayCharacters.push(`<li>${classCharacter}<ul>${displayItems.join("")}</ul></li>`)
+            data.characters.push(characterBounties)
         }
-        const display = `<ul>${displayCharacters.join("")}</ul>`
-        r.status(200).send(`<body style="background-color:${backgroundColor}"><div>${display}</div></body>`)
+
+        r.render("allcharacters", mergeDataWOpts(
+            data,
+            {
+                q,
+                partials: ["bountiesgroup", "header"],
+                variables: { allCharactersSizeIcon, backgroundColor }
+            }
+        ))
+
     }
 
 })
@@ -197,8 +247,31 @@ app.get(ROUTE.HOME, async (q, r) => {
     r.render("welcome", {
         refreshToken,
         authLink,
-        allCharacters: ROUTE.ALL_CHARACTERS
+        allCharacters: ROUTE.ALL_CHARACTERS,
+        settings: ROUTE.SETTINGS
     })
+})
+
+app.get(ROUTE.SETTINGS, async (q, r) => {
+    const savedTime = q.cookies["settingstimeSaved"]
+    const parsedTime = isNaN(savedTime) ? 0 : parseInt(savedTime)
+    const settingstimeSaved = new Date(parsedTime).toISOString()
+    const saved = q.query["saved"]
+    r.render("settings", mergeDataWOpts({
+        settingstimeSaved,
+        saved
+    },
+        {
+            q,
+            partials: ["header"],
+            variables: { allCharactersSizeIcon }
+        }))
+})
+
+app.post(ROUTE.SETTINGS, async (q, r) => {
+    r.cookie("allCharactersSizeIcon", q.body.allCharactersSizeIcon)
+    r.cookie("settingstimeSaved", Date.now())
+    r.redirect(`${ROUTE.SETTINGS}?saved=true`)
 })
 
 const httpEnabled = process.env["HTTP"] === "true"

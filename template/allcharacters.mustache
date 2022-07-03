@@ -1,14 +1,30 @@
+<!doctype html>
+<html>
+{{> header}}
 <body style="background-color:{{backgroundColor}}">
 <div>
     <ul>
-        {{#character}}
-        <li>{{classCharacter}}
+        {{#characters}}
+        <li>{{class}}
             <ul>
-                <li><div style="display:inline-flex"><span style="line-height:{{sizeIcon}}">${displayTotal.needed}/${displayTotal.count}/${displayTotal.complete}/${displayTotal.remaining}</span></div></li>
-                <li><div style="display:inline-flex"><img style="height:{{sizeIcon}};width={{sizeIcon}}" src={{bountyGroup.icon}} />&nbsp;<span style="line-height:${sizeIcon}">${bountyNeedCount}/${bountyGroup.count}/${bountyGroup.complete}</span></div></li>
+                {{#total}}
+                    <li><div style="display:inline-flex"><span style="line-height:{{allCharactersSizeIcon}}px">{{needed}}/{{count}}/{{complete}}/{{todo}}/{{remaining}}</span></div></li>            
+                {{/total}}
+                {{#groups}}
+                    {{#strikes}}
+                    {{> bountiesgroup}}
+                    {{/strikes}}
+                    {{#crucible}}
+                    {{> bountiesgroup}}
+                    {{/crucible}}
+                    {{#gambit}}
+                    {{> bountiesgroup}}
+                    {{/gambit}}
+                {{/groups}}
             </ul>
         </li>
-        {{/character}}
+        {{/characters}}
     </ul>
 </div>
 </body>
+</html>

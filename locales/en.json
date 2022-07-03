@@ -3,5 +3,9 @@
     "intro": "Tired of counting bounties, we are here to help you",
     "validToken": "You have a valid refresh token,",
     "timeValidity": " Bungie refesh token tend to have a 90 days validity",
-    "allCharacters": "All characters"
+    "allCharacters": "All characters",
+    "settings": "Settings",
+    "allCharactersSizeIcon": "Icons size",
+    "save": "Save",
+    "settingsSaved": "Settings saved"
 }
