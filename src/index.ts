@@ -15,9 +15,14 @@ import { urlencoded } from "body-parser"
 
 const bountiesType = ["crucible", "gambit", "strikes"]
 const bungiePath = "https://www.bungie.net"
-const allCharactersSizeIcon = "24"
-const bountyNeedCount = 8
-const backgroundColor = "transparent"
+const defaultOpts = {
+    allCharactersSizeIcon: 24,
+    bountyNeedCount: 8,
+    backgroundColor: "transparent",
+    strikes: true,
+    crucible: true,
+    gambit: true
+}
 
 export enum ROUTE {
     ALL_CHARACTERS = "/allCharacters",
@@ -77,12 +82,14 @@ app.use(function (req, res, next) {
 })
 app.use(urlencoded({ extended: true }))
 
+export type RWC = { cookies: { [key: string]: string } }
+export const getCookie = <T>(q: RWC, key: keyof typeof defaultOpts) => { return (q.cookies[key] || defaultOpts[key]) as unknown as T }
 export const mergeDataWOpts = (
     data: any,
     opts?: {
-        q?: { cookies: { [key: string]: string } },
+        q?: RWC,
         partials?: string[],
-        variables?: { [key: string]: string }
+        variables?: { [key: string]: string | number | boolean }
     }
 ) => {
     const partials: any = {}
@@ -92,7 +99,19 @@ export const mergeDataWOpts = (
     const variables = { ...opts?.variables }
     for (const key in opts?.q?.cookies || []) {
         if (key in variables && opts?.q?.cookies[key]) {
-            variables[key] = opts?.q?.cookies[key]
+            switch (typeof (defaultOpts as any)[key]) {
+                case "boolean": {
+                    variables[key] = opts?.q?.cookies[key] === "true"
+                    break
+                }
+                case "number": {
+                    variables[key] = parseInt(opts?.q?.cookies[key])
+                    break
+                }
+                default: {
+                    variables[key] = opts?.q?.cookies[key]
+                }
+            }
         }
     }
     return { ...{ partials }, ...variables, ...data }
@@ -193,11 +212,11 @@ app.get(ROUTE.ALL_CHARACTERS, async (q, r) => {
 
             for (const bountyGroupName in bountiesGroup) {
                 const bountyGroup = bountiesGroup[bountyGroupName]
-                const remaining = bountyNeedCount - bountyGroup.complete
+                const remaining = getCookie<number>(q, "bountyNeedCount") - bountyGroup.complete
                 bountyGroup.remaining = remaining > 0 ? remaining : 0
                 characterBounties.total.complete += bountyGroup.complete
                 characterBounties.total.count += bountyGroup.count
-                characterBounties.total.needed += bountyNeedCount
+                characterBounties.total.needed += getCookie<number>(q, "bountyNeedCount")
                 characterBounties.total.todo += bountyGroup.todo
                 characterBounties.total.remaining += bountyGroup.remaining
             }
@@ -209,7 +228,7 @@ app.get(ROUTE.ALL_CHARACTERS, async (q, r) => {
             {
                 q,
                 partials: ["bountiesgroup", "header"],
-                variables: { allCharactersSizeIcon, backgroundColor }
+                variables: defaultOpts
             }
         ))
 
@@ -264,12 +283,26 @@ app.get(ROUTE.SETTINGS, async (q, r) => {
         {
             q,
             partials: ["header"],
-            variables: { allCharactersSizeIcon }
+            variables: defaultOpts
         }))
 })
 
 app.post(ROUTE.SETTINGS, async (q, r) => {
-    r.cookie("allCharactersSizeIcon", q.body.allCharactersSizeIcon)
+    for (const key in defaultOpts) {
+        switch (typeof (defaultOpts as any)[key]) {
+            case "number": {
+                r.cookie(key, parseInt(q.body[key]))
+                break
+            }
+            case "boolean": {
+                r.cookie(key, (q.body[key] === "on"))
+                break
+            }
+            default: {
+                r.cookie(key, q.body[key])
+            }
+        }
+    }
     r.cookie("settingstimeSaved", Date.now())
     r.redirect(`${ROUTE.SETTINGS}?saved=true`)
 })
