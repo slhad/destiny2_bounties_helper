@@ -1,7 +1,7 @@
 /* eslint-disable prefer-rest-params */
 import { mustache } from "consolidate"
 import { readFileSync } from "fs"
-import { authorize, getInventory, getLinkedProfile, getToken, refresh } from "./api"
+import { authorize, getToken, refresh } from "./api"
 import express = require("express")
 
 import * as http from "http"
@@ -12,53 +12,9 @@ import * as i18n from "i18n"
 import { Cookie } from "./cookies"
 import manifest from "./manifest"
 import { urlencoded } from "body-parser"
+import { defaultOpts, mergeDataWOpts, ROUTE } from "./constants"
 
-const bountiesType = ["crucible", "gambit", "strikes"]
-const bungiePath = "https://www.bungie.net"
-const defaultOpts = {
-    allCharactersSizeIcon: 24,
-    bountyNeedCount: 8,
-    backgroundColor: "transparent",
-    strikes: true,
-    crucible: true,
-    gambit: true
-}
-
-export enum ROUTE {
-    ALL_CHARACTERS = "/allCharacters",
-    HOME = "/",
-    AUTH_ACCESS = "/config/auth",
-    SETTINGS = "/settings"
-}
-
-export type TotalBounties = {
-    complete: number,
-    count: number,
-    needed: number,
-    todo: number,
-    remaining: number
-}
-
-export type GroupBounties = {
-    icon: string,
-    complete: number,
-    count: number,
-    needed: number,
-    todo: number,
-    remaining: number
-}
-
-export type CharacterBounties = { [key: string]: GroupBounties }
-
-export type CharacterWithBounties = {
-    total: TotalBounties,
-    groups: CharacterBounties,
-    "class": string
-}
-
-export type AllCharacters = {
-    characters: CharacterWithBounties[]
-}
+import { Bounties } from "./bounties"
 
 const app = express()
 i18n.configure({
@@ -82,55 +38,7 @@ app.use(function (req, res, next) {
 })
 app.use(urlencoded({ extended: true }))
 
-export type RWC = { cookies: { [key: string]: string } }
-export const getCookie = <T>(q: RWC, key: keyof typeof defaultOpts) => { return (q.cookies[key] || defaultOpts[key]) as unknown as T }
-export const mergeDataWOpts = (
-    data: any,
-    opts?: {
-        q?: RWC,
-        partials?: string[],
-        variables?: { [key: string]: string | number | boolean }
-    }
-) => {
-    const partials: any = {}
-    for (const key of opts?.partials || []) {
-        partials[key] = key
-    }
-    const variables = { ...opts?.variables }
-    for (const key in opts?.q?.cookies || []) {
-        if (key in variables && opts?.q?.cookies[key]) {
-            switch (typeof (defaultOpts as any)[key]) {
-                case "boolean": {
-                    variables[key] = opts?.q?.cookies[key] === "true"
-                    break
-                }
-                case "number": {
-                    variables[key] = parseInt(opts?.q?.cookies[key])
-                    break
-                }
-                default: {
-                    variables[key] = opts?.q?.cookies[key]
-                }
-            }
-        }
-    }
-    return { ...{ partials }, ...variables, ...data }
-}
 
-const sortByLastPlayed = (a: any, b: any) => {
-    const atime = +new Date(a.dateLastPlayed)
-    const btime = +new Date(b.dateLastPlayed)
-    if (atime == btime) return 0
-    if (atime > btime) return 1
-    return -1
-}
-
-const findItemComponentObjective = (objectivesMap: any, ichash: string, objectiveHashes: string[]) => {
-    const objectives = objectivesMap[ichash] && objectivesMap[ichash].objectives || { objectives: [] }.objectives
-    return objectives.find((objective: any) => {
-        return objectiveHashes.find(hash => objective.objectiveHash === hash)
-    })
-}
 
 app.get(ROUTE.ALL_CHARACTERS, async (q, r) => {
     const rToken = q.cookies["destinyRefreshToken"]
@@ -148,80 +56,7 @@ app.get(ROUTE.ALL_CHARACTERS, async (q, r) => {
                 maxAge: refreshedToken.data.refresh_expires_in
             })
 
-        const profileResponse = await getLinkedProfile(refreshedToken.data.membership_id)
-        const profile = profileResponse.data.Response.profiles.sort(sortByLastPlayed)[0]
-        const inventoryResponse = await getInventory(profile.membershipId, profile.membershipType, refreshedToken.data.access_token)
-        const characters = inventoryResponse.data.Response.characters.data
-        const inventories = inventoryResponse.data.Response.characterInventories.data
-        const objectives = inventoryResponse.data.Response.itemComponents.objectives.data
-
-        const data: AllCharacters = {
-            characters: []
-        }
-
-        for (const characterId of Object.keys(characters)) {
-            const character = characters[characterId]
-            const classCharacter = manifest.t(character.classHash).displayProperties.name
-            const inventory = inventories[characterId].items
-            const characterBounties: CharacterWithBounties = {
-                class: classCharacter,
-                groups: {},
-                total: { complete: 0, count: 0, needed: 0, remaining: 0, todo: 0 }
-            }
-            const items = []
-            for (const item of inventory) {
-                try {
-                    const _item = manifest.t(item.itemHash)
-                    if (_item
-                        && _item.inventory
-                        && _item.inventory.stackUniqueLabel
-                        && _item.inventory.stackUniqueLabel.indexOf("bounties.") === 0
-                        && bountiesType.indexOf(_item.inventory.stackUniqueLabel.split(".")[1]) >= 0
-                    ) {
-                        const objectiveHashes = _item.objectives.objectiveHashes
-                        const objective = findItemComponentObjective(objectives, item.itemInstanceId, objectiveHashes)
-                        items.push({ item: item, definition: _item, objective: objective })
-                    }
-                } catch ({ message, stack }) {
-                    console.warn(`skipping ${message} : ${stack}`, item, manifest.t(item.itemHash))
-                    continue
-                }
-            }
-
-            const bountiesGroup: CharacterBounties = items.reduce((bounties, bounty) => {
-                const bountyType = bounty.definition.inventory.stackUniqueLabel.split(".")[1]
-                if (bounties[bountyType]) {
-                    bounties[bountyType].count++
-                    if (bounty.objective.complete) {
-                        bounties[bountyType].complete++
-                    } else {
-                        bounties[bountyType].todo++
-                    }
-                } else {
-                    bounties[bountyType] = {
-                        count: 1,
-                        complete: bounty.objective.complete ? 1 : 0,
-                        todo: bounty.objective.complete ? 0 : 1,
-                        icon: bungiePath + bounty.definition.displayProperties.icon,
-                    }
-                }
-                return bounties
-            }, {} as any)
-
-            characterBounties.groups = bountiesGroup
-
-            for (const bountyGroupName in bountiesGroup) {
-                const bountyGroup = bountiesGroup[bountyGroupName]
-                const remaining = getCookie<number>(q, "bountyNeedCount") - bountyGroup.complete
-                bountyGroup.remaining = remaining > 0 ? remaining : 0
-                characterBounties.total.complete += bountyGroup.complete
-                characterBounties.total.count += bountyGroup.count
-                characterBounties.total.needed += getCookie<number>(q, "bountyNeedCount")
-                characterBounties.total.todo += bountyGroup.todo
-                characterBounties.total.remaining += bountyGroup.remaining
-            }
-            data.characters.push(characterBounties)
-        }
+        const data = await Bounties.fetchBounties(refreshedToken, q)
 
         r.render("allcharacters", mergeDataWOpts(
             data,
