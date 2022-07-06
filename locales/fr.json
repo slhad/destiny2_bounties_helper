@@ -7,5 +7,11 @@
 	"settings": "Paramètres",
 	"allCharactersSizeIcon": "Taille des icones",
 	"save": "Enregistrer",
-	"settingsSaved": "Paramètres enregistrés"
+	"settingsSaved": "Paramètres enregistrés",
+	"bountiesGroups": "Contrats journaliers",
+	"strikes": "Assauts",
+	"crucible": "Epreuve",
+	"gambit": "Gambit",
+	"bountyNeedCount": "Nombre de contrats journaliers",
+	"globals": "Global"
 }

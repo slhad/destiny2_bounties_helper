@@ -7,5 +7,11 @@
     "settings": "Settings",
     "allCharactersSizeIcon": "Icons size",
     "save": "Save",
-    "settingsSaved": "Settings saved"
+    "settingsSaved": "Settings saved",
+    "bountiesGroups": "Dailies contracts",
+    "strikes": "Strikes",
+    "crucible": "Crucible",
+    "gambit": "Gambit",
+    "bountyNeedCount": "Number of daily contracts",
+    "globals": "Global"
 }
