@@ -4,6 +4,7 @@
 	"validToken": "Votre refresh token est valide,",
 	"timeValidity": "Le refesh token de Bungie  est valide pendant environ 90 jours",
 	"allCharacters": "Tous les personnages",
+	"character": "Dernier personnage utilisé",
 	"settings": "Paramètres",
 	"allCharactersSizeIcon": "Taille des icones",
 	"save": "Enregistrer",
@@ -13,5 +14,11 @@
 	"crucible": "Epreuve",
 	"gambit": "Gambit",
 	"bountyNeedCount": "Nombre de contrats journaliers",
-	"globals": "Global"
+	"globals": "Global",
+	"needed": "Objectif",
+	"count": "Total",
+	"complete": "Fini",
+	"todo": "A faire",
+	"remaining": "Restant",
+	"autoRefresh": "Rafraichissement automatique (s)"
 }

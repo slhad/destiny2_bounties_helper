@@ -37,6 +37,16 @@
             </div>
         </div>
         <div class="row">
+            <div class="col-4 p-2">
+                <input type="checkbox" class="btn-check" id="btn-check-auto-refresh" name="autoRefreshEnabled" {{#autoRefreshEnabled}}checked{{/autoRefreshEnabled}} autocomplete="off">
+                <label class="btn btn-outline-primary" for="btn-check-auto-refresh">{{#__}}autoRefresh{{/__}}</label>
+            </div>
+            <div class="col-8 p-2" style="display:flex">
+                <input style="width:60px;margin-right:15px" type="number" class="form-range" min="60" max="3600" name="autoRefresh" id="autoRefresh" value="{{autoRefresh}}">
+                <input type="range" class="form-range" min="60" max="3600" id="autoRefreshRange" value="{{autoRefresh}}">
+            </div>
+        </div>
+        <div class="row">
         <h2>{{#__}}allCharacters{{/__}}</h2>
             <div class="col-4 p-2">
                 <label for="allCharactersSizeIcon" class="form-label">{{#__}}allCharactersSizeIcon{{/__}}</label>
@@ -60,5 +70,6 @@ function updateInput(e){
 }
 document.getElementById("allCharactersSizeIconRange").addEventListener("change",updateInput)
 document.getElementById("bountyNeedCountRange").addEventListener("change",updateInput)
+document.getElementById("autoRefreshRange").addEventListener("change",updateInput)
 </script>
 </html>

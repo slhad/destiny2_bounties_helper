@@ -4,6 +4,7 @@
     "validToken": "You have a valid refresh token,",
     "timeValidity": " Bungie refesh token tend to have a 90 days validity",
     "allCharacters": "All characters",
+    "character": "Last used character",
     "settings": "Settings",
     "allCharactersSizeIcon": "Icons size",
     "save": "Save",
@@ -13,5 +14,11 @@
     "crucible": "Crucible",
     "gambit": "Gambit",
     "bountyNeedCount": "Number of daily contracts",
-    "globals": "Global"
+    "globals": "Global",
+    "needed": "Needed",
+    "count": "Count",
+    "complete": "Complete",
+    "todo": "Todo",
+    "remaining": "Remaining",
+    "autoRefresh": "Auto refresh (s)"
 }

@@ -39,14 +39,10 @@ app.use(function (req, res, next) {
 app.use(urlencoded({ extended: true }))
 
 
-
-app.get(ROUTE.ALL_CHARACTERS, async (q, r) => {
+app.get(ROUTE.CURRENT_CHARACTER, async (q, r) => {
     const rToken = q.cookies["destinyRefreshToken"]
-
     if (!rToken) {
-        const nanoid = await import("nanoid")
-        const loginUrl = authorize(nanoid.nanoid())
-        r.status(200).send(`<body><a href="${loginUrl}">Login</body>`)
+        r.redirect(ROUTE.HOME)
     } else {
         const refreshedToken = await refresh(rToken)
         r.cookie("destinyToken", refreshedToken.data.access_token)
@@ -56,13 +52,40 @@ app.get(ROUTE.ALL_CHARACTERS, async (q, r) => {
                 maxAge: refreshedToken.data.refresh_expires_in
             })
 
-        const data = await Bounties.fetchBounties(refreshedToken, q)
+        const data = await Bounties.fetchLastUsedCharacterBounties(refreshedToken, q)
+        r.render("character", mergeDataWOpts(
+            data,
+            {
+                q,
+                partials: ["bountiesgroup", "header"],
+                variables: defaultOpts
+            }
+        ))
+    }
+})
+
+
+app.get(ROUTE.ALL_CHARACTERS, async (q, r) => {
+    const rToken = q.cookies["destinyRefreshToken"]
+
+    if (!rToken) {
+        r.redirect(ROUTE.HOME)
+    } else {
+        const refreshedToken = await refresh(rToken)
+        r.cookie("destinyToken", refreshedToken.data.access_token)
+        r.cookie("memberId", refreshedToken.data.membership_id)
+        r.cookie("destinyRefreshToken", refreshedToken.data.refresh_token,
+            {
+                maxAge: refreshedToken.data.refresh_expires_in
+            })
+
+        const data = await Bounties.fetchAllCharactersBounties(refreshedToken, q)
 
         r.render("allcharacters", mergeDataWOpts(
             data,
             {
                 q,
-                partials: ["bountiesgroup", "header"],
+                partials: ["allbountiesgroup", "header"],
                 variables: defaultOpts
             }
         ))
@@ -98,12 +121,17 @@ app.get(ROUTE.HOME, async (q, r) => {
     const nanoid = await import("nanoid")
     const authLink = authorize(nanoid.nanoid())
     const refreshToken = Cookie.getRefresh(q)
-    r.render("welcome", {
+    r.render("welcome", mergeDataWOpts({
         refreshToken,
         authLink,
         allCharacters: ROUTE.ALL_CHARACTERS,
+        character: ROUTE.CURRENT_CHARACTER,
         settings: ROUTE.SETTINGS
-    })
+    }, {
+        q,
+        partials: ["header"],
+        variables: defaultOpts
+    }))
 })
 
 app.get(ROUTE.SETTINGS, async (q, r) => {

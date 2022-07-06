@@ -1,16 +1,29 @@
+<!doctype html>
 <html>
-<body>
-<h1>Destiny 2 bounties helper</h1>
-<p>{{#__}}intro{{/__}}</p>
-{{^refreshToken}}
-<div><a href="{{authLink}}">{{#__}}authText{{/__}}</a></div>
-{{/refreshToken}}
-{{#refreshToken}}
-<div><p>
-{{#__}}validToken{{/__}}&nbsp;{{#__}}timeValidity{{/__}}
-</p></div>
-<div><a href="{{allCharacters}}">{{#__}}allCharacters{{/__}}</a></div>
-<div><a href="{{settings}}">{{#__}}settings{{/__}}</a></div>
-{{/refreshToken}}
+{{> header}}
+<body style="background-color:{{backgroundColor}}">
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <h1>Destiny 2 bounties helper</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+        <p>{{#__}}intro{{/__}}</p>
+            </div>
+        </div>
+        {{^refreshToken}}
+            <div class="row"><div class="col"><a href="{{authLink}}">{{#__}}authText{{/__}}</a></div></div>
+        {{/refreshToken}}
+        {{#refreshToken}}
+            <div class="row"><div class="col"><p>
+                {{#__}}validToken{{/__}}&nbsp;{{#__}}timeValidity{{/__}}
+            </p></div></div>
+            <div class="row"><div class="col"><a href="{{allCharacters}}">{{#__}}allCharacters{{/__}}</a></div></div>
+            <div class="row"><div class="col"><a href="{{character}}">{{#__}}character{{/__}}</a></div></div>
+            <div class="row"><div class="col"><a href="{{settings}}">{{#__}}settings{{/__}}</a></div></div>
+        {{/refreshToken}}
+    </div>
 </body>
 </html>

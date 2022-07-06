@@ -13,14 +13,17 @@ export const defaultOpts = {
     backgroundColor: "transparent",
     strikes: true,
     crucible: true,
-    gambit: true
+    gambit: true,
+    autoRefresh: 60,
+    autoRefreshEnabled: false
 }
 
 export enum ROUTE {
     ALL_CHARACTERS = "/allCharacters",
     HOME = "/",
     AUTH_ACCESS = "/config/auth",
-    SETTINGS = "/settings"
+    SETTINGS = "/settings",
+    CURRENT_CHARACTER = "/character"
 }
 
 export type TotalBounties = {
@@ -47,7 +50,9 @@ export type CharacterBounties = { [key: string]: GroupBounties }
 export type CharacterWithBounties = {
     total: TotalBounties,
     groups: CharacterBounties,
-    "class": string
+    "class": string,
+    emblemBackground: string,
+    emblem: string
 }
 
 export type AllCharacters = {
@@ -106,7 +111,7 @@ export const sortByLastPlayed = (a: any, b: any) => {
     const atime = +new Date(a.dateLastPlayed)
     const btime = +new Date(b.dateLastPlayed)
     if (atime == btime) return 0
-    if (atime > btime) return 1
+    if (atime < btime) return 1
     return -1
 }
 
