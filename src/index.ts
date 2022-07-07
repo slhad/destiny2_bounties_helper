@@ -7,12 +7,12 @@ import express = require("express")
 import * as http from "http"
 import * as https from "https"
 
+import { urlencoded } from "body-parser"
 import cookieParser from "cookie-parser"
 import * as i18n from "i18n"
+import { defaultOpts, mergeDataWOpts, ROUTE } from "./constants"
 import { Cookie } from "./cookies"
 import manifest from "./manifest"
-import { urlencoded } from "body-parser"
-import { defaultOpts, mergeDataWOpts, ROUTE } from "./constants"
 
 import { Bounties } from "./bounties"
 
