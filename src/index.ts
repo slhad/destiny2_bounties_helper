@@ -67,6 +67,18 @@ app.get(ROUTE.CURRENT_CHARACTER, async (q, r) => {
     ))
 })
 
+app.get(ROUTE.CURRENT_CHARACTER_SMALL, async (q, r) => {
+    const data = await Bounties.fetchLastUsedCharacterBounties(q)
+    r.render("charactersmall", mergeDataWOpts(
+        data,
+        {
+            q,
+            partials: [],
+            variables: defaultOpts
+        }
+    ))
+})
+
 
 app.get(ROUTE.ALL_CHARACTERS, async (q, r) => {
     const data = await Bounties.fetchAllCharactersBounties(q)
@@ -105,6 +117,7 @@ app.get(ROUTE.HOME, async (q, r) => {
         authLink,
         allCharacters: ROUTE.ALL_CHARACTERS,
         character: ROUTE.CURRENT_CHARACTER,
+        characterSmall: ROUTE.CURRENT_CHARACTER_SMALL,
         settings: ROUTE.SETTINGS
     }, {
         q,

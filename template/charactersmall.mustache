@@ -1,0 +1,42 @@
+<!doctype html>
+<html>
+<style>
+p {
+    font-size:small;
+    display:contents;
+    line-height:24px;
+    font-family: Arial, Helvetica, sans-serif;
+    -webkit-text-stroke-width: thin;
+    -webkit-text-fill-color: white;
+}
+img {
+    height:24px;
+    width:24px;
+    margin-right:5px;
+}
+</style>
+<body style="background-color:transparent">
+{{#groups}}
+<div style="display:inline-flex">
+{{#strikes}}
+    {{^done}}
+    <img src={{icon}} />
+    <p>{{remaining}}/{{needed}}</p>
+    {{/done}}
+{{/strikes}}
+{{#crucible}}
+    {{^done}}
+    <img src={{icon}} />
+    <p>{{remaining}}/{{needed}}</p>
+    {{/done}}
+{{/crucible}}
+{{#gambit}}
+    {{^done}}
+    <img src={{icon}} />
+    <p>{{remaining}}/{{needed}}</p>
+    {{/done}}
+{{/gambit}}
+</div>
+{{/groups}}
+</body>
+</html>
