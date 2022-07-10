@@ -1,8 +1,9 @@
 /* eslint-disable prefer-rest-params */
 import { mustache } from "consolidate"
 import { readFileSync } from "fs"
-import { authorize, getToken, refresh } from "./api"
+import { accessToken, authorize, getCookies, getLinkedProfile, getToken, setCookies } from "./api"
 import express = require("express")
+import responseTime = require("response-time")
 
 import * as http from "http"
 import * as https from "https"
@@ -10,8 +11,7 @@ import * as https from "https"
 import { urlencoded } from "body-parser"
 import cookieParser from "cookie-parser"
 import * as i18n from "i18n"
-import { defaultOpts, mergeDataWOpts, ROUTE } from "./constants"
-import { Cookie } from "./cookies"
+import { defaultOpts, mergeDataWOpts, ROUTE, RWC, sortByLastPlayed } from "./constants"
 import manifest from "./manifest"
 
 import { Bounties } from "./bounties"
@@ -37,90 +37,69 @@ app.use(function (req, res, next) {
     next()
 })
 app.use(urlencoded({ extended: true }))
+app.use((err: Error, q: any, r: any, n: any) => {
+    console.log(`${err.message} : ${err.stack}`)
+    r.status(500).send("error")
+})
+app.use(responseTime(function (req, res, time) {
+    console.log(`${req.method} ${req.url} ${time} ms`)
+}))
 
-
-app.get(ROUTE.CURRENT_CHARACTER, async (q, r) => {
-    const rToken = q.cookies["destinyRefreshToken"]
-    if (!rToken) {
+app.use(ROUTE.CONNECTED, async (q: RWC, r, n) => {
+    const a = await accessToken(q, r)
+    if (!a) {
         r.redirect(ROUTE.HOME)
     } else {
-        const refreshedToken = await refresh(rToken)
-        r.cookie("destinyToken", refreshedToken.data.access_token)
-        r.cookie("memberId", refreshedToken.data.membership_id)
-        r.cookie("destinyRefreshToken", refreshedToken.data.refresh_token,
-            {
-                maxAge: refreshedToken.data.refresh_expires_in
-            })
-
-        const data = await Bounties.fetchLastUsedCharacterBounties(refreshedToken, q)
-        r.render("character", mergeDataWOpts(
-            data,
-            {
-                q,
-                partials: ["bountiesgroup", "header"],
-                variables: defaultOpts
-            }
-        ))
+        q.cookies["destinyToken"] = a
+        n()
     }
+})
+
+app.get(ROUTE.CURRENT_CHARACTER, async (q, r) => {
+    const data = await Bounties.fetchLastUsedCharacterBounties(q)
+    r.render("character", mergeDataWOpts(
+        data,
+        {
+            q,
+            partials: ["bountiesgroup", "header"],
+            variables: defaultOpts
+        }
+    ))
 })
 
 
 app.get(ROUTE.ALL_CHARACTERS, async (q, r) => {
-    const rToken = q.cookies["destinyRefreshToken"]
-
-    if (!rToken) {
-        r.redirect(ROUTE.HOME)
-    } else {
-        const refreshedToken = await refresh(rToken)
-        r.cookie("destinyToken", refreshedToken.data.access_token)
-        r.cookie("memberId", refreshedToken.data.membership_id)
-        r.cookie("destinyRefreshToken", refreshedToken.data.refresh_token,
-            {
-                maxAge: refreshedToken.data.refresh_expires_in
-            })
-
-        const data = await Bounties.fetchAllCharactersBounties(refreshedToken, q)
-
-        r.render("allcharacters", mergeDataWOpts(
-            data,
-            {
-                q,
-                partials: ["allbountiesgroup", "header"],
-                variables: defaultOpts
-            }
-        ))
-
-    }
-
+    const data = await Bounties.fetchAllCharactersBounties(q)
+    r.render("allcharacters", mergeDataWOpts(
+        data,
+        {
+            q,
+            partials: ["allbountiesgroup", "header"],
+            variables: defaultOpts
+        }
+    ))
 })
 
 app.get(ROUTE.AUTH_ACCESS, async (q, r) => {
     const code = q.query["code"]
 
-    try {
-        // todo : manage error token
-        const tokenData = await getToken(code as string)
-        r.cookie("destinyToken", tokenData.data.access_token)
-        r.cookie("memberId", tokenData.data.membership_id)
-        r.cookie("destinyRefreshToken", tokenData.data.refresh_token,
-            {
-                maxAge: tokenData.data.refresh_expires_in
-            })
-        // Cookie.setAuth(r, {
-        //     destinyRefreshToken: { value: tokenData.data.refresh_token, options: { maxAge: tokenData.data.refresh_expires_in } },
-        //     destinyToken: tokenData.data.access_token,
-        //     memberId: tokenData.data.membership_id
-        // })
-    } catch ({ message, stack }) {
-        console.log(`${message} : ${stack}`)
+    const tokenData = await getToken(code as string)
+    if (tokenData) {
+        const cookies = setCookies(tokenData, r)
+        const profileResponse = await getLinkedProfile(cookies.membershipId)
+        if (profileResponse) {
+            const profile = profileResponse.data.Response.profiles.sort(sortByLastPlayed)[0]
+            setCookies(profile, r)
+        }
     }
+
     r.redirect(ROUTE.HOME)
 })
 
 app.get(ROUTE.HOME, async (q, r) => {
     const nanoid = await import("nanoid")
     const authLink = authorize(nanoid.nanoid())
-    const refreshToken = Cookie.getRefresh(q)
+    const refreshToken = getCookies(q).refreshToken
     r.render("welcome", mergeDataWOpts({
         refreshToken,
         authLink,

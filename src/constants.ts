@@ -11,19 +11,28 @@ export const defaultOpts = {
     allCharactersSizeIcon: 24,
     bountyNeedCount: 8,
     backgroundColor: "transparent",
-    strikes: true,
-    crucible: true,
-    gambit: true,
+    strikesAllowed: true,
+    crucibleAllowed: true,
+    gambitAllowed: true,
     autoRefresh: 60,
     autoRefreshEnabled: false
 }
 
+export type Destiny2Cookies = {
+    membershipId: string
+    token: string
+    refreshToken: string
+    profileMembershipId: string
+    profileMembershipType: string
+}
+
 export enum ROUTE {
-    ALL_CHARACTERS = "/allCharacters",
+    CONNECTED = "/connected",
     HOME = "/",
+    ALL_CHARACTERS = "/connected/allCharacters",
+    CURRENT_CHARACTER = "/connected/character",
     AUTH_ACCESS = "/config/auth",
-    SETTINGS = "/settings",
-    CURRENT_CHARACTER = "/character"
+    SETTINGS = "/settings"
 }
 
 export type TotalBounties = {

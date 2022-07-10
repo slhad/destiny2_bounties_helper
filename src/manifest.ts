@@ -12,7 +12,7 @@ class Manifest {
 
     async fetchManifest() {
         const res = await getManifest()
-        this.urls = res.data.Response
+        this.urls = (res && res.data || { Responce: {} }).Response
 
         for (const definition of this.definitions) {
             const manifestUrl = "https://www.bungie.net" + this.jsonUrl(definition)

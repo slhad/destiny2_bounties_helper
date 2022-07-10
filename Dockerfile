@@ -25,4 +25,5 @@ RUN npm -g install npm@latest && npm -g install npm@latest && npm --omit-dev ci
 EXPOSE 8888
 EXPOSE 8887
 VOLUME [ "/app/files" ]
+ENV NODE_ENV=production
 ENTRYPOINT [ "node","." ]

@@ -1,4 +1,4 @@
-import { getInventory, getLinkedProfile } from "./api"
+import { getCharacters, getCookies, getInventory, getLinkedProfile, refresh } from "./api"
 import { AllCharacters, backup, bountiesType, bungiePath, CharacterBounties, CharacterWithBounties, findItemComponentObjective, getCookie, RWC, sortByLastPlayed } from "./constants"
 import manifest from "./manifest"
 
@@ -37,7 +37,7 @@ export class Bounties {
 
         for (const key in backup.icon) {
             const needed = getCookie<number>(q, "bountyNeedCount")
-            const allowedGroup = getCookie(q, key as any)
+            const allowedGroup = getCookie(q, `${key}Allowed` as any)
             if (!allowedGroup) {
                 continue
             }
@@ -54,7 +54,7 @@ export class Bounties {
 
         const bountiesGroup: CharacterBounties = items.reduce((bounties, bounty) => {
             const bountyType = bounty.definition.inventory.stackUniqueLabel.split(".")[1]
-            const allowedGroup = getCookie(q, bountyType)
+            const allowedGroup = getCookie(q, `${bountyType}Allowed` as any)
             if (allowedGroup) {
                 if (bounties[bountyType].count === 0) {
                     bounties[bountyType].icon = bungiePath + bounty.definition.displayProperties.icon
@@ -91,30 +91,30 @@ export class Bounties {
         return Object.keys(info.characters).map(key => info.characters[key]).sort(sortByLastPlayed)[0]
     }
 
-    static async fetchData(refreshedToken: any) {
-        const profileResponse = await getLinkedProfile(refreshedToken.data.membership_id)
-        const profile = profileResponse.data.Response.profiles.sort(sortByLastPlayed)[0]
-        const inventoryResponse = await getInventory(profile.membershipId, profile.membershipType, refreshedToken.data.access_token)
-        const characters = inventoryResponse.data.Response.characters.data
-        const inventories = inventoryResponse.data.Response.characterInventories.data
+    static async fetchData(q: RWC, characterId?: string) {
+        const cookies = getCookies(q)
+        const inventoryResponse = await getInventory(cookies.profileMembershipId, cookies.profileMembershipType, cookies.token, characterId)
+        if (!inventoryResponse) return
+        const characters = inventoryResponse.data.Response[characterId ? "character" : "characters"].data
+        const inventories = inventoryResponse.data.Response[characterId ? "inventory" : "characterInventories"].data
         const objectives = inventoryResponse.data.Response.itemComponents.objectives.data
         const data: fetchedData = {
-            characters,
-            inventories,
-            objectives,
-            profile
+            characters: characterId ? { [characterId]: characters } : characters,
+            inventories: characterId ? { [characterId]: inventories } : inventories,
+            objectives
         }
         return data
     }
 
-    static async fetchLastUsedCharacterBounties(refreshedToken: any, q: RWC) {
-        const info = await this.fetchData(refreshedToken)
+    static async fetchLastUsedCharacterBounties(q: RWC) {
+        const info = await this.fetchData(q)
+        if (!info) return
         const lastUsedCharacter = this.getLastCharacterIdUsed(info)
         return this.extractCharacterBounties(info, q, lastUsedCharacter.characterId)
     }
 
-    static async fetchAllCharactersBounties(refreshedToken: any, q: RWC) {
-        const info = await this.fetchData(refreshedToken)
+    static async fetchAllCharactersBounties(q: RWC) {
+        const info = await this.fetchData(q) || { characters: {} }
         const data: AllCharacters = {
             characters: []
         }
@@ -130,7 +130,6 @@ export class Bounties {
 }
 
 export type fetchedData = {
-    profile: any,
     inventories: any
     characters: any
     objectives: any
