@@ -1,5 +1,9 @@
 <!doctype html>
 <html>
+<head>
+    <meta charset="utf-8" />
+    <title>{{titlePage}}</title>
+    {{#autoRefreshEnabled}}<meta http-equiv="refresh" content="{{autoRefresh}}">{{/autoRefreshEnabled}}
 <style>
 p {
     font-size:xx-large;
@@ -15,6 +19,7 @@ img {
     margin-right:5px;
 }
 </style>
+</head>
 <body>
 {{#groups}}
 <div style="display:inline-flex">
