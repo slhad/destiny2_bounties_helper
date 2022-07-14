@@ -6,6 +6,7 @@
 	"allCharacters": "Tous les personnages",
 	"character": "Dernier personnage utilisé",
 	"characterSmall": "Dernier personnage utilisé overlay minimaliste",
+	"charactersmallDesc": "Affiche uniquement les contrats journaliers restants à faire et manquant pour atteindre l'objectif",
 	"settings": "Paramètres",
 	"allCharactersSizeIcon": "Taille des icones",
 	"save": "Enregistrer",

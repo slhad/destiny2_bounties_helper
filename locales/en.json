@@ -6,6 +6,7 @@
     "allCharacters": "All characters",
     "character": "Last used character",
     "characterSmall": "Last used character minimalistic overlay",
+    "charactersmallDesc": "Display only remaining and missing dailies contracts to get to your fixed objective",
     "settings": "Settings",
     "allCharactersSizeIcon": "Icons size",
     "save": "Save",
