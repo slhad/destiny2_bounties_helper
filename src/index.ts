@@ -1,7 +1,7 @@
 /* eslint-disable prefer-rest-params */
 import { mustache } from "consolidate"
 import { readFileSync } from "fs"
-import { accessToken, authorize, getCookies, getLinkedProfile, getToken, setCookies } from "./api"
+import { accessToken, authorize, clearTokens, getCookies, getLinkedProfile, getToken, setCookies } from "./api"
 import express = require("express")
 import responseTime = require("response-time")
 
@@ -108,6 +108,11 @@ app.get(ROUTE.AUTH_ACCESS, async (q, r) => {
     r.redirect(ROUTE.HOME)
 })
 
+app.get(ROUTE.AUTH_CLEAR, (q, r) => {
+    clearTokens(r)
+    r.redirect(ROUTE.HOME)
+})
+
 app.get(ROUTE.HOME, async (q, r) => {
     const nanoid = await import("nanoid")
     const authLink = authorize(nanoid.nanoid())
@@ -118,7 +123,8 @@ app.get(ROUTE.HOME, async (q, r) => {
         allCharacters: ROUTE.ALL_CHARACTERS,
         character: ROUTE.CURRENT_CHARACTER,
         characterSmall: ROUTE.CURRENT_CHARACTER_SMALL,
-        settings: ROUTE.SETTINGS
+        settings: ROUTE.SETTINGS,
+        authClear: ROUTE.AUTH_CLEAR
     }, {
         q,
         partials: ["header"],

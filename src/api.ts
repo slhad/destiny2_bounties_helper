@@ -55,6 +55,14 @@ export const accessToken = async (q: RWC, r: any) => {
     return
 }
 
+export const clearTokens = (r: any) => {
+    r.clearCookie("destinyToken")
+    r.clearCookie("destinyRefreshToken")
+    r.clearCookie("destinyMembershipId")
+    r.clearCookie("destinyProfileMembershipId")
+    r.clearCookie("destinyProfileMembershipType")
+}
+
 export const setCookies = (token: any, r: any): Destiny2Cookies => {
     const cookies: Destiny2Cookies = {
         membershipId: token && token.data && token.data.membership_id,

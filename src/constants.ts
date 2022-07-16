@@ -33,7 +33,8 @@ export enum ROUTE {
     CURRENT_CHARACTER = "/connected/character",
     CURRENT_CHARACTER_SMALL = "/connected/character/small",
     AUTH_ACCESS = "/config/auth",
-    SETTINGS = "/settings"
+    SETTINGS = "/settings",
+    AUTH_CLEAR = "/config/clear"
 }
 
 export type TotalBounties = {
