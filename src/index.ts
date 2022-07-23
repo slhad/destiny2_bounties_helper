@@ -34,6 +34,12 @@ app.use(function (req, res, next) {
         }
     }
 
+    if (req.query["logCookies"] === "true") {
+        for (const key in req.cookies) {
+            console.info(`Cookie ${key} : '${req.cookies[key]}'`)
+        }
+    }
+
     next()
 })
 app.use(urlencoded({ extended: true }))
