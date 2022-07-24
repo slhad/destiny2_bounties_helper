@@ -11,7 +11,7 @@ import * as https from "https"
 import { urlencoded } from "body-parser"
 import cookieParser from "cookie-parser"
 import * as i18n from "i18n"
-import { defaultOpts, mergeDataWOpts, ROUTE, RWC, sortByLastPlayed } from "./constants"
+import { defaultOpts, mergeDataWOpts, ROUTE, RWC } from "./constants"
 import manifest from "./manifest"
 
 import { Bounties } from "./bounties"
@@ -53,11 +53,10 @@ app.use(responseTime(function (req, res, time) {
 
 app.use(ROUTE.CONNECTED, async (q: RWC, r, n) => {
     const a = await accessToken(q, r)
-    if (!a) {
-        r.redirect(ROUTE.HOME)
-    } else {
-        q.cookies["destinyToken"] = a
+    if (a) {
         n()
+    } else {
+        r.redirect(ROUTE.HOME)
     }
 })
 
@@ -103,12 +102,7 @@ app.get(ROUTE.AUTH_ACCESS, async (q, r) => {
 
     const tokenData = await getToken(code as string)
     if (tokenData) {
-        const cookies = setCookies(tokenData, r)
-        const profileResponse = await getLinkedProfile(cookies.membershipId)
-        if (profileResponse) {
-            const profile = profileResponse.data.Response.profiles.sort(sortByLastPlayed)[0]
-            setCookies(profile, r)
-        }
+        setCookies(tokenData, r)
     }
 
     r.redirect(ROUTE.HOME)
