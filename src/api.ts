@@ -1,6 +1,6 @@
 import axios, { AxiosRequestConfig } from "axios"
 import { api_key, client_id, client_secret } from "../config.json"
-import { Destiny2Cookies, RWC } from "./constants"
+import { Destiny2Cookies, RWC, sortByLastPlayed } from "./constants"
 
 const API_KEY = process.env["API_KEY"] || api_key
 const CLIENT_ID = process.env["CLIENT_ID"] || client_id
@@ -44,18 +44,39 @@ export const accessToken = async (q: RWC, r: any) => {
     const aToken = q.cookies["destinyToken"]
     const rToken = q.cookies["destinyRefreshToken"]
     if (aToken) {
+        await ensureProfileMembership(q, r)
         return aToken
     } else if (rToken) {
         const refreshedToken = await refresh(rToken)
         if (refreshedToken) {
-            setCookies(refreshedToken, r)
+            setCookies(refreshedToken, r, q)
+            await ensureProfileMembership(q, r)
             return refreshedToken.data.access_token
         }
     }
     return
 }
 
-export const setCookies = (token: any, r: any): Destiny2Cookies => {
+export const ensureProfileMembership = async (q: RWC, r: any) => {
+    const cookies = getCookies(q)
+    if (!cookies.membershipId || !cookies.profileMembershipId || !cookies.profileMembershipType) {
+        const profileResponse = await getLinkedProfile(cookies.membershipId)
+        if (profileResponse) {
+            const profile = profileResponse.data.Response.profiles.sort(sortByLastPlayed)[0]
+            setCookies(profile, r, q)
+        }
+    }
+}
+
+export const clearTokens = (r: any) => {
+    r.clearCookie("destinyToken")
+    r.clearCookie("destinyRefreshToken")
+    r.clearCookie("destinyMembershipId")
+    r.clearCookie("destinyProfileMembershipId")
+    r.clearCookie("destinyProfileMembershipType")
+}
+
+export const setCookies = (token: any, r: any, q?: RWC): Destiny2Cookies => {
     const cookies: Destiny2Cookies = {
         membershipId: token && token.data && token.data.membership_id,
         refreshToken: token && token.data && token.data.refresh_token,
@@ -78,6 +99,19 @@ export const setCookies = (token: any, r: any): Destiny2Cookies => {
     if (cookies.profileMembershipType) {
         r.cookie("destinyProfileMembershipType", cookies.profileMembershipType)
     }
+
+    if (q && q.cookies) {
+        if (cookies.membershipId) {
+            q.cookies["destinyMembershipId"] = cookies.membershipId
+        }
+        if (cookies.profileMembershipId) {
+            q.cookies["destinyProfileMembershipId"] = cookies.profileMembershipId
+        }
+        if (cookies.profileMembershipType) {
+            q.cookies["destinyProfileMembershipType"] = cookies.profileMembershipType
+        }
+    }
+
     return cookies
 }
 

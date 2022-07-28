@@ -33,7 +33,8 @@ export enum ROUTE {
     CURRENT_CHARACTER = "/connected/character",
     CURRENT_CHARACTER_SMALL = "/connected/character/small",
     AUTH_ACCESS = "/config/auth",
-    SETTINGS = "/settings"
+    SETTINGS = "/settings",
+    AUTH_CLEAR = "/config/clear"
 }
 
 export type TotalBounties = {
@@ -71,10 +72,10 @@ export type AllCharacters = {
 
 export type RWC = { cookies: { [key: string]: string } }
 export const getCookie = <T>(q: RWC, key: keyof typeof defaultOpts): T => {
-    const value = (q.cookies[key] || defaultOpts[key]) as unknown as string
+    const value = (q.cookies[key] || defaultOpts[key]) as unknown as any
     switch (typeof (defaultOpts as any)[key]) {
         case "boolean": {
-            return (value === "true") as unknown as T
+            return (value === true || value === "true") as unknown as T
         }
         case "number": {
             return parseInt(value) as unknown as T

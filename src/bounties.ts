@@ -1,4 +1,4 @@
-import { getCharacters, getCookies, getInventory, getLinkedProfile, refresh } from "./api"
+import { getCookies, getInventory } from "./api"
 import { AllCharacters, backup, bountiesType, bungiePath, CharacterBounties, CharacterWithBounties, findItemComponentObjective, getCookie, RWC, sortByLastPlayed } from "./constants"
 import manifest from "./manifest"
 

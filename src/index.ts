@@ -1,7 +1,7 @@
 /* eslint-disable prefer-rest-params */
 import { mustache } from "consolidate"
 import { readFileSync } from "fs"
-import { accessToken, authorize, getCookies, getLinkedProfile, getToken, setCookies } from "./api"
+import { accessToken, authorize, clearTokens, getCookies, getLinkedProfile, getToken, setCookies } from "./api"
 import express = require("express")
 import responseTime = require("response-time")
 
@@ -11,7 +11,7 @@ import * as https from "https"
 import { urlencoded } from "body-parser"
 import cookieParser from "cookie-parser"
 import * as i18n from "i18n"
-import { defaultOpts, mergeDataWOpts, ROUTE, RWC, sortByLastPlayed } from "./constants"
+import { defaultOpts, mergeDataWOpts, ROUTE, RWC } from "./constants"
 import manifest from "./manifest"
 
 import { Bounties } from "./bounties"
@@ -36,6 +36,12 @@ app.use(function (req, res, next) {
         }
     }
 
+    if (req.query["logCookies"] === "true") {
+        for (const key in req.cookies) {
+            console.info(`Cookie ${key} : '${req.cookies[key]}'`)
+        }
+    }
+
     next()
 })
 app.use(urlencoded({ extended: true }))
@@ -49,11 +55,10 @@ app.use(responseTime(function (req, res, time) {
 
 app.use(ROUTE.CONNECTED, async (q: RWC, r, n) => {
     const a = await accessToken(q, r)
-    if (!a) {
-        r.redirect(ROUTE.HOME)
-    } else {
-        q.cookies["destinyToken"] = a
+    if (a) {
         n()
+    } else {
+        r.redirect(ROUTE.HOME)
     }
 })
 
@@ -99,14 +104,14 @@ app.get(ROUTE.AUTH_ACCESS, async (q, r) => {
 
     const tokenData = await getToken(code as string)
     if (tokenData) {
-        const cookies = setCookies(tokenData, r)
-        const profileResponse = await getLinkedProfile(cookies.membershipId)
-        if (profileResponse) {
-            const profile = profileResponse.data.Response.profiles.sort(sortByLastPlayed)[0]
-            setCookies(profile, r)
-        }
+        setCookies(tokenData, r)
     }
 
+    r.redirect(ROUTE.HOME)
+})
+
+app.get(ROUTE.AUTH_CLEAR, (q, r) => {
+    clearTokens(r)
     r.redirect(ROUTE.HOME)
 })
 
@@ -120,7 +125,8 @@ app.get(ROUTE.HOME, async (q, r) => {
         allCharacters: ROUTE.ALL_CHARACTERS,
         character: ROUTE.CURRENT_CHARACTER,
         characterSmall: ROUTE.CURRENT_CHARACTER_SMALL,
-        settings: ROUTE.SETTINGS
+        settings: ROUTE.SETTINGS,
+        authClear: ROUTE.AUTH_CLEAR
     }, {
         q,
         partials: ["header"],
