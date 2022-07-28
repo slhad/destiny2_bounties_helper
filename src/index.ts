@@ -16,6 +16,8 @@ import manifest from "./manifest"
 
 import { Bounties } from "./bounties"
 
+const getMaxAge = () => { return { maxAge: Date.now() + 3600 * 24 * 365 } }
+
 const app = express()
 i18n.configure({
     locales: ["en", "fr"],
@@ -146,15 +148,15 @@ app.post(ROUTE.SETTINGS, async (q, r) => {
     for (const key in defaultOpts) {
         switch (typeof (defaultOpts as any)[key]) {
             case "number": {
-                r.cookie(key, parseInt(q.body[key]))
+                r.cookie(key, parseInt(q.body[key]), getMaxAge())
                 break
             }
             case "boolean": {
-                r.cookie(key, (q.body[key] === "on"))
+                r.cookie(key, (q.body[key] === "on"), getMaxAge())
                 break
             }
             default: {
-                r.cookie(key, q.body[key])
+                r.cookie(key, q.body[key], getMaxAge())
             }
         }
     }
