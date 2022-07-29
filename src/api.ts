@@ -15,6 +15,7 @@ const _axios = axios.create({
     }
 })
 
+const getMaxAge = () => { return { maxAge: Date.now() + 3600 * 24 * 365 } }
 export const axiosError = (err: any) => {
     console.log(`${err.message} : ${err.stack}`)
 }
@@ -91,13 +92,13 @@ export const setCookies = (token: any, r: any, q?: RWC): Destiny2Cookies => {
         r.cookie("destinyRefreshToken", cookies.refreshToken, token && token.data && token.data.refresh_expires_in ? { maxAge: token.data.refresh_expires_in * 1000 } : undefined)
     }
     if (cookies.membershipId) {
-        r.cookie("destinyMembershipId", cookies.membershipId)
+        r.cookie("destinyMembershipId", cookies.membershipId, getMaxAge())
     }
     if (cookies.profileMembershipId) {
-        r.cookie("destinyProfileMembershipId", cookies.profileMembershipId)
+        r.cookie("destinyProfileMembershipId", cookies.profileMembershipId, getMaxAge())
     }
     if (cookies.profileMembershipType) {
-        r.cookie("destinyProfileMembershipType", cookies.profileMembershipType)
+        r.cookie("destinyProfileMembershipType", cookies.profileMembershipType, getMaxAge())
     }
 
     if (q && q.cookies) {
