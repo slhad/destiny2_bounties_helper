@@ -27,19 +27,19 @@ img {
 {{#strikes}}
     {{^done}}
     <img src={{icon}} />
-    <p>{{remaining}}/{{needed}}</p>
+    <p>{{todo}}{{#remaining}}/{{remaining}}{{/remaining}}</p>
     {{/done}}
 {{/strikes}}
 {{#crucible}}
     {{^done}}
     <img src={{icon}} />
-    <p>{{remaining}}/{{needed}}</p>
+    <p>{{todo}}{{#remaining}}/{{remaining}}{{/remaining}}</p>
     {{/done}}
 {{/crucible}}
 {{#gambit}}
     {{^done}}
     <img src={{icon}} />
-    <p>{{remaining}}/{{needed}}</p>
+    <p>{{todo}}{{#remaining}}/{{remaining}}{{/remaining}}</p>
     {{/done}}
 {{/gambit}}
 </div>
