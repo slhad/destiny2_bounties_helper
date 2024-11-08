@@ -7,6 +7,7 @@
     "character": "Last used character",
     "characterSmall": "Last used character minimalistic overlay",
     "charactersmallDesc": "Display only remaining and missing dailies contracts to get to your fixed objective",
+	"activity":"Activity",
     "settings": "Settings",
     "authClear": "Clear Bungie data",
     "allCharactersSizeIcon": "Icons size",

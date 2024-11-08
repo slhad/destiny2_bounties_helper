@@ -6,7 +6,11 @@ class Manifest {
 
     definitions = [
         "DestinyInventoryItemDefinition",
-        "DestinyClassDefinition"
+        "DestinyClassDefinition",
+        "DestinyActivityDefinition",
+        "DestinyActivityModeDefinition",
+        "DestinyPlaceDefinition",
+        "DestinyDestinationDefinition"
     ]
 
 

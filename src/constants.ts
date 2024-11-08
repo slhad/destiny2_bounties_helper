@@ -32,6 +32,7 @@ export enum ROUTE {
     ALL_CHARACTERS = "/connected/allCharacters",
     CURRENT_CHARACTER = "/connected/character",
     CURRENT_CHARACTER_SMALL = "/connected/character/small",
+    CURRENT_ACTIVITY = "/connected/activity",
     AUTH_ACCESS = "/config/auth",
     SETTINGS = "/settings",
     AUTH_CLEAR = "/config/clear"

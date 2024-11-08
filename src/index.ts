@@ -15,6 +15,7 @@ import { defaultOpts, mergeDataWOpts, ROUTE, RWC } from "./constants"
 import manifest from "./manifest"
 
 import { Bounties } from "./bounties"
+import { Activities } from "./activities"
 
 const getMaxAge = () => { return { maxAge: Date.now() + 3600 * 24 * 365 } }
 
@@ -74,6 +75,18 @@ app.get(ROUTE.CURRENT_CHARACTER, async (q, r) => {
     ))
 })
 
+app.get(ROUTE.CURRENT_ACTIVITY, async (q, r) => {
+    const data = await Activities.fetchLastUsedCharacterActivities(q)
+    r.render("activity", mergeDataWOpts(
+        data,
+        {
+            q,
+            partials: ["header"],
+            variables: defaultOpts
+        }
+    ))
+})
+
 app.get(ROUTE.CURRENT_CHARACTER_SMALL, async (q, r) => {
     const data = await Bounties.fetchLastUsedCharacterBounties(q)
     r.render("charactersmall", mergeDataWOpts(
@@ -122,6 +135,7 @@ app.get(ROUTE.HOME, async (q, r) => {
     r.render("welcome", mergeDataWOpts({
         refreshToken,
         authLink,
+        activity:ROUTE.CURRENT_ACTIVITY,
         allCharacters: ROUTE.ALL_CHARACTERS,
         character: ROUTE.CURRENT_CHARACTER,
         characterSmall: ROUTE.CURRENT_CHARACTER_SMALL,
@@ -177,12 +191,16 @@ manifest.fetchManifest().then(() => {
     if (httpsEnabled || (!httpEnabled && !httpsEnabled)) {
         const keySSL = readFileSync(process.env["SSL_KEY"] || "./files/server.key")
         const certSSL = readFileSync(process.env["SSL_CRT"] || "./files/server.crt")
+        const port = (process.env["APP_PORT_SSL"] ? process.env["APP_PORT_SSL"] : process.env["APP_PORT"]) || 8888
         https.createServer({
             key: keySSL,
             cert: certSSL
-        }, app).listen((process.env["APP_PORT_SSL"] ? process.env["APP_PORT_SSL"] : process.env["APP_PORT"]) || 8888)
+        }, app).listen(port)
+        console.log(`Listening HTTPS on port ${port}`)
     }
     if (httpEnabled) {
-        http.createServer({}, app).listen(process.env["APP_PORT"] || httpsEnabled ? 8887 : 8888)
+        const port = process.env["APP_PORT"] || httpsEnabled ? 8887 : 8888
+        http.createServer({}, app).listen(port)
+        console.log(`Listening HTTP on port ${port}`)
     }
 })

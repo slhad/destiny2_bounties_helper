@@ -192,8 +192,18 @@ export const inventoryComponents = [
     DestinyComponentType.ItemObjectives
 ]
 
+export const activitiesComponents = [
+    DestinyComponentType.Characters,
+    DestinyComponentType.CharacterActivities
+]
+
 export const getCharacters = (id: string, membershipType: string, token: string) => _axios.get(
     `/Platform/Destiny2/${membershipType}/Profile/${id}/?components=${DestinyComponentType.Characters}`,
+    { headers: { Authorization: "Bearer " + token } }
+).catch(axiosError)
+
+export const getActivity = (id: string, membershipType: string, token: string, characterId?: string) => _axios.get(
+    `/Platform/Destiny2/${membershipType}/Profile/${id}${characterId ? "/Character/" + characterId : ""}/?components=${activitiesComponents.join("%2C")}`,
     { headers: { Authorization: "Bearer " + token } }
 ).catch(axiosError)
 
