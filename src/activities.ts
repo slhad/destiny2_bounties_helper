@@ -51,6 +51,43 @@ export class Activities {
             activities
         }
     }
+
+    static computeChapterText(activity: any, destination: any, place: any) {
+
+        if (activity.activityModeTypes) {
+
+            if (activity.activityModeTypes.includes(6)){
+                return `Patrol - ${activity.originalDisplayProperties.name} - ${destination.displayProperties.name}`
+            }
+
+            // Offensive
+            if (activity.activityModeTypes.includes(86)) {
+                return `Offensive - ${activity.originalDisplayProperties.name} - ${activity.selectionScreenDisplayProperties.name} - ${destination.displayProperties.name}`
+            }
+
+            // Lost sector
+            if (activity.activityModeTypes.includes(87)) {
+                return `Lost sector - ${activity.originalDisplayProperties.name} - ${activity.selectionScreenDisplayProperties.name} - ${destination.displayProperties.name}`
+            }
+
+            // Strikes
+            if (activity.activityModeTypes.includes(18)) {
+                return `${activity.originalDisplayProperties.name} - ${activity.originalDisplayProperties.description} - ${activity.selectionScreenDisplayProperties.name} - ${destination.displayProperties.name}`
+            }
+
+            if (activity.activityModeTypes.includes(40)) {
+                const mainActivity = activity.displayProperties.name !== "" ? activity.displayProperties.name : destination.displayProperties.name
+                const locationActivity = destination.displayProperties.name !== mainActivity ? ` - ${destination.displayProperties.name}` : ""
+                const placeActivity = destination.displayProperties.name !== place.displayProperties.name ? ` - ${place.displayProperties.name}` : ""
+                return `Social - ${activity.displayProperties.name}`
+            }
+        }
+
+        const mainActivity = activity.displayProperties.name !== "" ? activity.displayProperties.name : destination.displayProperties.name
+        const locationActivity = destination.displayProperties.name !== mainActivity ? ` - ${destination.displayProperties.name}` : ""
+        const placeActivity = destination.displayProperties.name !== place.displayProperties.name ? ` - ${place.displayProperties.name}` : ""
+        return `${mainActivity}${placeActivity}${locationActivity}`
+    }
 }
 
 
