@@ -38,6 +38,17 @@
         </div>
         <div class="row">
             <div class="col-4 p-2">
+                <label for="locale" class="form-label">{{#__}}locale{{/__}}</label>
+            </div>
+            <div class="col-8 p-1" style="display:flex">
+                <select class="form-select" id="locale" name="locale">
+                    <option value="en" {{#locale_en}}selected{{/locale_en}}>EN</option>
+                    <option value="fr" {{#locale_fr}}selected{{/locale_fr}}>FR</option>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-4 p-2">
                 <input type="checkbox" class="btn-check" id="btn-check-auto-refresh" name="autoRefreshEnabled" {{#autoRefreshEnabled}}checked{{/autoRefreshEnabled}} autocomplete="off">
                 <label class="btn btn-outline-primary" for="btn-check-auto-refresh">{{#__}}autoRefresh{{/__}}</label>
             </div>

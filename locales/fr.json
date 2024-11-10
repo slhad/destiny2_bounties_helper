@@ -7,7 +7,7 @@
 	"character": "Dernier personnage utilisé",
 	"characterSmall": "Dernier personnage utilisé overlay minimaliste",
 	"charactersmallDesc": "Affiche uniquement les contrats journaliers restants à faire et manquant pour atteindre l'objectif",
-	"activity":"Activité",
+	"activity": "Activité",
 	"settings": "Paramètres",
 	"authClear": "Effacer les infos Bungie",
 	"allCharactersSizeIcon": "Taille des icones",
@@ -26,5 +26,6 @@
 	"complete": "Fini",
 	"todo": "A faire",
 	"remaining": "Restant",
-	"autoRefresh": "Rafraichissement automatique (s)"
+	"autoRefresh": "Rafraichissement automatique (s)",
+	"locale": "Langue"
 }

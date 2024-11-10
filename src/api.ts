@@ -17,7 +17,7 @@ const _axios = axios.create({
 
 const getMaxAge = () => { return { maxAge: Date.now() + 3600 * 24 * 365 } }
 export const axiosError = (err: any) => {
-    console.log(`${err.message} : ${err.stack}`)
+    console.log(`${err.message} ${err.request?.path} : ${err.stack}`)
 }
 export const authorize = (state: string) => `https://www.bungie.net/en/oauth/authorize?client_id=${CLIENT_ID}&response_type=code&state=${state}`
 
@@ -66,6 +66,11 @@ export const ensureProfileMembership = async (q: RWC, r: any) => {
             const profile = profileResponse.data.Response.profiles.sort(sortByLastPlayed)[0]
             setCookies(profile, r, q)
         }
+        const userResponse = await getUser(cookies.membershipId)
+        if (userResponse) {
+            const token = { locale: userResponse.data.Response.locale }
+            setCookies(token, r, q)
+        }
     }
 }
 
@@ -75,6 +80,7 @@ export const clearTokens = (r: any) => {
     r.clearCookie("destinyMembershipId")
     r.clearCookie("destinyProfileMembershipId")
     r.clearCookie("destinyProfileMembershipType")
+    r.clearCookie("locale")
 }
 
 export const setCookies = (token: any, r: any, q?: RWC): Destiny2Cookies => {
@@ -100,6 +106,9 @@ export const setCookies = (token: any, r: any, q?: RWC): Destiny2Cookies => {
     if (cookies.profileMembershipType) {
         r.cookie("destinyProfileMembershipType", cookies.profileMembershipType, getMaxAge())
     }
+    if (cookies.locale) {
+        r.cookie("locale", cookies.locale, getMaxAge())
+    }
 
     if (q && q.cookies) {
         if (cookies.membershipId) {
@@ -110,6 +119,9 @@ export const setCookies = (token: any, r: any, q?: RWC): Destiny2Cookies => {
         }
         if (cookies.profileMembershipType) {
             q.cookies["destinyProfileMembershipType"] = cookies.profileMembershipType
+        }
+        if (cookies.locale) {
+            q.cookies["locale"] = cookies.locale
         }
     }
 
@@ -122,7 +134,8 @@ export const getCookies = (q: any): Destiny2Cookies => {
         refreshToken: q.cookies["destinyRefreshToken"],
         token: q.cookies["destinyToken"],
         profileMembershipId: q.cookies["destinyProfileMembershipId"],
-        profileMembershipType: q.cookies["destinyProfileMembershipType"]
+        profileMembershipType: q.cookies["destinyProfileMembershipType"],
+        locale: q.cookies["locale"]
     }
 }
 
@@ -143,7 +156,12 @@ export const refresh = (refresh_token: string) => _axios.post(
 ).catch(axiosError)
 
 export const getManifest = () => _axios.get("/Platform/Destiny2/Manifest/").catch(axiosError)
-export const getUser = (id: string) => _axios.get(`/User/GetBungieNetUserById/${id}/`).catch(axiosError)
+/**
+ * Loads a bungienet user by membership id.
+ * @param id The requested Bungie.net membership id
+ * @returns 
+ */
+export const getUser = (id: string) => _axios.get(`/Platform/User/GetBungieNetUserById/${id}/`).catch(axiosError)
 export const getLinkedProfile = (id: string) => _axios.get(`/Platform/Destiny2/254/Profile/${id}/LinkedProfiles/`).catch(axiosError)
 
 export enum DestinyComponentType {

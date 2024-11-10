@@ -15,7 +15,8 @@ export const defaultOpts = {
     crucibleAllowed: true,
     gambitAllowed: true,
     autoRefresh: 60,
-    autoRefreshEnabled: false
+    autoRefreshEnabled: false,
+    locale: "en"
 }
 
 export type Destiny2Cookies = {
@@ -23,7 +24,8 @@ export type Destiny2Cookies = {
     token: string
     refreshToken: string
     profileMembershipId: string
-    profileMembershipType: string
+    profileMembershipType: string,
+    locale?: string
 }
 
 export enum ROUTE {

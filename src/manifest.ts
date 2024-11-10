@@ -1,5 +1,11 @@
 import axios from "axios"
 import { getManifest } from "./api"
+
+export enum Lang {
+    EN = "en",
+    FR = "fr"
+}
+
 class Manifest {
     urls: any = {}
     tables: any = {}
@@ -19,10 +25,15 @@ class Manifest {
         this.urls = (res && res.data || { Responce: {} }).Response
 
         for (const definition of this.definitions) {
-            const manifestUrl = "https://www.bungie.net" + this.jsonUrl(definition)
-            const res2 = await axios.get(manifestUrl)
-            console.log(`fetched manifest: ${manifestUrl}`)
-            this.tables[definition] = res2.data
+            for (const lang of Object.values(Lang)) {
+                const manifestUrl = "https://www.bungie.net" + this.jsonUrl(definition, lang)
+                const res2 = await axios.get(manifestUrl)
+                console.log(`fetched manifest: ${manifestUrl}`)
+                if (!this.tables[definition]) {
+                    this.tables[definition] = {}
+                }
+                this.tables[definition][lang] = res2.data
+            }
         }
     }
 
@@ -34,10 +45,10 @@ class Manifest {
         return this.urls[path][lang][definition]
     }
 
-    t(hash: string) {
+    t(hash: string, lang = Lang.EN) {
         try {
             for (const definition of this.definitions) {
-                const defined = this.tables[definition][hash]
+                const defined = this.tables[definition][lang][hash]
                 if (defined) {
                     return defined
                 }

@@ -1,6 +1,6 @@
 import { getActivity, getCookies } from "./api"
 import { RWC, sortByLastPlayed } from "./constants"
-import manifest from "./manifest"
+import manifest, { Lang } from "./manifest"
 
 export class Activities {
 
@@ -28,13 +28,22 @@ export class Activities {
         return this.extractCharacterActivities(info, q, lastUsedCharacter.characterId)
     }
 
+    static getLocale(q: RWC): Lang {
+        return q.cookies["locale"] as Lang
+    }
+
     static extractCharacterActivities(info: fetchedData, q: RWC, characterId: string) {
         const character = info.characters[characterId]
         const activities = info.activities[characterId]
-        const activity = manifest.t(activities.currentActivityHash)
-        const activityMode = manifest.t(activities.currentActivityModeHash)
-        const destination = manifest.t(activity.destinationHash)
-        const place = manifest.t(activity.placeHash)
+
+        if (activities.currentActivityHash === 0) {
+            return {}
+        }
+
+        const activity = manifest.t(activities.currentActivityHash, this.getLocale(q))
+        const activityMode = manifest.t(activities.currentActivityModeHash, this.getLocale(q))
+        const destination = manifest.t(activity.destinationHash, this.getLocale(q))
+        const place = manifest.t(activity.placeHash, this.getLocale(q))
 
         return {
             started: activities.dateActivityStarted,
@@ -46,9 +55,11 @@ export class Activities {
             at: JSON.stringify(activity, undefined, 3),
             dt: JSON.stringify(destination, undefined, 3),
             pt: JSON.stringify(place, undefined, 3),
+            mt: JSON.stringify(activityMode || {}, undefined, 3),
             activityMode,
             character,
-            activities
+            activities,
+            chapterName: this.computeChapterText(activity, destination, place)
         }
     }
 
@@ -56,7 +67,7 @@ export class Activities {
 
         if (activity.activityModeTypes) {
 
-            if (activity.activityModeTypes.includes(6)){
+            if (activity.activityModeTypes.includes(6)) {
                 return `Patrol - ${activity.originalDisplayProperties.name} - ${destination.displayProperties.name}`
             }
 
@@ -72,7 +83,7 @@ export class Activities {
 
             // Strikes
             if (activity.activityModeTypes.includes(18)) {
-                return `${activity.originalDisplayProperties.name} - ${activity.originalDisplayProperties.description} - ${activity.selectionScreenDisplayProperties.name} - ${destination.displayProperties.name}`
+                return `${activity.originalDisplayProperties.name} - ${activity.originalDisplayProperties.description} - ${activity?.selectionScreenDisplayProperties?.name} - ${destination.displayProperties.name}`
             }
 
             if (activity.activityModeTypes.includes(40)) {

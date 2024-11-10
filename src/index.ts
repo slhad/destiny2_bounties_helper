@@ -135,7 +135,7 @@ app.get(ROUTE.HOME, async (q, r) => {
     r.render("welcome", mergeDataWOpts({
         refreshToken,
         authLink,
-        activity:ROUTE.CURRENT_ACTIVITY,
+        activity: ROUTE.CURRENT_ACTIVITY,
         allCharacters: ROUTE.ALL_CHARACTERS,
         character: ROUTE.CURRENT_CHARACTER,
         characterSmall: ROUTE.CURRENT_CHARACTER_SMALL,
@@ -155,7 +155,8 @@ app.get(ROUTE.SETTINGS, async (q, r) => {
     const saved = q.query["saved"]
     r.render("settings", mergeDataWOpts({
         settingstimeSaved,
-        saved
+        saved,
+        [`locale_${q.cookies["locale"]}`]: true
     },
         {
             q,
