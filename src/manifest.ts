@@ -27,12 +27,17 @@ class Manifest {
         for (const definition of this.definitions) {
             for (const lang of Object.values(Lang)) {
                 const manifestUrl = "https://www.bungie.net" + this.jsonUrl(definition, lang)
-                const res2 = await axios.get(manifestUrl)
-                console.log(`fetched manifest: ${manifestUrl}`)
-                if (!this.tables[definition]) {
-                    this.tables[definition] = {}
+                try {
+                    const res2 = await axios.get(manifestUrl)
+                    console.log(`fetched manifest: ${manifestUrl}`)
+                    if (!this.tables[definition]) {
+                        this.tables[definition] = {}
+                    }
+                    this.tables[definition][lang] = res2.data
                 }
-                this.tables[definition][lang] = res2.data
+                catch (e) {
+                    console.error("error manifest", e)
+                }
             }
         }
     }

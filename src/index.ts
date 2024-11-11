@@ -77,8 +77,9 @@ app.get(ROUTE.CURRENT_CHARACTER, async (q, r) => {
 
 app.get(ROUTE.CURRENT_ACTIVITY, async (q, r) => {
     const data = await Activities.fetchLastUsedCharacterActivities(q)
+    const debug = q.query["debug"] === "true"
     r.render("activity", mergeDataWOpts(
-        data,
+        { ...data, debug },
         {
             q,
             partials: ["header"],

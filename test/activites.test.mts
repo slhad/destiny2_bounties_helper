@@ -1,5 +1,40 @@
-import { expect, describe, it } from "vitest";
-import { Activities } from "../src/activities.js";
+import { expect, describe, it } from "vitest"
+import { Activities } from "../src/activities.js"
+
+const RAID_CAVEAU_VERRE = {
+    "Activity": { "displayProperties": { "description": "Sous Vénus, le mal s'agite...", "name": "Le Caveau de verre: Standard", "icon": "/common/destiny2_content/icons/bd7a1fc995f87be96698263bc16698e7.png", "hasIcon": true }, "originalDisplayProperties": { "description": "Sous Vénus, le mal s'agite...", "name": "Le Caveau de verre", "icon": "/img/misc/missing_icon_d2.png", "hasIcon": false }, "selectionScreenDisplayProperties": { "description": "Une escouade puissante est recommandée pour surmonter ce défi.\n\nMatchmaking : NON", "name": "Standard", "hasIcon": false }, "releaseIcon": "/img/misc/missing_icon_d2.png", "releaseTime": 0, "completionUnlockHash": 0, "activityLightLevel": 1300, "destinationHash": 3871070152, "placeHash": 3871070152, "activityTypeHash": 2043403989, "tier": 0, "pgcrImage": "/img/destiny_content/pgcr/vault_of_glass.jpg", "rewards": [], "modifiers": [{ "activityModifierHash": 1783825372 }, { "activityModifierHash": 1783825372 }, { "activityModifierHash": 1783825372 }, { "activityModifierHash": 1572570117 }, { "activityModifierHash": 3135466059 }, { "activityModifierHash": 3212721586 }, { "activityModifierHash": 274420331 }, { "activityModifierHash": 2814846409 }, { "activityModifierHash": 3620565640 }, { "activityModifierHash": 1783825372 }, { "activityModifierHash": 4075903438 }], "isPlaylist": false, "challenges": [{ "rewardSiteHash": 0, "inhibitRewardsUnlockHash": 0, "objectiveHash": 3180884403, "dummyRewards": [{ "itemHash": 73143230, "quantity": 1, "hasConditionalVisibility": false }] }], "optionalUnlockStrings": [], "inheritFromFreeRoam": false, "suppressOtherRewards": false, "playlistItems": [], "activityGraphList": [{ "activityGraphHash": 3510444975 }], "matchmaking": { "isMatchmade": false, "minParty": 1, "maxParty": 6, "maxPlayers": 6, "requiresGuardianOath": false }, "directActivityModeHash": 2043403989, "directActivityModeType": 4, "activityModeHashes": [2043403989, 1164760493], "activityModeTypes": [4, 7], "isPvP": false, "insertionPoints": [{ "phaseHash": 1327839050, "unlockHash": 0 }, { "phaseHash": 1327839051, "unlockHash": 0 }, { "phaseHash": 1327839048, "unlockHash": 0 }, { "phaseHash": 1327839049, "unlockHash": 0 }, { "phaseHash": 2818885672, "unlockHash": 0 }, { "phaseHash": 2818885673, "unlockHash": 0 }, { "phaseHash": 3793779771, "unlockHash": 0 }, { "phaseHash": 3793779770, "unlockHash": 0 }, { "phaseHash": 3793779769, "unlockHash": 0 }], "activityLocationMappings": [], "hash": 3881495763, "index": 199, "redacted": false, "blacklisted": false },
+    "Destination": { "displayProperties": { "description": "On fit un jour sur Vénus une grande découverte, celle d'un paradis. Aujourd'hui, c'est un monument dédié à tous nos disparus. Selon les vieilles histoires, nous bâtîmes une académie consacrée à l'apprentissage et à la recherche sur la côte d'un océan extraordinaire, et les eaux elles-mêmes se levèrent, bouillonnantes, pour briser le rivage, emportant tout ce que nous avions construit.", "name": "Vénus", "icon": "/img/misc/missing_icon_d2.png", "hasIcon": false }, "hash": 3871070152, "index": 19, "redacted": false, "blacklisted": false },
+    "Place": { "displayProperties": { "description": "On fit un jour sur Vénus une grande découverte, celle d'un paradis. Aujourd'hui, c'est un monument dédié à tous nos disparus. Selon les vieilles histoires, nous bâtîmes une académie consacrée à l'apprentissage et à la recherche sur la côte d'un océan extraordinaire, et les eaux elles-mêmes se levèrent, bouillonnantes, pour briser le rivage, emportant tout ce que nous avions construit.", "name": "Vénus", "icon": "/img/misc/missing_icon_d2.png", "hasIcon": false }, "hash": 3871070152, "index": 19, "redacted": false, "blacklisted": false },
+    "ActivityMode": { "displayProperties": { "description": "Toutes vos statistiques de Raids en même temps.", "name": "Raid", "icon": "/common/destiny2_content/icons/DestinyActivityModeDefinition_bfe80e3dafe6686a9dc42df0606bdc9b.png", "hasIcon": true }, "pgcrImage": "/img/theme/destiny/bgs/stats/banner_raid_1.jpg", "modeType": 4, "activityModeCategory": 1, "isTeamBased": false, "tier": 0, "isAggregateMode": false, "parentHashes": [1164760493], "friendlyName": "raid", "supportsFeedFiltering": false, "display": true, "order": 2000, "hash": 2043403989, "index": 7, "redacted": false, "blacklisted": false }
+}
+
+const DUNGEON_PROPHECY = {
+    "Activity": { "displayProperties": { "description": "Entrez dans le royaume des Neuf et posez la question suivante : « Quelle est la nature des Ténèbres ? »", "name": "Prophétie", "icon": "/img/misc/missing_icon_d2.png", "hasIcon": false }, "originalDisplayProperties": { "description": "Entrez dans le royaume des Neuf et posez la question suivante : « Quelle est la nature des Ténèbres ? »", "name": "Prophétie", "icon": "/img/misc/missing_icon_d2.png", "hasIcon": false }, "releaseIcon": "/img/misc/missing_icon_d2.png", "releaseTime": 0, "completionUnlockHash": 0, "activityLightLevel": 1040, "destinationHash": 1553550479, "placeHash": 3747705955, "activityTypeHash": 608898761, "tier": -1, "pgcrImage": "/img/destiny_content/pgcr/dungeon_prophecy.jpg", "rewards": [], "modifiers": [{ "activityModifierHash": 1783825372 }, { "activityModifierHash": 1783825372 }, { "activityModifierHash": 1783825372 }, { "activityModifierHash": 1783825372 }], "isPlaylist": false, "challenges": [{ "rewardSiteHash": 0, "inhibitRewardsUnlockHash": 0, "objectiveHash": 2039792527, "dummyRewards": [{ "itemHash": 73143230, "quantity": 1, "hasConditionalVisibility": false }] }], "optionalUnlockStrings": [], "inheritFromFreeRoam": false, "suppressOtherRewards": false, "playlistItems": [], "matchmaking": { "isMatchmade": false, "minParty": 1, "maxParty": 3, "maxPlayers": 3, "requiresGuardianOath": false }, "directActivityModeHash": 608898761, "directActivityModeType": 82, "activityModeHashes": [608898761, 1164760493], "activityModeTypes": [82, 7], "isPvP": false, "insertionPoints": [{ "phaseHash": 2400102494, "unlockHash": 0 }, { "phaseHash": 1692344396, "unlockHash": 0 }, { "phaseHash": 382168380, "unlockHash": 0 }, { "phaseHash": 2132736886, "unlockHash": 0 }, { "phaseHash": 3585780724, "unlockHash": 0 }, { "phaseHash": 3999204422, "unlockHash": 0 }, { "phaseHash": 2229343072, "unlockHash": 0 }, { "phaseHash": 2543744318, "unlockHash": 0 }, { "phaseHash": 3492117941, "unlockHash": 0 }, { "phaseHash": 3998734759, "unlockHash": 0 }], "activityLocationMappings": [], "hash": 1077850348, "index": 137, "redacted": false, "blacklisted": false },
+    "Destination": { "displayProperties": { "description": "Phénomène paracausal créé par les Neuf.", "name": "Royaume des IX", "hasIcon": false }, "placeHash": 3747705955, "defaultFreeroamActivityHash": 0, "activityGraphEntries": [{ "activityGraphHash": 3510444975 }], "bubbleSettings": [], "bubbles": [], "hash": 1553550479, "index": 17, "redacted": false, "blacklisted": false },
+    "Place": { "displayProperties": { "description": "Le berceau de l'humanité. Cimetière de nos gloires passées, ce monde est désormais à reconquérir.", "name": "Terre", "icon": "/img/misc/missing_icon_d2.png", "hasIcon": false }, "hash": 3747705955, "index": 0, "redacted": false, "blacklisted": false },
+    "ActivityMode": { "displayProperties": { "description": "Statistiques pour les Donjons.", "name": "Donjon", "icon": "/common/destiny2_content/icons/DestinyActivityModeDefinition_f20ebb76bee675ca429e470cec58cc7b.png", "hasIcon": true }, "pgcrImage": "/img/destiny_content/pgcr/dungeon_pit_of_heresy.jpg", "modeType": 82, "activityModeCategory": 1, "isTeamBased": false, "tier": 0, "isAggregateMode": false, "parentHashes": [1164760493], "friendlyName": "dungeon", "supportsFeedFiltering": false, "display": true, "order": 5000, "hash": 608898761, "index": 62, "redacted": false, "blacklisted": false }
+}
+
+const EXOTIC_MISSION_WHISPER_WORM_STANDARD = {
+    "Activity": { "displayProperties": { "description": "Examinez une Anomalie corrompue loin sous la surface d'Io.", "name": "Le Murmure: Standard", "icon": "/img/misc/missing_icon_d2.png", "hasIcon": false }, "originalDisplayProperties": { "description": "Examinez une Anomalie corrompue loin sous la surface d'Io.", "name": "Le Murmure", "icon": "/img/misc/missing_icon_d2.png", "hasIcon": false }, "selectionScreenDisplayProperties": { "description": "Examinez une Anomalie corrompue loin sous la surface d'Io.", "name": "Standard", "hasIcon": false }, "releaseIcon": "/img/misc/missing_icon_d2.png", "releaseTime": 0, "completionUnlockHash": 0, "activityLightLevel": 1950, "destinationHash": 763066127, "placeHash": 763066127, "activityTypeHash": 1686739444, "tier": -1, "pgcrImage": "/img/destiny_content/pgcr/whisper.jpg", "rewards": [{ "rewardItems": [{ "itemHash": 1983149589, "quantity": 1, "hasConditionalVisibility": false }] }], "modifiers": [{ "activityModifierHash": 2290945089 }, { "activityModifierHash": 1783825372 }, { "activityModifierHash": 1602614337 }, { "activityModifierHash": 186409259 }, { "activityModifierHash": 3517267764 }, { "activityModifierHash": 3652821947 }], "isPlaylist": false, "challenges": [], "optionalUnlockStrings": [], "inheritFromFreeRoam": false, "suppressOtherRewards": false, "requirements": { "leaderRequirementLabels": [{ "displayString": "Nécessite de progresser dans la quête : « Murmures du passé »" }], "fireteamRequirementLabels": [{ "displayString": "Nécessite de progresser dans la quête : « Murmures du passé »" }, { "displayString": "Complete step 4 of the \"A Spark of Hope\" quest." }] }, "playlistItems": [], "matchmaking": { "isMatchmade": false, "minParty": 1, "maxParty": 3, "maxPlayers": 3, "requiresGuardianOath": false }, "directActivityModeHash": 1686739444, "directActivityModeType": 2, "activityModeHashes": [1686739444, 1164760493], "activityModeTypes": [2, 7], "isPvP": false, "insertionPoints": [], "activityLocationMappings": [], "hash": 3743446313, "index": 250, "redacted": false, "blacklisted": false },
+    "Destination": { "displayProperties": { "description": "Une lune de Jupiter et le dernier lieu touché par le Voyageur avant la Chute.", "name": "Io", "icon": "/img/misc/missing_icon_d2.png", "hasIcon": false }, "hash": 763066127, "index": 4, "redacted": false, "blacklisted": false },
+    "Place": { "displayProperties": { "description": "Une lune de Jupiter et le dernier lieu touché par le Voyageur avant la Chute.", "name": "Io", "icon": "/img/misc/missing_icon_d2.png", "hasIcon": false }, "hash": 763066127, "index": 4, "redacted": false, "blacklisted": false },
+    "ActivityMode": { "displayProperties": { "description": "Combien de Vex ai-je tués sans leur laisser le temps de s'expliquer ?", "name": "Histoire", "icon": "/common/destiny2_content/icons/DestinyActivityModeDefinition_5f8a923a0d0ac1e4289ae3be03f94aa2.png", "hasIcon": true }, "pgcrImage": "/img/theme/destiny/bgs/stats/banner_story_1.jpg", "modeType": 2, "activityModeCategory": 1, "isTeamBased": false, "tier": 0, "isAggregateMode": false, "parentHashes": [1164760493], "friendlyName": "story", "supportsFeedFiltering": false, "display": true, "order": 4000, "hash": 1686739444, "index": 8, "redacted": false, "blacklisted": false }
+}
+
+const EXOTIC_MISSION_WHISPER_WORK_EXPERT = {
+    "Activity": { "displayProperties": { "description": "Examinez une Anomalie corrompue loin sous la surface d'Io.", "name": "Le Murmure (Expert)", "icon": "/img/misc/missing_icon_d2.png", "hasIcon": false }, "originalDisplayProperties": { "description": "Examinez une Anomalie corrompue loin sous la surface d'Io.", "name": "Le Murmure (Expert)", "icon": "/img/misc/missing_icon_d2.png", "hasIcon": false }, "selectionScreenDisplayProperties": { "description": "Examinez une Anomalie corrompue loin sous la surface d'Io.", "name": "Expert", "hasIcon": false }, "releaseIcon": "/img/misc/missing_icon_d2.png", "releaseTime": 0, "completionUnlockHash": 0, "activityLightLevel": 2010, "destinationHash": 763066127, "placeHash": 763066127, "activityTypeHash": 1686739444, "tier": -1, "pgcrImage": "/img/destiny_content/pgcr/whisper.jpg", "rewards": [{ "rewardItems": [{ "itemHash": 1983149589, "quantity": 1, "hasConditionalVisibility": false }] }, { "rewardItems": [{ "itemHash": 2732814938, "quantity": 1, "hasConditionalVisibility": false }] }], "modifiers": [{ "activityModifierHash": 2290945089 }, { "activityModifierHash": 1783825372 }, { "activityModifierHash": 1602614337 }, { "activityModifierHash": 998275325 }, { "activityModifierHash": 186409259 }, { "activityModifierHash": 3517267764 }, { "activityModifierHash": 3652821947 }, { "activityModifierHash": 1282934989 }], "isPlaylist": false, "challenges": [], "optionalUnlockStrings": [], "inheritFromFreeRoam": false, "suppressOtherRewards": false, "requirements": { "leaderRequirementLabels": [{ "displayString": "Nécessite de progresser dans la quête : « Murmures du passé »" }], "fireteamRequirementLabels": [{ "displayString": "Nécessite de progresser dans la quête : « Murmures du passé »" }, { "displayString": "Complete step 4 of the \"A Spark of Hope\" quest." }] }, "playlistItems": [], "matchmaking": { "isMatchmade": false, "minParty": 1, "maxParty": 3, "maxPlayers": 3, "requiresGuardianOath": false }, "directActivityModeHash": 1686739444, "directActivityModeType": 2, "activityModeHashes": [1686739444, 1164760493], "activityModeTypes": [2, 7], "isPvP": false, "insertionPoints": [], "activityLocationMappings": [], "hash": 3871520787, "index": 251, "redacted": false, "blacklisted": false },
+    "Destination": { "displayProperties": { "description": "Une lune de Jupiter et le dernier lieu touché par le Voyageur avant la Chute.", "name": "Io", "icon": "/img/misc/missing_icon_d2.png", "hasIcon": false }, "hash": 763066127, "index": 4, "redacted": false, "blacklisted": false },
+    "Place": { "displayProperties": { "description": "Une lune de Jupiter et le dernier lieu touché par le Voyageur avant la Chute.", "name": "Io", "icon": "/img/misc/missing_icon_d2.png", "hasIcon": false }, "hash": 763066127, "index": 4, "redacted": false, "blacklisted": false },
+    "ActivityMode": { "displayProperties": { "description": "Combien de Vex ai-je tués sans leur laisser le temps de s'expliquer ?", "name": "Histoire", "icon": "/common/destiny2_content/icons/DestinyActivityModeDefinition_5f8a923a0d0ac1e4289ae3be03f94aa2.png", "hasIcon": true }, "pgcrImage": "/img/theme/destiny/bgs/stats/banner_story_1.jpg", "modeType": 2, "activityModeCategory": 1, "isTeamBased": false, "tier": 0, "isAggregateMode": false, "parentHashes": [1164760493], "friendlyName": "story", "supportsFeedFiltering": false, "display": true, "order": 4000, "hash": 1686739444, "index": 8, "redacted": false, "blacklisted": false }
+}
+
+const SOCIAL_XUR = {
+    "Activity": { "displayProperties": { "description": "Voyagez jusqu'au Magot de Xûr", "name": "Magot de Xûr", "icon": "/common/destiny2_content/icons/9b8a4c7a07890778b929654716010b39.png", "hasIcon": true }, "originalDisplayProperties": { "description": "Voyagez jusqu'au Magot de Xûr", "name": "Magot de Xûr", "icon": "/img/misc/missing_icon_d2.png", "hasIcon": false }, "releaseIcon": "/img/misc/missing_icon_d2.png", "releaseTime": 0, "completionUnlockHash": 0, "activityLightLevel": 0, "destinationHash": 1449984089, "placeHash": 1449984089, "activityTypeHash": 951708808, "tier": 1, "pgcrImage": "/img/theme/destiny/bgs/pgcrs/placeholder.jpg", "rewards": [], "modifiers": [], "isPlaylist": false, "challenges": [], "optionalUnlockStrings": [], "inheritFromFreeRoam": false, "suppressOtherRewards": false, "playlistItems": [], "matchmaking": { "isMatchmade": false, "minParty": 1, "maxParty": 6, "maxPlayers": 6, "requiresGuardianOath": false }, "directActivityModeHash": 3497767639, "directActivityModeType": 6, "activityModeHashes": [3497767639, 1164760493], "activityModeTypes": [6, 7], "isPvP": false, "insertionPoints": [], "activityLocationMappings": [], "hash": 2565561509, "index": 201, "redacted": false, "blacklisted": false },
+    "Destination": { "displayProperties": { "description": "Une étrange dimension de poche où plusieurs réalités du paravers convergent et se chevauchent.", "name": "Espace inconnu", "icon": "/img/misc/missing_icon_d2.png", "hasIcon": false }, "hash": 1449984089, "index": 20, "redacted": false, "blacklisted": false },
+    "Place": { "displayProperties": { "description": "Une étrange dimension de poche où plusieurs réalités du paravers convergent et se chevauchent.", "name": "Espace inconnu", "icon": "/img/misc/missing_icon_d2.png", "hasIcon": false }, "hash": 1449984089, "index": 20, "redacted": false, "blacklisted": false },
+    "ActivityMode": { "displayProperties": { "description": "Statistiques pour ces moments où vous parcourez les planètes en cherchant l'amour. Enfin, je parle de Patrouilles, d'Aventures... Peu importe le nom que leur donnent les jeunes aujourd'hui.", "name": "Exploration", "icon": "/common/destiny2_content/icons/DestinyActivityModeDefinition_0aa1d7b0e0ac2c6820036b6b3dde3e5b.png", "hasIcon": true }, "pgcrImage": "/img/theme/destiny/bgs/stats/banner_patrol_1.jpg", "modeType": 6, "activityModeCategory": 1, "isTeamBased": false, "tier": 0, "isAggregateMode": false, "parentHashes": [1164760493], "friendlyName": "patrol", "supportsFeedFiltering": false, "display": true, "order": 5000, "hash": 3497767639, "index": 3, "redacted": false, "blacklisted": false }
+}
 
 const IN_ORBIT = {
     Activity: {
@@ -71,7 +106,7 @@ const IN_ORBIT = {
         blacklisted: false
     },
     ActivityMode: {}
-};
+}
 
 const TOWER = {
     Activity: {
@@ -291,7 +326,7 @@ const TOWER = {
         redacted: false,
         blacklisted: false
     }
-};
+}
 
 const STRIKE_LIGHT_BLADE = {
     Activity: {
@@ -417,7 +452,7 @@ const STRIKE_LIGHT_BLADE = {
         redacted: false,
         blacklisted: false
     }
-};
+}
 
 const STRIKE_BERCEAU_MAL = {
     Activity: {
@@ -543,7 +578,7 @@ const STRIKE_BERCEAU_MAL = {
         redacted: false,
         blacklisted: false
     }
-};
+}
 
 const ROAMING_PALE_HEART = {
     Activity: {
@@ -671,7 +706,7 @@ const ROAMING_PALE_HEART = {
         redacted: false,
         blacklisted: false
     }
-};
+}
 
 const ROAMING_PALE_HEART_LOST_SECTOR = {
     Activity: {
@@ -799,7 +834,7 @@ const ROAMING_PALE_HEART_LOST_SECTOR = {
         redacted: false,
         blacklisted: false
     }
-};
+}
 
 const HAUNTED_SECTOR_EXPERT_MOON = {
     Activity: {
@@ -870,7 +905,7 @@ const HAUNTED_SECTOR_EXPERT_MOON = {
                 },
                 {
                     displayString:
-                        'Complete step 4 of the "A Spark of Hope" quest.'
+                        "Complete step 4 of the \"A Spark of Hope\" quest."
                 }
             ]
         },
@@ -915,7 +950,7 @@ const HAUNTED_SECTOR_EXPERT_MOON = {
         blacklisted: false
     },
     ActivityMode: {}
-};
+}
 
 const PATROL_THRONE_WORLD = {
     Activity: {
@@ -1025,7 +1060,7 @@ const PATROL_THRONE_WORLD = {
         redacted: false,
         blacklisted: false
     }
-};
+}
 
 const LOST_SECTOR_EXPERT_FORGOTTEN_ABYSS = {
     Activity: {
@@ -1117,7 +1152,7 @@ const LOST_SECTOR_EXPERT_FORGOTTEN_ABYSS = {
                 },
                 {
                     displayString:
-                        'Complete step 4 of the "A Spark of Hope" quest.'
+                        "Complete step 4 of the \"A Spark of Hope\" quest."
                 }
             ]
         },
@@ -1194,7 +1229,7 @@ const LOST_SECTOR_EXPERT_FORGOTTEN_ABYSS = {
         redacted: false,
         blacklisted: false
     }
-};
+}
 
 const LOST_SECTOR_MASTER_FORGOTTEN_ABYSS = {
     Activity: {
@@ -1286,7 +1321,7 @@ const LOST_SECTOR_MASTER_FORGOTTEN_ABYSS = {
                 },
                 {
                     displayString:
-                        'Complete step 4 of the "A Spark of Hope" quest.'
+                        "Complete step 4 of the \"A Spark of Hope\" quest."
                 }
             ]
         },
@@ -1357,7 +1392,7 @@ const LOST_SECTOR_MASTER_FORGOTTEN_ABYSS = {
         redacted: false,
         blacklisted: false
     }
-};
+}
 
 const THE_BLOOMING_MASTER = {
     Activity: {
@@ -1449,7 +1484,7 @@ const THE_BLOOMING_MASTER = {
                 },
                 {
                     displayString:
-                        'Complete step 4 of the "A Spark of Hope" quest.'
+                        "Complete step 4 of the \"A Spark of Hope\" quest."
                 }
             ]
         },
@@ -1496,8 +1531,31 @@ const THE_BLOOMING_MASTER = {
         index: 31,
         redacted: false,
         blacklisted: false
+    },
+    ActivityMode: {
+        displayProperties: {
+            description: "Statistiques pour les Secteurs oubliés.",
+            name: "Secteur oublié",
+            icon: "/common/destiny2_content/icons/DestinyActivityModeDefinition_7d11acd7d5a3daebc0a0c906452932d6.png",
+            hasIcon: true
+        },
+        pgcrImage: "/img/theme/destiny/bgs/stats/banner_story_1.jpg",
+        modeType: 87,
+        activityModeCategory: 1,
+        isTeamBased: false,
+        tier: 0,
+        isAggregateMode: false,
+        parentHashes: [1164760493],
+        friendlyName: "lost_sector",
+        supportsFeedFiltering: false,
+        display: true,
+        order: 5002,
+        hash: 103143560,
+        index: 67,
+        redacted: false,
+        blacklisted: false
     }
-};
+}
 
 const NIGHTFALL_GRAND_MASTER_PROVING_GROUNDS = {
     Activity: {
@@ -1669,7 +1727,7 @@ const NIGHTFALL_GRAND_MASTER_PROVING_GROUNDS = {
                 { displayString: "" },
                 {
                     displayString:
-                        'Complete step 4 of the "A Spark of Hope" quest.'
+                        "Complete step 4 of the \"A Spark of Hope\" quest."
                 }
             ]
         },
@@ -1741,7 +1799,7 @@ const NIGHTFALL_GRAND_MASTER_PROVING_GROUNDS = {
         redacted: false,
         blacklisted: false
     }
-};
+}
 
 const NIGHTFALL_EXPERT_PROVING_GROUNDS = {
     Activity: {
@@ -1897,7 +1955,7 @@ const NIGHTFALL_EXPERT_PROVING_GROUNDS = {
                 { displayString: "" },
                 {
                     displayString:
-                        'Complete step 4 of the "A Spark of Hope" quest.'
+                        "Complete step 4 of the \"A Spark of Hope\" quest."
                 }
             ]
         },
@@ -1969,7 +2027,7 @@ const NIGHTFALL_EXPERT_PROVING_GROUNDS = {
         redacted: false,
         blacklisted: false
     }
-};
+}
 
 const OFFENSIVE_WELLSPRING_DEFEND = {
     Activity: {
@@ -2065,7 +2123,7 @@ const OFFENSIVE_WELLSPRING_DEFEND = {
                 { displayString: "Requires Destiny 2: The Witch Queen" },
                 {
                     displayString:
-                        'Complete step 4 of the "A Spark of Hope" quest.'
+                        "Complete step 4 of the \"A Spark of Hope\" quest."
                 }
             ]
         },
@@ -2138,7 +2196,7 @@ const OFFENSIVE_WELLSPRING_DEFEND = {
         redacted: false,
         blacklisted: false
     }
-};
+}
 
 const ONSLAUGHT_EXPERT_VOSTOK = {
     Activity: {
@@ -2300,7 +2358,7 @@ const ONSLAUGHT_EXPERT_VOSTOK = {
             fireteamRequirementLabels: [
                 {
                     displayString:
-                        'Complete step 4 of the "A Spark of Hope" quest.'
+                        "Complete step 4 of the \"A Spark of Hope\" quest."
                 }
             ]
         },
@@ -2372,7 +2430,7 @@ const ONSLAUGHT_EXPERT_VOSTOK = {
         redacted: false,
         blacklisted: false
     }
-};
+}
 
 const ASSAULT_HEIST_BATTLEGROUND_EUROPA = {
     Activity: {
@@ -2478,8 +2536,9 @@ const ASSAULT_HEIST_BATTLEGROUND_EUROPA = {
         index: 1,
         redacted: false,
         blacklisted: false
-    }
-};
+    },
+    ActivityMode: {}
+}
 
 const AGGRESSION_DU_SALUT = {
     Activity: {
@@ -2647,7 +2706,7 @@ const AGGRESSION_DU_SALUT = {
         blacklisted: false
     },
     ActivityMode: {}
-};
+}
 
 const CARNAGE_PRIVE = {
     Activity: {
@@ -2747,86 +2806,206 @@ const CARNAGE_PRIVE = {
         redacted: false,
         blacklisted: false
     }
-};
+}
 
 describe("Activity Tests", () => {
     describe("Chapter name", () => {
         it("IN_ORBIT", () => {
-            const ACTIVITY = IN_ORBIT;
+            const ACTIVITY = IN_ORBIT
             const chapterText = Activities.computeChapterText(
                 ACTIVITY.Activity,
                 ACTIVITY.Destination,
-                ACTIVITY.Place
-            );
-            expect(chapterText).toStrictEqual("Orbite");
-        });
+                ACTIVITY.Place,
+                ACTIVITY.ActivityMode as any
+            )
+            expect(chapterText).toStrictEqual("Orbite")
+        })
 
         it("TOWER", () => {
-            const ACTIVITY = TOWER;
+            const ACTIVITY = TOWER
             const chapterText = Activities.computeChapterText(
                 ACTIVITY.Activity,
                 ACTIVITY.Destination,
-                ACTIVITY.Place
-            );
-            expect(chapterText).toStrictEqual("Social - La Tour");
-        });
+                ACTIVITY.Place,
+                ACTIVITY.ActivityMode
+            )
+            expect(chapterText).toStrictEqual("Social - La Tour")
+        })
 
         it("ROAMING_PALE_HEART", () => {
-            const ACTIVITY = ROAMING_PALE_HEART;
+            const ACTIVITY = ROAMING_PALE_HEART
             const chapterText = Activities.computeChapterText(
                 ACTIVITY.Activity,
                 ACTIVITY.Destination,
-                ACTIVITY.Place
-            );
-            expect(chapterText).toStrictEqual(
-                "Patrouile - The Pale Heart - The Traveler"
-            );
-        });
+                ACTIVITY.Place,
+                ACTIVITY.ActivityMode
+            )
+            expect(chapterText).toStrictEqual("Exploration - Le Cœur pâle - Le Voyageur")
+        })
 
         it("THE_BLOOMING_MASTER", () => {
-            const ACTIVITY = THE_BLOOMING_MASTER;
+            const ACTIVITY = THE_BLOOMING_MASTER
             const chapterText = Activities.computeChapterText(
                 ACTIVITY.Activity,
                 ACTIVITY.Destination,
-                ACTIVITY.Place
-            );
-            expect(chapterText).toStrictEqual(
-                "Lost sector - The Blooming Deep - Master - The Traveler"
-            );
-        });
+                ACTIVITY.Place,
+                ACTIVITY.ActivityMode
+            )
+            expect(chapterText).toStrictEqual("Secteur oublié - The Blooming Deep - Master - The Traveler")
+        })
 
         it("NIGHTFALL_GRAND_MASTER_PROVING_GROUNDS", () => {
-            const ACTIVITY = NIGHTFALL_GRAND_MASTER_PROVING_GROUNDS;
+            const ACTIVITY = NIGHTFALL_GRAND_MASTER_PROVING_GROUNDS
             const chapterText = Activities.computeChapterText(
                 ACTIVITY.Activity,
                 ACTIVITY.Destination,
-                ACTIVITY.Place
-            );
-            expect(chapterText).toStrictEqual(
-                "Nightfall - Proving Grounds - Grandmaster - Nessus"
-            );
-        });
+                ACTIVITY.Place,
+                ACTIVITY.ActivityMode
+            )
+            expect(chapterText).toStrictEqual("Nuit noire - Terrain d'essai - Grand-maître - Nessos")
+        })
 
         it("ONSLAUGHT_EXPERT_VOSTOK", () => {
-            const ACTIVITY = ONSLAUGHT_EXPERT_VOSTOK;
+            const ACTIVITY = ONSLAUGHT_EXPERT_VOSTOK
             const chapterText = Activities.computeChapterText(
                 ACTIVITY.Activity,
                 ACTIVITY.Destination,
-                ACTIVITY.Place
-            );
-            expect(chapterText).toStrictEqual(
-                "Offensive - Expert: Vostok - Onslaught - Earth"
-            );
-        });
+                ACTIVITY.Place,
+                ACTIVITY.ActivityMode
+            )
+            expect(chapterText).toStrictEqual("Offensive - Expert : Vostok - Agression - Terre")
+        })
 
         it("ASSAULT_HEIST_BATTLEGROUND_EUROPA", () => {
-            const ACTIVITY = ASSAULT_HEIST_BATTLEGROUND_EUROPA;
+            const ACTIVITY = ASSAULT_HEIST_BATTLEGROUND_EUROPA
             const chapterText = Activities.computeChapterText(
                 ACTIVITY.Activity,
                 ACTIVITY.Destination,
-                ACTIVITY.Place
-            );
-            expect(chapterText).toStrictEqual("Orbit");
-        });
-    });
-});
+                ACTIVITY.Place,
+                ACTIVITY.ActivityMode as any
+            )
+            expect(chapterText).toStrictEqual("Heist Battleground: Europa - Rathmore Chaos, Europa")
+        })
+
+        it("STRIKE_LIGHT_BLADE", () => {
+            const ACTIVITY = STRIKE_LIGHT_BLADE
+            const chapterText = Activities.computeChapterText(
+                ACTIVITY.Activity,
+                ACTIVITY.Destination,
+                ACTIVITY.Place,
+                ACTIVITY.ActivityMode as any
+            )
+            expect(chapterText).toStrictEqual("Assaut - La Lame-Lumière - Cour de Savathûn, monde du trône")
+        })
+
+        it("STRIKE_BERCEAU_MAL", () => {
+            const ACTIVITY = STRIKE_BERCEAU_MAL
+            const chapterText = Activities.computeChapterText(
+                ACTIVITY.Activity,
+                ACTIVITY.Destination,
+                ACTIVITY.Place,
+                ACTIVITY.ActivityMode as any
+            )
+            expect(chapterText).toStrictEqual("Assaut - Berceau du mal - Cour de Savathûn, monde du trône")
+        })
+
+        it("ROAMING_PALE_HEART_LOST_SECTOR", () => {
+            const ACTIVITY = ROAMING_PALE_HEART_LOST_SECTOR
+            const chapterText = Activities.computeChapterText(
+                ACTIVITY.Activity,
+                ACTIVITY.Destination,
+                ACTIVITY.Place,
+                ACTIVITY.ActivityMode as any
+            )
+            expect(chapterText).toStrictEqual("Exploration - Le Cœur pâle - Le Voyageur")
+        })
+
+        it("HAUNTED_SECTOR_EXPERT_MOON", () => {
+            const ACTIVITY = HAUNTED_SECTOR_EXPERT_MOON
+            const chapterText = Activities.computeChapterText(
+                ACTIVITY.Activity,
+                ACTIVITY.Destination,
+                ACTIVITY.Place,
+                ACTIVITY.ActivityMode as any
+            )
+            expect(chapterText).toStrictEqual("Secteurs hantés (Expert) - La Lune")
+        })
+
+        it("PATROL_THRONE_WORLD", () => {
+            const ACTIVITY = PATROL_THRONE_WORLD
+            const chapterText = Activities.computeChapterText(
+                ACTIVITY.Activity,
+                ACTIVITY.Destination,
+                ACTIVITY.Place,
+                ACTIVITY.ActivityMode as any
+            )
+            expect(chapterText).toStrictEqual("Exploration - Monde du trône de Savathûn - Cour de Savathûn, monde du trône")
+        })
+
+        it("PATROL_THLOST_SECTOR_EXPERT_FORGOTTEN_ABYSSRONE_WORLD", () => {
+            const ACTIVITY = LOST_SECTOR_EXPERT_FORGOTTEN_ABYSS
+            const chapterText = Activities.computeChapterText(
+                ACTIVITY.Activity,
+                ACTIVITY.Destination,
+                ACTIVITY.Place,
+                ACTIVITY.ActivityMode as any
+            )
+            expect(chapterText).toStrictEqual("Secteur oublié - Les Profondeurs oubliées - Expert - Le Voyageur")
+        })
+
+        it("LOST_SECTOR_MASTER_FORGOTTEN_ABYSS", () => {
+            const ACTIVITY = LOST_SECTOR_MASTER_FORGOTTEN_ABYSS
+            const chapterText = Activities.computeChapterText(
+                ACTIVITY.Activity,
+                ACTIVITY.Destination,
+                ACTIVITY.Place,
+                ACTIVITY.ActivityMode as any
+            )
+            expect(chapterText).toStrictEqual("Secteur oublié - Les Profondeurs oubliées - Maîtrise - Le Voyageur")
+        })
+
+        it("NIGHTFALL_EXPERT_PROVING_GROUNDS", () => {
+            const ACTIVITY = NIGHTFALL_EXPERT_PROVING_GROUNDS
+            const chapterText = Activities.computeChapterText(
+                ACTIVITY.Activity,
+                ACTIVITY.Destination,
+                ACTIVITY.Place,
+                ACTIVITY.ActivityMode as any
+            )
+            expect(chapterText).toStrictEqual("Nuit noire - Terrain d'essai - Avancé - Nessos")
+        })
+
+        it("OFFENSIVE_WELLSPRING_DEFEND", () => {
+            const ACTIVITY = OFFENSIVE_WELLSPRING_DEFEND
+            const chapterText = Activities.computeChapterText(
+                ACTIVITY.Activity,
+                ACTIVITY.Destination,
+                ACTIVITY.Place,
+                ACTIVITY.ActivityMode as any
+            )
+            expect(chapterText).toStrictEqual("Offensive - La Source : Défense - La Source - Cour de Savathûn, monde du trône")
+        })
+
+        it("AGGRESSION_DU_SALUT", () => {
+            const ACTIVITY = AGGRESSION_DU_SALUT
+            const chapterText = Activities.computeChapterText(
+                ACTIVITY.Activity,
+                ACTIVITY.Destination,
+                ACTIVITY.Place,
+                ACTIVITY.ActivityMode as any
+            )
+            expect(chapterText).toStrictEqual("La Cour de la Veuve: Agression : Salut - Activité saisonnière")
+        })
+
+        it("CARNAGE_PRIVE", () => {
+            const ACTIVITY = CARNAGE_PRIVE
+            const chapterText = Activities.computeChapterText(
+                ACTIVITY.Activity,
+                ACTIVITY.Destination,
+                ACTIVITY.Place,
+                ACTIVITY.ActivityMode as any
+            )
+            expect(chapterText).toStrictEqual("L'Épreuve - Carnage - Chute de l'étendard")
+        })
+    })
+})
