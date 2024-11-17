@@ -19,7 +19,7 @@ export const defaultOpts = {
     locale: "en"
 }
 
-export type Destiny2Cookies = {
+export interface Destiny2Cookies {
     membershipId: string
     token: string
     refreshToken: string
@@ -40,7 +40,7 @@ export enum ROUTE {
     AUTH_CLEAR = "/config/clear"
 }
 
-export type TotalBounties = {
+export interface TotalBounties {
     complete: number,
     count: number,
     needed: number,
@@ -49,7 +49,7 @@ export type TotalBounties = {
     done: boolean
 }
 
-export type GroupBounties = {
+export interface GroupBounties {
     icon: string,
     complete: number,
     count: number,
@@ -59,9 +59,9 @@ export type GroupBounties = {
     done: boolean
 }
 
-export type CharacterBounties = { [key: string]: GroupBounties }
+export type CharacterBounties = Record<string, GroupBounties>
 
-export type CharacterWithBounties = {
+export interface CharacterWithBounties {
     total: TotalBounties,
     groups: CharacterBounties,
     "class": string,
@@ -69,11 +69,11 @@ export type CharacterWithBounties = {
     emblem: string
 }
 
-export type AllCharacters = {
+export interface AllCharacters {
     characters: CharacterWithBounties[]
 }
 
-export type RWC = { cookies: { [key: string]: string } }
+export interface RWC { cookies: Record<string, string> }
 export const getCookie = <T>(q: RWC, key: keyof typeof defaultOpts): T => {
     const value = (q.cookies[key] || defaultOpts[key]) as unknown as any
     switch (typeof (defaultOpts as any)[key]) {
@@ -93,7 +93,7 @@ export const mergeDataWOpts = (
     opts?: {
         q?: RWC,
         partials?: string[],
-        variables?: { [key: string]: string | number | boolean }
+        variables?: Record<string, string | number | boolean>
     }
 ) => {
     const partials: any = {}

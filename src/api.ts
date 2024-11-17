@@ -10,9 +10,7 @@ const _axios = axios.create({
     baseURL: "https://www.bungie.net/",
     timeout: 10000,
     withCredentials: true,
-    headers: {
-        "X-API-Key": API_KEY,
-    }
+    headers: {"X-API-Key": API_KEY,}
 })
 
 const getMaxAge = () => { return { maxAge: Date.now() + 3600 * 24 * 365 } }
@@ -148,11 +146,7 @@ export const refresh = (refresh_token: string) => _axios.post(
         refresh_token
         // code,
     }),
-    {
-        headers: {
-            "Content-Type": "application/x-www-form-urlencoded",
-        }
-    }
+    {headers: {"Content-Type": "application/x-www-form-urlencoded",}}
 ).catch(axiosError)
 
 export const getManifest = () => _axios.get("/Platform/Destiny2/Manifest/").catch(axiosError)

@@ -1,0 +1,56 @@
+<script>
+let socket
+const userId="d2-helper"
+function initializeConnections(){
+socket = new WebSocket("ws://127.0.0.1:8081");
+}
+initializeConnections()
+socket.onopen = () => {
+    const s = {
+        "request": "Subscribe",
+        "id": userId,
+        "events": {"Twitch":["Message"]}
+    };
+
+    //const s = {"request":"Subscribe","id":"obs-chat2","events":{"Twitch":["ChatMessage","FirstWord","Announcement","UserTimedOut","UserBanned","ChatMessageDeleted"],"YouTube":["Message","MessageDeleted","UserBanned","SuperChat"]}}
+
+    socket.send(JSON.stringify(s));
+    console.debug(['Connected to Streamer.Bot socket:', socket]);
+    setTimeout(()=>{
+     if (toSendData){
+        toSendData()
+    }},5000)
+};
+
+socket.onclose = function () {
+    console.warn('Disconnected from Streamer.Bot socket.');
+    setTimeout(initializeConnections, 10000);
+};
+
+socket.onmessage = async (event) => {
+    const wsdata = JSON.parse(event.data);
+
+    console.debug(['Event', wsdata]);
+
+    if (wsdata.id === userId) {
+        console.debug([`SUBSCRIBE: ${wsdata.status}`, wsdata]);
+    }
+}
+function sendData(args){
+    const data = {
+        request: 'DoAction',
+        action: {
+            id: '97495e12-e3a5-4db4-8c79-11901fd8178d'
+        },
+        args,
+        id: `${Date.now()}`
+        };
+    socket.send(JSON.stringify(data));
+}
+function sendTextToTwitch(text){
+    sendData({
+            message: text,
+            platform: "twitch"
+        })
+}
+</script>

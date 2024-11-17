@@ -66,6 +66,11 @@ export class Activities {
             activities.currentActivityHash,
             this.getLocale(q)
         )
+
+        if (typeof activity !== "object") {
+            return {}
+        }
+
         const activityMode = manifest.t(
             activities.currentActivityModeHash,
             this.getLocale(q)
@@ -78,8 +83,8 @@ export class Activities {
 
         return {
             started: activities.dateActivityStarted,
-            activityName: activity ? activity.displayProperties.name : "",
-            activityLocation: activity ? activity.displayProperties.description : "",
+            activityName: activity?.displayProperties?.name || "",
+            activityLocation: activity?.displayProperties?.description || "",
             activity,
             destination,
             place,
@@ -103,8 +108,20 @@ export class Activities {
         if (activityMode?.displayProperties?.name) {
 
 
+            if (activityMode.modeType === ActivityModeType.GAMBIT) {
+                return `${activityMode.displayProperties.name} - ${activity.displayProperties.name} - ${activity.displayProperties.description}`
+            }
+
             if ([ActivityModeType.SCORED_HEROIC_NIGHTFALL, ActivityModeType.SCORED_NIGHTFALL].includes(activity.directActivityModeType as ActivityModeType)) {
                 return `${activity.originalDisplayProperties?.name} - ${activity.displayProperties.description} - ${activity.selectionScreenDisplayProperties?.name} - ${destination.displayProperties.name}`
+            }
+
+            if (activityMode.modeType === ActivityModeType.OFFENSIVE) {
+
+                if (activity.originalDisplayProperties?.name.includes(activity.selectionScreenDisplayProperties?.name || "")) {
+                    return `${activityMode.displayProperties.name} - ${activity.originalDisplayProperties?.name}`
+                }
+                return `${activityMode.displayProperties.name} - ${activity.selectionScreenDisplayProperties?.name} - ${activity.originalDisplayProperties?.name}`
             }
 
             if (activity.selectionScreenDisplayProperties?.name) {
@@ -120,33 +137,10 @@ export class Activities {
                 return `${place.displayProperties.name} - ${activityMode.displayProperties.name} - ${activity.displayProperties.name}`
             }
 
+
+
             return `${activityMode.displayProperties.name} - ${activity.displayProperties.name} - ${destination.displayProperties.name}`
 
-            // if (activity.activityModeTypes.includes(6)) {
-            //     return `Patrol - ${activity.originalDisplayProperties.name} - ${destination.displayProperties.name}`
-            // }
-
-            // // Offensive
-            // if (activity.activityModeTypes.includes(86)) {
-            //     return `Offensive - ${activity.originalDisplayProperties.name} - ${activity.selectionScreenDisplayProperties.name} - ${destination.displayProperties.name}`
-            // }
-
-            // // Lost sector
-            // if (activity.activityModeTypes.includes(87)) {
-            //     return `Lost sector - ${activity.originalDisplayProperties.name} - ${activity.selectionScreenDisplayProperties.name} - ${destination.displayProperties.name}`
-            // }
-
-            // // Strikes
-            // if (activity.activityModeTypes.includes(18)) {
-            //     return `${activity.originalDisplayProperties.name} - ${activity.originalDisplayProperties.description} - ${activity?.selectionScreenDisplayProperties?.name} - ${destination.displayProperties.name}`
-            // }
-
-            // if (activity.activityModeTypes.includes(40)) {
-            //     const mainActivity = activity.displayProperties.name !== "" ? activity.displayProperties.name : destination.displayProperties.name
-            //     const locationActivity = destination.displayProperties.name !== mainActivity ? ` - ${destination.displayProperties.name}` : ""
-            //     const placeActivity = destination.displayProperties.name !== place.displayProperties.name ? ` - ${place.displayProperties.name}` : ""
-            //     return `Social - ${activity.displayProperties.name}`
-            // }
         }
 
         const mainActivity = activity.displayProperties.name !== "" ? activity.displayProperties.name : destination.displayProperties.name
@@ -156,7 +150,7 @@ export class Activities {
     }
 }
 
-export type fetchedData = {
+export interface fetchedData {
     characters: any
     activities: any
 }
@@ -175,14 +169,14 @@ export type ActivityMode = BaseDefinition & {
     modeType: number
 }
 
-export type BaseDefinition = {
+export interface BaseDefinition {
     displayProperties: {
         name: string
         description: string
     }
 }
 
-export type CustomActivity = {
+export interface CustomActivity {
     selectionScreenDisplayProperties?: {
         name: string
         description: string
@@ -199,6 +193,10 @@ export enum ActivityModeType {
     ALL_STRIKES = 18,
     SOCIAL = 40,
     SCORED_NIGHTFALL = 46,
-    SCORED_HEROIC_NIGHTFALL = 47
+    SCORED_HEROIC_NIGHTFALL = 47,
+    GAMBIT = 63,
+    All_PVE_COMPETITIVE = 64,
+    OFFENSIVE = 86,
+    LOST_SECTOR = 87
 
 }

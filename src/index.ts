@@ -1,4 +1,3 @@
-/* eslint-disable prefer-rest-params */
 import { mustache } from "consolidate"
 import { readFileSync } from "fs"
 import { accessToken, authorize, clearTokens, getCookies, getLinkedProfile, getToken, setCookies } from "./api"
@@ -78,11 +77,20 @@ app.get(ROUTE.CURRENT_CHARACTER, async (q, r) => {
 app.get(ROUTE.CURRENT_ACTIVITY, async (q, r) => {
     const data = await Activities.fetchLastUsedCharacterActivities(q)
     const debug = q.query["debug"] === "true"
+    const ws = q.query["ws"] === "true"
+    const partials = ["header"]
+    if (ws) {
+        partials.push("websocket", "cookies")
+    }
     r.render("activity", mergeDataWOpts(
-        { ...data, debug },
+        {
+            ...data,
+            debug,
+            ws
+        },
         {
             q,
-            partials: ["header"],
+            partials,
             variables: defaultOpts
         }
     ))

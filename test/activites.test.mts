@@ -2,38 +2,619 @@ import { expect, describe, it } from "vitest"
 import { Activities } from "../src/activities.js"
 
 const RAID_CAVEAU_VERRE = {
-    "Activity": { "displayProperties": { "description": "Sous Vénus, le mal s'agite...", "name": "Le Caveau de verre: Standard", "icon": "/common/destiny2_content/icons/bd7a1fc995f87be96698263bc16698e7.png", "hasIcon": true }, "originalDisplayProperties": { "description": "Sous Vénus, le mal s'agite...", "name": "Le Caveau de verre", "icon": "/img/misc/missing_icon_d2.png", "hasIcon": false }, "selectionScreenDisplayProperties": { "description": "Une escouade puissante est recommandée pour surmonter ce défi.\n\nMatchmaking : NON", "name": "Standard", "hasIcon": false }, "releaseIcon": "/img/misc/missing_icon_d2.png", "releaseTime": 0, "completionUnlockHash": 0, "activityLightLevel": 1300, "destinationHash": 3871070152, "placeHash": 3871070152, "activityTypeHash": 2043403989, "tier": 0, "pgcrImage": "/img/destiny_content/pgcr/vault_of_glass.jpg", "rewards": [], "modifiers": [{ "activityModifierHash": 1783825372 }, { "activityModifierHash": 1783825372 }, { "activityModifierHash": 1783825372 }, { "activityModifierHash": 1572570117 }, { "activityModifierHash": 3135466059 }, { "activityModifierHash": 3212721586 }, { "activityModifierHash": 274420331 }, { "activityModifierHash": 2814846409 }, { "activityModifierHash": 3620565640 }, { "activityModifierHash": 1783825372 }, { "activityModifierHash": 4075903438 }], "isPlaylist": false, "challenges": [{ "rewardSiteHash": 0, "inhibitRewardsUnlockHash": 0, "objectiveHash": 3180884403, "dummyRewards": [{ "itemHash": 73143230, "quantity": 1, "hasConditionalVisibility": false }] }], "optionalUnlockStrings": [], "inheritFromFreeRoam": false, "suppressOtherRewards": false, "playlistItems": [], "activityGraphList": [{ "activityGraphHash": 3510444975 }], "matchmaking": { "isMatchmade": false, "minParty": 1, "maxParty": 6, "maxPlayers": 6, "requiresGuardianOath": false }, "directActivityModeHash": 2043403989, "directActivityModeType": 4, "activityModeHashes": [2043403989, 1164760493], "activityModeTypes": [4, 7], "isPvP": false, "insertionPoints": [{ "phaseHash": 1327839050, "unlockHash": 0 }, { "phaseHash": 1327839051, "unlockHash": 0 }, { "phaseHash": 1327839048, "unlockHash": 0 }, { "phaseHash": 1327839049, "unlockHash": 0 }, { "phaseHash": 2818885672, "unlockHash": 0 }, { "phaseHash": 2818885673, "unlockHash": 0 }, { "phaseHash": 3793779771, "unlockHash": 0 }, { "phaseHash": 3793779770, "unlockHash": 0 }, { "phaseHash": 3793779769, "unlockHash": 0 }], "activityLocationMappings": [], "hash": 3881495763, "index": 199, "redacted": false, "blacklisted": false },
-    "Destination": { "displayProperties": { "description": "On fit un jour sur Vénus une grande découverte, celle d'un paradis. Aujourd'hui, c'est un monument dédié à tous nos disparus. Selon les vieilles histoires, nous bâtîmes une académie consacrée à l'apprentissage et à la recherche sur la côte d'un océan extraordinaire, et les eaux elles-mêmes se levèrent, bouillonnantes, pour briser le rivage, emportant tout ce que nous avions construit.", "name": "Vénus", "icon": "/img/misc/missing_icon_d2.png", "hasIcon": false }, "hash": 3871070152, "index": 19, "redacted": false, "blacklisted": false },
-    "Place": { "displayProperties": { "description": "On fit un jour sur Vénus une grande découverte, celle d'un paradis. Aujourd'hui, c'est un monument dédié à tous nos disparus. Selon les vieilles histoires, nous bâtîmes une académie consacrée à l'apprentissage et à la recherche sur la côte d'un océan extraordinaire, et les eaux elles-mêmes se levèrent, bouillonnantes, pour briser le rivage, emportant tout ce que nous avions construit.", "name": "Vénus", "icon": "/img/misc/missing_icon_d2.png", "hasIcon": false }, "hash": 3871070152, "index": 19, "redacted": false, "blacklisted": false },
-    "ActivityMode": { "displayProperties": { "description": "Toutes vos statistiques de Raids en même temps.", "name": "Raid", "icon": "/common/destiny2_content/icons/DestinyActivityModeDefinition_bfe80e3dafe6686a9dc42df0606bdc9b.png", "hasIcon": true }, "pgcrImage": "/img/theme/destiny/bgs/stats/banner_raid_1.jpg", "modeType": 4, "activityModeCategory": 1, "isTeamBased": false, "tier": 0, "isAggregateMode": false, "parentHashes": [1164760493], "friendlyName": "raid", "supportsFeedFiltering": false, "display": true, "order": 2000, "hash": 2043403989, "index": 7, "redacted": false, "blacklisted": false }
+    "Activity": {
+        "displayProperties": {
+            "description": "Sous Vénus, le mal s'agite...",
+            "name": "Le Caveau de verre: Standard",
+            "icon": "/common/destiny2_content/icons/bd7a1fc995f87be96698263bc16698e7.png",
+            "hasIcon": true
+        },
+        "originalDisplayProperties": {
+            "description": "Sous Vénus, le mal s'agite...",
+            "name": "Le Caveau de verre",
+            "icon": "/img/misc/missing_icon_d2.png",
+            "hasIcon": false
+        },
+        "selectionScreenDisplayProperties": {
+            "description": "Une escouade puissante est recommandée pour surmonter ce défi.\n\nMatchmaking : NON",
+            "name": "Standard",
+            "hasIcon": false
+        },
+        "releaseIcon": "/img/misc/missing_icon_d2.png",
+        "releaseTime": 0,
+        "completionUnlockHash": 0,
+        "activityLightLevel": 1300,
+        "destinationHash": 3871070152,
+        "placeHash": 3871070152,
+        "activityTypeHash": 2043403989,
+        "tier": 0,
+        "pgcrImage": "/img/destiny_content/pgcr/vault_of_glass.jpg",
+        "rewards": [],
+        "modifiers": [{ "activityModifierHash": 1783825372 }, { "activityModifierHash": 1783825372 }, { "activityModifierHash": 1783825372 }, { "activityModifierHash": 1572570117 }, { "activityModifierHash": 3135466059 }, { "activityModifierHash": 3212721586 }, { "activityModifierHash": 274420331 }, { "activityModifierHash": 2814846409 }, { "activityModifierHash": 3620565640 }, { "activityModifierHash": 1783825372 }, { "activityModifierHash": 4075903438 }],
+        "isPlaylist": false,
+        "challenges": [{
+            "rewardSiteHash": 0,
+            "inhibitRewardsUnlockHash": 0,
+            "objectiveHash": 3180884403,
+            "dummyRewards": [{
+                "itemHash": 73143230,
+                "quantity": 1,
+                "hasConditionalVisibility": false
+            }]
+        }],
+        "optionalUnlockStrings": [],
+        "inheritFromFreeRoam": false,
+        "suppressOtherRewards": false,
+        "playlistItems": [],
+        "activityGraphList": [{ "activityGraphHash": 3510444975 }],
+        "matchmaking": {
+            "isMatchmade": false,
+            "minParty": 1,
+            "maxParty": 6,
+            "maxPlayers": 6,
+            "requiresGuardianOath": false
+        },
+        "directActivityModeHash": 2043403989,
+        "directActivityModeType": 4,
+        "activityModeHashes": [2043403989, 1164760493],
+        "activityModeTypes": [4, 7],
+        "isPvP": false,
+        "insertionPoints": [{
+            "phaseHash": 1327839050,
+            "unlockHash": 0
+        }, {
+            "phaseHash": 1327839051,
+            "unlockHash": 0
+        }, {
+            "phaseHash": 1327839048,
+            "unlockHash": 0
+        }, {
+            "phaseHash": 1327839049,
+            "unlockHash": 0
+        }, {
+            "phaseHash": 2818885672,
+            "unlockHash": 0
+        }, {
+            "phaseHash": 2818885673,
+            "unlockHash": 0
+        }, {
+            "phaseHash": 3793779771,
+            "unlockHash": 0
+        }, {
+            "phaseHash": 3793779770,
+            "unlockHash": 0
+        }, {
+            "phaseHash": 3793779769,
+            "unlockHash": 0
+        }],
+        "activityLocationMappings": [],
+        "hash": 3881495763,
+        "index": 199,
+        "redacted": false,
+        "blacklisted": false
+    },
+    "Destination": {
+        "displayProperties": {
+            "description": "On fit un jour sur Vénus une grande découverte, celle d'un paradis. Aujourd'hui, c'est un monument dédié à tous nos disparus. Selon les vieilles histoires, nous bâtîmes une académie consacrée à l'apprentissage et à la recherche sur la côte d'un océan extraordinaire, et les eaux elles-mêmes se levèrent, bouillonnantes, pour briser le rivage, emportant tout ce que nous avions construit.",
+            "name": "Vénus",
+            "icon": "/img/misc/missing_icon_d2.png",
+            "hasIcon": false
+        },
+        "hash": 3871070152,
+        "index": 19,
+        "redacted": false,
+        "blacklisted": false
+    },
+    "Place": {
+        "displayProperties": {
+            "description": "On fit un jour sur Vénus une grande découverte, celle d'un paradis. Aujourd'hui, c'est un monument dédié à tous nos disparus. Selon les vieilles histoires, nous bâtîmes une académie consacrée à l'apprentissage et à la recherche sur la côte d'un océan extraordinaire, et les eaux elles-mêmes se levèrent, bouillonnantes, pour briser le rivage, emportant tout ce que nous avions construit.",
+            "name": "Vénus",
+            "icon": "/img/misc/missing_icon_d2.png",
+            "hasIcon": false
+        },
+        "hash": 3871070152,
+        "index": 19,
+        "redacted": false,
+        "blacklisted": false
+    },
+    "ActivityMode": {
+        "displayProperties": {
+            "description": "Toutes vos statistiques de Raids en même temps.",
+            "name": "Raid",
+            "icon": "/common/destiny2_content/icons/DestinyActivityModeDefinition_bfe80e3dafe6686a9dc42df0606bdc9b.png",
+            "hasIcon": true
+        },
+        "pgcrImage": "/img/theme/destiny/bgs/stats/banner_raid_1.jpg",
+        "modeType": 4,
+        "activityModeCategory": 1,
+        "isTeamBased": false,
+        "tier": 0,
+        "isAggregateMode": false,
+        "parentHashes": [1164760493],
+        "friendlyName": "raid",
+        "supportsFeedFiltering": false,
+        "display": true,
+        "order": 2000,
+        "hash": 2043403989,
+        "index": 7,
+        "redacted": false,
+        "blacklisted": false
+    }
 }
 
 const DUNGEON_PROPHECY = {
-    "Activity": { "displayProperties": { "description": "Entrez dans le royaume des Neuf et posez la question suivante : « Quelle est la nature des Ténèbres ? »", "name": "Prophétie", "icon": "/img/misc/missing_icon_d2.png", "hasIcon": false }, "originalDisplayProperties": { "description": "Entrez dans le royaume des Neuf et posez la question suivante : « Quelle est la nature des Ténèbres ? »", "name": "Prophétie", "icon": "/img/misc/missing_icon_d2.png", "hasIcon": false }, "releaseIcon": "/img/misc/missing_icon_d2.png", "releaseTime": 0, "completionUnlockHash": 0, "activityLightLevel": 1040, "destinationHash": 1553550479, "placeHash": 3747705955, "activityTypeHash": 608898761, "tier": -1, "pgcrImage": "/img/destiny_content/pgcr/dungeon_prophecy.jpg", "rewards": [], "modifiers": [{ "activityModifierHash": 1783825372 }, { "activityModifierHash": 1783825372 }, { "activityModifierHash": 1783825372 }, { "activityModifierHash": 1783825372 }], "isPlaylist": false, "challenges": [{ "rewardSiteHash": 0, "inhibitRewardsUnlockHash": 0, "objectiveHash": 2039792527, "dummyRewards": [{ "itemHash": 73143230, "quantity": 1, "hasConditionalVisibility": false }] }], "optionalUnlockStrings": [], "inheritFromFreeRoam": false, "suppressOtherRewards": false, "playlistItems": [], "matchmaking": { "isMatchmade": false, "minParty": 1, "maxParty": 3, "maxPlayers": 3, "requiresGuardianOath": false }, "directActivityModeHash": 608898761, "directActivityModeType": 82, "activityModeHashes": [608898761, 1164760493], "activityModeTypes": [82, 7], "isPvP": false, "insertionPoints": [{ "phaseHash": 2400102494, "unlockHash": 0 }, { "phaseHash": 1692344396, "unlockHash": 0 }, { "phaseHash": 382168380, "unlockHash": 0 }, { "phaseHash": 2132736886, "unlockHash": 0 }, { "phaseHash": 3585780724, "unlockHash": 0 }, { "phaseHash": 3999204422, "unlockHash": 0 }, { "phaseHash": 2229343072, "unlockHash": 0 }, { "phaseHash": 2543744318, "unlockHash": 0 }, { "phaseHash": 3492117941, "unlockHash": 0 }, { "phaseHash": 3998734759, "unlockHash": 0 }], "activityLocationMappings": [], "hash": 1077850348, "index": 137, "redacted": false, "blacklisted": false },
-    "Destination": { "displayProperties": { "description": "Phénomène paracausal créé par les Neuf.", "name": "Royaume des IX", "hasIcon": false }, "placeHash": 3747705955, "defaultFreeroamActivityHash": 0, "activityGraphEntries": [{ "activityGraphHash": 3510444975 }], "bubbleSettings": [], "bubbles": [], "hash": 1553550479, "index": 17, "redacted": false, "blacklisted": false },
-    "Place": { "displayProperties": { "description": "Le berceau de l'humanité. Cimetière de nos gloires passées, ce monde est désormais à reconquérir.", "name": "Terre", "icon": "/img/misc/missing_icon_d2.png", "hasIcon": false }, "hash": 3747705955, "index": 0, "redacted": false, "blacklisted": false },
-    "ActivityMode": { "displayProperties": { "description": "Statistiques pour les Donjons.", "name": "Donjon", "icon": "/common/destiny2_content/icons/DestinyActivityModeDefinition_f20ebb76bee675ca429e470cec58cc7b.png", "hasIcon": true }, "pgcrImage": "/img/destiny_content/pgcr/dungeon_pit_of_heresy.jpg", "modeType": 82, "activityModeCategory": 1, "isTeamBased": false, "tier": 0, "isAggregateMode": false, "parentHashes": [1164760493], "friendlyName": "dungeon", "supportsFeedFiltering": false, "display": true, "order": 5000, "hash": 608898761, "index": 62, "redacted": false, "blacklisted": false }
+    "Activity": {
+        "displayProperties": {
+            "description": "Entrez dans le royaume des Neuf et posez la question suivante : « Quelle est la nature des Ténèbres ? »",
+            "name": "Prophétie",
+            "icon": "/img/misc/missing_icon_d2.png",
+            "hasIcon": false
+        },
+        "originalDisplayProperties": {
+            "description": "Entrez dans le royaume des Neuf et posez la question suivante : « Quelle est la nature des Ténèbres ? »",
+            "name": "Prophétie",
+            "icon": "/img/misc/missing_icon_d2.png",
+            "hasIcon": false
+        },
+        "releaseIcon": "/img/misc/missing_icon_d2.png",
+        "releaseTime": 0,
+        "completionUnlockHash": 0,
+        "activityLightLevel": 1040,
+        "destinationHash": 1553550479,
+        "placeHash": 3747705955,
+        "activityTypeHash": 608898761,
+        "tier": -1,
+        "pgcrImage": "/img/destiny_content/pgcr/dungeon_prophecy.jpg",
+        "rewards": [],
+        "modifiers": [{ "activityModifierHash": 1783825372 }, { "activityModifierHash": 1783825372 }, { "activityModifierHash": 1783825372 }, { "activityModifierHash": 1783825372 }],
+        "isPlaylist": false,
+        "challenges": [{
+            "rewardSiteHash": 0,
+            "inhibitRewardsUnlockHash": 0,
+            "objectiveHash": 2039792527,
+            "dummyRewards": [{
+                "itemHash": 73143230,
+                "quantity": 1,
+                "hasConditionalVisibility": false
+            }]
+        }],
+        "optionalUnlockStrings": [],
+        "inheritFromFreeRoam": false,
+        "suppressOtherRewards": false,
+        "playlistItems": [],
+        "matchmaking": {
+            "isMatchmade": false,
+            "minParty": 1,
+            "maxParty": 3,
+            "maxPlayers": 3,
+            "requiresGuardianOath": false
+        },
+        "directActivityModeHash": 608898761,
+        "directActivityModeType": 82,
+        "activityModeHashes": [608898761, 1164760493],
+        "activityModeTypes": [82, 7],
+        "isPvP": false,
+        "insertionPoints": [{
+            "phaseHash": 2400102494,
+            "unlockHash": 0
+        }, {
+            "phaseHash": 1692344396,
+            "unlockHash": 0
+        }, {
+            "phaseHash": 382168380,
+            "unlockHash": 0
+        }, {
+            "phaseHash": 2132736886,
+            "unlockHash": 0
+        }, {
+            "phaseHash": 3585780724,
+            "unlockHash": 0
+        }, {
+            "phaseHash": 3999204422,
+            "unlockHash": 0
+        }, {
+            "phaseHash": 2229343072,
+            "unlockHash": 0
+        }, {
+            "phaseHash": 2543744318,
+            "unlockHash": 0
+        }, {
+            "phaseHash": 3492117941,
+            "unlockHash": 0
+        }, {
+            "phaseHash": 3998734759,
+            "unlockHash": 0
+        }],
+        "activityLocationMappings": [],
+        "hash": 1077850348,
+        "index": 137,
+        "redacted": false,
+        "blacklisted": false
+    },
+    "Destination": {
+        "displayProperties": {
+            "description": "Phénomène paracausal créé par les Neuf.",
+            "name": "Royaume des IX",
+            "hasIcon": false
+        },
+        "placeHash": 3747705955,
+        "defaultFreeroamActivityHash": 0,
+        "activityGraphEntries": [{ "activityGraphHash": 3510444975 }],
+        "bubbleSettings": [],
+        "bubbles": [],
+        "hash": 1553550479,
+        "index": 17,
+        "redacted": false,
+        "blacklisted": false
+    },
+    "Place": {
+        "displayProperties": {
+            "description": "Le berceau de l'humanité. Cimetière de nos gloires passées, ce monde est désormais à reconquérir.",
+            "name": "Terre",
+            "icon": "/img/misc/missing_icon_d2.png",
+            "hasIcon": false
+        },
+        "hash": 3747705955,
+        "index": 0,
+        "redacted": false,
+        "blacklisted": false
+    },
+    "ActivityMode": {
+        "displayProperties": {
+            "description": "Statistiques pour les Donjons.",
+            "name": "Donjon",
+            "icon": "/common/destiny2_content/icons/DestinyActivityModeDefinition_f20ebb76bee675ca429e470cec58cc7b.png",
+            "hasIcon": true
+        },
+        "pgcrImage": "/img/destiny_content/pgcr/dungeon_pit_of_heresy.jpg",
+        "modeType": 82,
+        "activityModeCategory": 1,
+        "isTeamBased": false,
+        "tier": 0,
+        "isAggregateMode": false,
+        "parentHashes": [1164760493],
+        "friendlyName": "dungeon",
+        "supportsFeedFiltering": false,
+        "display": true,
+        "order": 5000,
+        "hash": 608898761,
+        "index": 62,
+        "redacted": false,
+        "blacklisted": false
+    }
 }
 
 const EXOTIC_MISSION_WHISPER_WORM_STANDARD = {
-    "Activity": { "displayProperties": { "description": "Examinez une Anomalie corrompue loin sous la surface d'Io.", "name": "Le Murmure: Standard", "icon": "/img/misc/missing_icon_d2.png", "hasIcon": false }, "originalDisplayProperties": { "description": "Examinez une Anomalie corrompue loin sous la surface d'Io.", "name": "Le Murmure", "icon": "/img/misc/missing_icon_d2.png", "hasIcon": false }, "selectionScreenDisplayProperties": { "description": "Examinez une Anomalie corrompue loin sous la surface d'Io.", "name": "Standard", "hasIcon": false }, "releaseIcon": "/img/misc/missing_icon_d2.png", "releaseTime": 0, "completionUnlockHash": 0, "activityLightLevel": 1950, "destinationHash": 763066127, "placeHash": 763066127, "activityTypeHash": 1686739444, "tier": -1, "pgcrImage": "/img/destiny_content/pgcr/whisper.jpg", "rewards": [{ "rewardItems": [{ "itemHash": 1983149589, "quantity": 1, "hasConditionalVisibility": false }] }], "modifiers": [{ "activityModifierHash": 2290945089 }, { "activityModifierHash": 1783825372 }, { "activityModifierHash": 1602614337 }, { "activityModifierHash": 186409259 }, { "activityModifierHash": 3517267764 }, { "activityModifierHash": 3652821947 }], "isPlaylist": false, "challenges": [], "optionalUnlockStrings": [], "inheritFromFreeRoam": false, "suppressOtherRewards": false, "requirements": { "leaderRequirementLabels": [{ "displayString": "Nécessite de progresser dans la quête : « Murmures du passé »" }], "fireteamRequirementLabels": [{ "displayString": "Nécessite de progresser dans la quête : « Murmures du passé »" }, { "displayString": "Complete step 4 of the \"A Spark of Hope\" quest." }] }, "playlistItems": [], "matchmaking": { "isMatchmade": false, "minParty": 1, "maxParty": 3, "maxPlayers": 3, "requiresGuardianOath": false }, "directActivityModeHash": 1686739444, "directActivityModeType": 2, "activityModeHashes": [1686739444, 1164760493], "activityModeTypes": [2, 7], "isPvP": false, "insertionPoints": [], "activityLocationMappings": [], "hash": 3743446313, "index": 250, "redacted": false, "blacklisted": false },
-    "Destination": { "displayProperties": { "description": "Une lune de Jupiter et le dernier lieu touché par le Voyageur avant la Chute.", "name": "Io", "icon": "/img/misc/missing_icon_d2.png", "hasIcon": false }, "hash": 763066127, "index": 4, "redacted": false, "blacklisted": false },
-    "Place": { "displayProperties": { "description": "Une lune de Jupiter et le dernier lieu touché par le Voyageur avant la Chute.", "name": "Io", "icon": "/img/misc/missing_icon_d2.png", "hasIcon": false }, "hash": 763066127, "index": 4, "redacted": false, "blacklisted": false },
-    "ActivityMode": { "displayProperties": { "description": "Combien de Vex ai-je tués sans leur laisser le temps de s'expliquer ?", "name": "Histoire", "icon": "/common/destiny2_content/icons/DestinyActivityModeDefinition_5f8a923a0d0ac1e4289ae3be03f94aa2.png", "hasIcon": true }, "pgcrImage": "/img/theme/destiny/bgs/stats/banner_story_1.jpg", "modeType": 2, "activityModeCategory": 1, "isTeamBased": false, "tier": 0, "isAggregateMode": false, "parentHashes": [1164760493], "friendlyName": "story", "supportsFeedFiltering": false, "display": true, "order": 4000, "hash": 1686739444, "index": 8, "redacted": false, "blacklisted": false }
+    "Activity": {
+        "displayProperties": {
+            "description": "Examinez une Anomalie corrompue loin sous la surface d'Io.",
+            "name": "Le Murmure: Standard",
+            "icon": "/img/misc/missing_icon_d2.png",
+            "hasIcon": false
+        },
+        "originalDisplayProperties": {
+            "description": "Examinez une Anomalie corrompue loin sous la surface d'Io.",
+            "name": "Le Murmure",
+            "icon": "/img/misc/missing_icon_d2.png",
+            "hasIcon": false
+        },
+        "selectionScreenDisplayProperties": {
+            "description": "Examinez une Anomalie corrompue loin sous la surface d'Io.",
+            "name": "Standard",
+            "hasIcon": false
+        },
+        "releaseIcon": "/img/misc/missing_icon_d2.png",
+        "releaseTime": 0,
+        "completionUnlockHash": 0,
+        "activityLightLevel": 1950,
+        "destinationHash": 763066127,
+        "placeHash": 763066127,
+        "activityTypeHash": 1686739444,
+        "tier": -1,
+        "pgcrImage": "/img/destiny_content/pgcr/whisper.jpg",
+        "rewards": [{
+            "rewardItems": [{
+                "itemHash": 1983149589,
+                "quantity": 1,
+                "hasConditionalVisibility": false
+            }]
+        }],
+        "modifiers": [{ "activityModifierHash": 2290945089 }, { "activityModifierHash": 1783825372 }, { "activityModifierHash": 1602614337 }, { "activityModifierHash": 186409259 }, { "activityModifierHash": 3517267764 }, { "activityModifierHash": 3652821947 }],
+        "isPlaylist": false,
+        "challenges": [],
+        "optionalUnlockStrings": [],
+        "inheritFromFreeRoam": false,
+        "suppressOtherRewards": false,
+        "requirements": {
+            "leaderRequirementLabels": [{ "displayString": "Nécessite de progresser dans la quête : « Murmures du passé »" }],
+            "fireteamRequirementLabels": [{ "displayString": "Nécessite de progresser dans la quête : « Murmures du passé »" }, { "displayString": "Complete step 4 of the \"A Spark of Hope\" quest." }]
+        },
+        "playlistItems": [],
+        "matchmaking": {
+            "isMatchmade": false,
+            "minParty": 1,
+            "maxParty": 3,
+            "maxPlayers": 3,
+            "requiresGuardianOath": false
+        },
+        "directActivityModeHash": 1686739444,
+        "directActivityModeType": 2,
+        "activityModeHashes": [1686739444, 1164760493],
+        "activityModeTypes": [2, 7],
+        "isPvP": false,
+        "insertionPoints": [],
+        "activityLocationMappings": [],
+        "hash": 3743446313,
+        "index": 250,
+        "redacted": false,
+        "blacklisted": false
+    },
+    "Destination": {
+        "displayProperties": {
+            "description": "Une lune de Jupiter et le dernier lieu touché par le Voyageur avant la Chute.",
+            "name": "Io",
+            "icon": "/img/misc/missing_icon_d2.png",
+            "hasIcon": false
+        },
+        "hash": 763066127,
+        "index": 4,
+        "redacted": false,
+        "blacklisted": false
+    },
+    "Place": {
+        "displayProperties": {
+            "description": "Une lune de Jupiter et le dernier lieu touché par le Voyageur avant la Chute.",
+            "name": "Io",
+            "icon": "/img/misc/missing_icon_d2.png",
+            "hasIcon": false
+        },
+        "hash": 763066127,
+        "index": 4,
+        "redacted": false,
+        "blacklisted": false
+    },
+    "ActivityMode": {
+        "displayProperties": {
+            "description": "Combien de Vex ai-je tués sans leur laisser le temps de s'expliquer ?",
+            "name": "Histoire",
+            "icon": "/common/destiny2_content/icons/DestinyActivityModeDefinition_5f8a923a0d0ac1e4289ae3be03f94aa2.png",
+            "hasIcon": true
+        },
+        "pgcrImage": "/img/theme/destiny/bgs/stats/banner_story_1.jpg",
+        "modeType": 2,
+        "activityModeCategory": 1,
+        "isTeamBased": false,
+        "tier": 0,
+        "isAggregateMode": false,
+        "parentHashes": [1164760493],
+        "friendlyName": "story",
+        "supportsFeedFiltering": false,
+        "display": true,
+        "order": 4000,
+        "hash": 1686739444,
+        "index": 8,
+        "redacted": false,
+        "blacklisted": false
+    }
 }
 
 const EXOTIC_MISSION_WHISPER_WORK_EXPERT = {
-    "Activity": { "displayProperties": { "description": "Examinez une Anomalie corrompue loin sous la surface d'Io.", "name": "Le Murmure (Expert)", "icon": "/img/misc/missing_icon_d2.png", "hasIcon": false }, "originalDisplayProperties": { "description": "Examinez une Anomalie corrompue loin sous la surface d'Io.", "name": "Le Murmure (Expert)", "icon": "/img/misc/missing_icon_d2.png", "hasIcon": false }, "selectionScreenDisplayProperties": { "description": "Examinez une Anomalie corrompue loin sous la surface d'Io.", "name": "Expert", "hasIcon": false }, "releaseIcon": "/img/misc/missing_icon_d2.png", "releaseTime": 0, "completionUnlockHash": 0, "activityLightLevel": 2010, "destinationHash": 763066127, "placeHash": 763066127, "activityTypeHash": 1686739444, "tier": -1, "pgcrImage": "/img/destiny_content/pgcr/whisper.jpg", "rewards": [{ "rewardItems": [{ "itemHash": 1983149589, "quantity": 1, "hasConditionalVisibility": false }] }, { "rewardItems": [{ "itemHash": 2732814938, "quantity": 1, "hasConditionalVisibility": false }] }], "modifiers": [{ "activityModifierHash": 2290945089 }, { "activityModifierHash": 1783825372 }, { "activityModifierHash": 1602614337 }, { "activityModifierHash": 998275325 }, { "activityModifierHash": 186409259 }, { "activityModifierHash": 3517267764 }, { "activityModifierHash": 3652821947 }, { "activityModifierHash": 1282934989 }], "isPlaylist": false, "challenges": [], "optionalUnlockStrings": [], "inheritFromFreeRoam": false, "suppressOtherRewards": false, "requirements": { "leaderRequirementLabels": [{ "displayString": "Nécessite de progresser dans la quête : « Murmures du passé »" }], "fireteamRequirementLabels": [{ "displayString": "Nécessite de progresser dans la quête : « Murmures du passé »" }, { "displayString": "Complete step 4 of the \"A Spark of Hope\" quest." }] }, "playlistItems": [], "matchmaking": { "isMatchmade": false, "minParty": 1, "maxParty": 3, "maxPlayers": 3, "requiresGuardianOath": false }, "directActivityModeHash": 1686739444, "directActivityModeType": 2, "activityModeHashes": [1686739444, 1164760493], "activityModeTypes": [2, 7], "isPvP": false, "insertionPoints": [], "activityLocationMappings": [], "hash": 3871520787, "index": 251, "redacted": false, "blacklisted": false },
-    "Destination": { "displayProperties": { "description": "Une lune de Jupiter et le dernier lieu touché par le Voyageur avant la Chute.", "name": "Io", "icon": "/img/misc/missing_icon_d2.png", "hasIcon": false }, "hash": 763066127, "index": 4, "redacted": false, "blacklisted": false },
-    "Place": { "displayProperties": { "description": "Une lune de Jupiter et le dernier lieu touché par le Voyageur avant la Chute.", "name": "Io", "icon": "/img/misc/missing_icon_d2.png", "hasIcon": false }, "hash": 763066127, "index": 4, "redacted": false, "blacklisted": false },
-    "ActivityMode": { "displayProperties": { "description": "Combien de Vex ai-je tués sans leur laisser le temps de s'expliquer ?", "name": "Histoire", "icon": "/common/destiny2_content/icons/DestinyActivityModeDefinition_5f8a923a0d0ac1e4289ae3be03f94aa2.png", "hasIcon": true }, "pgcrImage": "/img/theme/destiny/bgs/stats/banner_story_1.jpg", "modeType": 2, "activityModeCategory": 1, "isTeamBased": false, "tier": 0, "isAggregateMode": false, "parentHashes": [1164760493], "friendlyName": "story", "supportsFeedFiltering": false, "display": true, "order": 4000, "hash": 1686739444, "index": 8, "redacted": false, "blacklisted": false }
+    "Activity": {
+        "displayProperties": {
+            "description": "Examinez une Anomalie corrompue loin sous la surface d'Io.",
+            "name": "Le Murmure (Expert)",
+            "icon": "/img/misc/missing_icon_d2.png",
+            "hasIcon": false
+        },
+        "originalDisplayProperties": {
+            "description": "Examinez une Anomalie corrompue loin sous la surface d'Io.",
+            "name": "Le Murmure (Expert)",
+            "icon": "/img/misc/missing_icon_d2.png",
+            "hasIcon": false
+        },
+        "selectionScreenDisplayProperties": {
+            "description": "Examinez une Anomalie corrompue loin sous la surface d'Io.",
+            "name": "Expert",
+            "hasIcon": false
+        },
+        "releaseIcon": "/img/misc/missing_icon_d2.png",
+        "releaseTime": 0,
+        "completionUnlockHash": 0,
+        "activityLightLevel": 2010,
+        "destinationHash": 763066127,
+        "placeHash": 763066127,
+        "activityTypeHash": 1686739444,
+        "tier": -1,
+        "pgcrImage": "/img/destiny_content/pgcr/whisper.jpg",
+        "rewards": [{
+            "rewardItems": [{
+                "itemHash": 1983149589,
+                "quantity": 1,
+                "hasConditionalVisibility": false
+            }]
+        }, {
+            "rewardItems": [{
+                "itemHash": 2732814938,
+                "quantity": 1,
+                "hasConditionalVisibility": false
+            }]
+        }],
+        "modifiers": [{ "activityModifierHash": 2290945089 }, { "activityModifierHash": 1783825372 }, { "activityModifierHash": 1602614337 }, { "activityModifierHash": 998275325 }, { "activityModifierHash": 186409259 }, { "activityModifierHash": 3517267764 }, { "activityModifierHash": 3652821947 }, { "activityModifierHash": 1282934989 }],
+        "isPlaylist": false,
+        "challenges": [],
+        "optionalUnlockStrings": [],
+        "inheritFromFreeRoam": false,
+        "suppressOtherRewards": false,
+        "requirements": {
+            "leaderRequirementLabels": [{ "displayString": "Nécessite de progresser dans la quête : « Murmures du passé »" }],
+            "fireteamRequirementLabels": [{ "displayString": "Nécessite de progresser dans la quête : « Murmures du passé »" }, { "displayString": "Complete step 4 of the \"A Spark of Hope\" quest." }]
+        },
+        "playlistItems": [],
+        "matchmaking": {
+            "isMatchmade": false,
+            "minParty": 1,
+            "maxParty": 3,
+            "maxPlayers": 3,
+            "requiresGuardianOath": false
+        },
+        "directActivityModeHash": 1686739444,
+        "directActivityModeType": 2,
+        "activityModeHashes": [1686739444, 1164760493],
+        "activityModeTypes": [2, 7],
+        "isPvP": false,
+        "insertionPoints": [],
+        "activityLocationMappings": [],
+        "hash": 3871520787,
+        "index": 251,
+        "redacted": false,
+        "blacklisted": false
+    },
+    "Destination": {
+        "displayProperties": {
+            "description": "Une lune de Jupiter et le dernier lieu touché par le Voyageur avant la Chute.",
+            "name": "Io",
+            "icon": "/img/misc/missing_icon_d2.png",
+            "hasIcon": false
+        },
+        "hash": 763066127,
+        "index": 4,
+        "redacted": false,
+        "blacklisted": false
+    },
+    "Place": {
+        "displayProperties": {
+            "description": "Une lune de Jupiter et le dernier lieu touché par le Voyageur avant la Chute.",
+            "name": "Io",
+            "icon": "/img/misc/missing_icon_d2.png",
+            "hasIcon": false
+        },
+        "hash": 763066127,
+        "index": 4,
+        "redacted": false,
+        "blacklisted": false
+    },
+    "ActivityMode": {
+        "displayProperties": {
+            "description": "Combien de Vex ai-je tués sans leur laisser le temps de s'expliquer ?",
+            "name": "Histoire",
+            "icon": "/common/destiny2_content/icons/DestinyActivityModeDefinition_5f8a923a0d0ac1e4289ae3be03f94aa2.png",
+            "hasIcon": true
+        },
+        "pgcrImage": "/img/theme/destiny/bgs/stats/banner_story_1.jpg",
+        "modeType": 2,
+        "activityModeCategory": 1,
+        "isTeamBased": false,
+        "tier": 0,
+        "isAggregateMode": false,
+        "parentHashes": [1164760493],
+        "friendlyName": "story",
+        "supportsFeedFiltering": false,
+        "display": true,
+        "order": 4000,
+        "hash": 1686739444,
+        "index": 8,
+        "redacted": false,
+        "blacklisted": false
+    }
 }
 
 const SOCIAL_XUR = {
-    "Activity": { "displayProperties": { "description": "Voyagez jusqu'au Magot de Xûr", "name": "Magot de Xûr", "icon": "/common/destiny2_content/icons/9b8a4c7a07890778b929654716010b39.png", "hasIcon": true }, "originalDisplayProperties": { "description": "Voyagez jusqu'au Magot de Xûr", "name": "Magot de Xûr", "icon": "/img/misc/missing_icon_d2.png", "hasIcon": false }, "releaseIcon": "/img/misc/missing_icon_d2.png", "releaseTime": 0, "completionUnlockHash": 0, "activityLightLevel": 0, "destinationHash": 1449984089, "placeHash": 1449984089, "activityTypeHash": 951708808, "tier": 1, "pgcrImage": "/img/theme/destiny/bgs/pgcrs/placeholder.jpg", "rewards": [], "modifiers": [], "isPlaylist": false, "challenges": [], "optionalUnlockStrings": [], "inheritFromFreeRoam": false, "suppressOtherRewards": false, "playlistItems": [], "matchmaking": { "isMatchmade": false, "minParty": 1, "maxParty": 6, "maxPlayers": 6, "requiresGuardianOath": false }, "directActivityModeHash": 3497767639, "directActivityModeType": 6, "activityModeHashes": [3497767639, 1164760493], "activityModeTypes": [6, 7], "isPvP": false, "insertionPoints": [], "activityLocationMappings": [], "hash": 2565561509, "index": 201, "redacted": false, "blacklisted": false },
-    "Destination": { "displayProperties": { "description": "Une étrange dimension de poche où plusieurs réalités du paravers convergent et se chevauchent.", "name": "Espace inconnu", "icon": "/img/misc/missing_icon_d2.png", "hasIcon": false }, "hash": 1449984089, "index": 20, "redacted": false, "blacklisted": false },
-    "Place": { "displayProperties": { "description": "Une étrange dimension de poche où plusieurs réalités du paravers convergent et se chevauchent.", "name": "Espace inconnu", "icon": "/img/misc/missing_icon_d2.png", "hasIcon": false }, "hash": 1449984089, "index": 20, "redacted": false, "blacklisted": false },
-    "ActivityMode": { "displayProperties": { "description": "Statistiques pour ces moments où vous parcourez les planètes en cherchant l'amour. Enfin, je parle de Patrouilles, d'Aventures... Peu importe le nom que leur donnent les jeunes aujourd'hui.", "name": "Exploration", "icon": "/common/destiny2_content/icons/DestinyActivityModeDefinition_0aa1d7b0e0ac2c6820036b6b3dde3e5b.png", "hasIcon": true }, "pgcrImage": "/img/theme/destiny/bgs/stats/banner_patrol_1.jpg", "modeType": 6, "activityModeCategory": 1, "isTeamBased": false, "tier": 0, "isAggregateMode": false, "parentHashes": [1164760493], "friendlyName": "patrol", "supportsFeedFiltering": false, "display": true, "order": 5000, "hash": 3497767639, "index": 3, "redacted": false, "blacklisted": false }
+    "Activity": {
+        "displayProperties": {
+            "description": "Voyagez jusqu'au Magot de Xûr",
+            "name": "Magot de Xûr",
+            "icon": "/common/destiny2_content/icons/9b8a4c7a07890778b929654716010b39.png",
+            "hasIcon": true
+        },
+        "originalDisplayProperties": {
+            "description": "Voyagez jusqu'au Magot de Xûr",
+            "name": "Magot de Xûr",
+            "icon": "/img/misc/missing_icon_d2.png",
+            "hasIcon": false
+        },
+        "releaseIcon": "/img/misc/missing_icon_d2.png",
+        "releaseTime": 0,
+        "completionUnlockHash": 0,
+        "activityLightLevel": 0,
+        "destinationHash": 1449984089,
+        "placeHash": 1449984089,
+        "activityTypeHash": 951708808,
+        "tier": 1,
+        "pgcrImage": "/img/theme/destiny/bgs/pgcrs/placeholder.jpg",
+        "rewards": [],
+        "modifiers": [],
+        "isPlaylist": false,
+        "challenges": [],
+        "optionalUnlockStrings": [],
+        "inheritFromFreeRoam": false,
+        "suppressOtherRewards": false,
+        "playlistItems": [],
+        "matchmaking": {
+            "isMatchmade": false,
+            "minParty": 1,
+            "maxParty": 6,
+            "maxPlayers": 6,
+            "requiresGuardianOath": false
+        },
+        "directActivityModeHash": 3497767639,
+        "directActivityModeType": 6,
+        "activityModeHashes": [3497767639, 1164760493],
+        "activityModeTypes": [6, 7],
+        "isPvP": false,
+        "insertionPoints": [],
+        "activityLocationMappings": [],
+        "hash": 2565561509,
+        "index": 201,
+        "redacted": false,
+        "blacklisted": false
+    },
+    "Destination": {
+        "displayProperties": {
+            "description": "Une étrange dimension de poche où plusieurs réalités du paravers convergent et se chevauchent.",
+            "name": "Espace inconnu",
+            "icon": "/img/misc/missing_icon_d2.png",
+            "hasIcon": false
+        },
+        "hash": 1449984089,
+        "index": 20,
+        "redacted": false,
+        "blacklisted": false
+    },
+    "Place": {
+        "displayProperties": {
+            "description": "Une étrange dimension de poche où plusieurs réalités du paravers convergent et se chevauchent.",
+            "name": "Espace inconnu",
+            "icon": "/img/misc/missing_icon_d2.png",
+            "hasIcon": false
+        },
+        "hash": 1449984089,
+        "index": 20,
+        "redacted": false,
+        "blacklisted": false
+    },
+    "ActivityMode": {
+        "displayProperties": {
+            "description": "Statistiques pour ces moments où vous parcourez les planètes en cherchant l'amour. Enfin, je parle de Patrouilles, d'Aventures... Peu importe le nom que leur donnent les jeunes aujourd'hui.",
+            "name": "Exploration",
+            "icon": "/common/destiny2_content/icons/DestinyActivityModeDefinition_0aa1d7b0e0ac2c6820036b6b3dde3e5b.png",
+            "hasIcon": true
+        },
+        "pgcrImage": "/img/theme/destiny/bgs/stats/banner_patrol_1.jpg",
+        "modeType": 6,
+        "activityModeCategory": 1,
+        "isTeamBased": false,
+        "tier": 0,
+        "isAggregateMode": false,
+        "parentHashes": [1164760493],
+        "friendlyName": "patrol",
+        "supportsFeedFiltering": false,
+        "display": true,
+        "order": 5000,
+        "hash": 3497767639,
+        "index": 3,
+        "redacted": false,
+        "blacklisted": false
+    }
 }
 
 const IN_ORBIT = {
@@ -1710,9 +2291,7 @@ const NIGHTFALL_GRAND_MASTER_PROVING_GROUNDS = {
                 { displayString: "Reach Power Level 800" }
             ],
             fireteamRequirementLabels: [
-                {
-                    displayString: "Nécessite Destiny 2 : Au-delà de la Lumière"
-                },
+                { displayString: "Nécessite Destiny 2 : Au-delà de la Lumière" },
                 {
                     displayString:
                         "La difficulté Grand-maître en Nuit noire sera disponible après la troisième semaine de l'épisode."
@@ -1942,9 +2521,7 @@ const NIGHTFALL_EXPERT_PROVING_GROUNDS = {
                 { displayString: "Reach Power Level 800" }
             ],
             fireteamRequirementLabels: [
-                {
-                    displayString: "Nécessite Destiny 2 : Au-delà de la Lumière"
-                },
+                { displayString: "Nécessite Destiny 2 : Au-delà de la Lumière" },
                 {
                     displayString:
                         "Tous les membres de l'escouade doivent avoir au moins {var:1986309345} de Puissance pour participer à cette activité."
@@ -2383,7 +2960,11 @@ const ONSLAUGHT_EXPERT_VOSTOK = {
         blacklisted: false
     },
     Destination: {
-        displayProperties: { description: "", name: "Terre", hasIcon: false },
+        displayProperties: {
+            description: "",
+            name: "Terre",
+            hasIcon: false
+        },
         placeHash: 3747705955,
         defaultFreeroamActivityHash: 0,
         activityGraphEntries: [],
@@ -2759,7 +3340,11 @@ const CARNAGE_PRIVE = {
         blacklisted: false
     },
     Destination: {
-        displayProperties: { description: "", name: "", hasIcon: false },
+        displayProperties: {
+            description: "",
+            name: "",
+            hasIcon: false
+        },
         placeHash: 4088006058,
         defaultFreeroamActivityHash: 0,
         activityGraphEntries: [],
@@ -2805,6 +3390,109 @@ const CARNAGE_PRIVE = {
         index: 38,
         redacted: false,
         blacklisted: false
+    }
+}
+
+const GAMBIT_MARS = {
+    "Activity": {
+        "displayProperties": {
+            "description": "Bassin d'Hellas, Mars",
+            "name": "Nouvelle Arcadia",
+            "icon": "/img/misc/missing_icon_d2.png",
+            "hasIcon": false
+        },
+        "originalDisplayProperties": {
+            "description": "Bassin d'Hellas, Mars",
+            "name": "Nouvelle Arcadia",
+            "icon": "/img/misc/missing_icon_d2.png",
+            "hasIcon": false
+        },
+        "releaseIcon": "/img/misc/missing_icon_d2.png",
+        "releaseTime": 0,
+        "completionUnlockHash": 0,
+        "activityLightLevel": 0,
+        "destinationHash": 1756262061,
+        "placeHash": 248695599,
+        "activityTypeHash": 248695599,
+        "tier": -1,
+        "pgcrImage": "/img/destiny_content/pgcr/gambit_hold.jpg",
+        "rewards": [],
+        "modifiers": [],
+        "isPlaylist": false,
+        "challenges": [],
+        "optionalUnlockStrings": [],
+        "inheritFromFreeRoam": false,
+        "suppressOtherRewards": false,
+        "playlistItems": [],
+        "matchmaking": {
+            "isMatchmade": false,
+            "minParty": 1,
+            "maxParty": 4,
+            "maxPlayers": 8,
+            "requiresGuardianOath": false
+        },
+        "directActivityModeHash": 1848252830,
+        "directActivityModeType": 63,
+        "activityModeHashes": [1848252830, 2449176354],
+        "activityModeTypes": [63, 64],
+        "isPvP": false,
+        "insertionPoints": [],
+        "activityLocationMappings": [],
+        "hash": 1855216675,
+        "index": 563,
+        "redacted": false,
+        "blacklisted": false
+    },
+    "Destination": {
+        "displayProperties": {
+            "description": "",
+            "name": "",
+            "hasIcon": false
+        },
+        "placeHash": 248695599,
+        "defaultFreeroamActivityHash": 0,
+        "activityGraphEntries": [],
+        "bubbleSettings": [],
+        "bubbles": [],
+        "hash": 1756262061,
+        "index": 46,
+        "redacted": false,
+        "blacklisted": false
+    },
+    "Place": {
+        "displayProperties": {
+            "description": "Traquez des ennemis dans des zones de guerre en activité. Affrontez de grands périls. Soyez craints.",
+            "name": "Le Gambit",
+            "icon": "/img/misc/missing_icon_d2.png",
+            "hasIcon": false
+        },
+        "hash": 248695599,
+        "index": 13,
+        "redacted": false,
+        "blacklisted": false
+    },
+    "ActivityMode": {
+        "displayProperties": {
+            "description": "Tuez des ennemis, déposez des particules, et perturbez l'équipe adverse.",
+            "name": "Le Gambit",
+            "icon": "/common/destiny2_content/icons/DestinyActivityModeDefinition_96f7e9009d4f26e30cfd60564021925e.png",
+            "hasIcon": true
+        },
+        "pgcrImage": "/img/theme/destiny/bgs/stats/banner_crucible_1.jpg",
+        "modeType": 63,
+        "activityModeCategory": 3,
+        "isTeamBased": true,
+        "tier": 0,
+        "isAggregateMode": false,
+        "parentHashes": [2449176354],
+        "friendlyName": "pvecomp_gambit",
+        "supportsFeedFiltering": false,
+        "display": true,
+        "order": 5000,
+        "hash": 1848252830,
+        "index": 52,
+        "redacted": false,
+        "blacklisted": false
     }
 }
 
@@ -2873,7 +3561,7 @@ describe("Activity Tests", () => {
                 ACTIVITY.Place,
                 ACTIVITY.ActivityMode
             )
-            expect(chapterText).toStrictEqual("Offensive - Expert : Vostok - Agression - Terre")
+            expect(chapterText).toStrictEqual("Offensive - Agression - Expert : Vostok")
         })
 
         it("ASSAULT_HEIST_BATTLEGROUND_EUROPA", () => {
@@ -2983,7 +3671,7 @@ describe("Activity Tests", () => {
                 ACTIVITY.Place,
                 ACTIVITY.ActivityMode as any
             )
-            expect(chapterText).toStrictEqual("Offensive - La Source : Défense - La Source - Cour de Savathûn, monde du trône")
+            expect(chapterText).toStrictEqual("Offensive - La Source : Défense")
         })
 
         it("AGGRESSION_DU_SALUT", () => {
@@ -3006,6 +3694,72 @@ describe("Activity Tests", () => {
                 ACTIVITY.ActivityMode as any
             )
             expect(chapterText).toStrictEqual("L'Épreuve - Carnage - Chute de l'étendard")
+        })
+
+        it("RAID_CAVEAU_VERRE", () => {
+            const ACTIVITY = RAID_CAVEAU_VERRE
+            const chapterText = Activities.computeChapterText(
+                ACTIVITY.Activity,
+                ACTIVITY.Destination,
+                ACTIVITY.Place,
+                ACTIVITY.ActivityMode as any
+            )
+            expect(chapterText).toStrictEqual("Raid - Le Caveau de verre - Standard - Vénus")
+        })
+
+        it("DUNGEON_PROPHECY", () => {
+            const ACTIVITY = DUNGEON_PROPHECY
+            const chapterText = Activities.computeChapterText(
+                ACTIVITY.Activity,
+                ACTIVITY.Destination,
+                ACTIVITY.Place,
+                ACTIVITY.ActivityMode as any
+            )
+            expect(chapterText).toStrictEqual("Donjon - Prophétie - Royaume des IX")
+        })
+
+        it("EXOTIC_MISSION_WHISPER_WORM_STANDARD", () => {
+            const ACTIVITY = EXOTIC_MISSION_WHISPER_WORM_STANDARD
+            const chapterText = Activities.computeChapterText(
+                ACTIVITY.Activity,
+                ACTIVITY.Destination,
+                ACTIVITY.Place,
+                ACTIVITY.ActivityMode as any
+            )
+            expect(chapterText).toStrictEqual("Histoire - Le Murmure - Standard - Io")
+        })
+
+        it("EXOTIC_MISSION_WHISPER_WORK_EXPERT", () => {
+            const ACTIVITY = EXOTIC_MISSION_WHISPER_WORK_EXPERT
+            const chapterText = Activities.computeChapterText(
+                ACTIVITY.Activity,
+                ACTIVITY.Destination,
+                ACTIVITY.Place,
+                ACTIVITY.ActivityMode as any
+            )
+            expect(chapterText).toStrictEqual("Histoire - Le Murmure (Expert) - Expert - Io")
+        })
+
+        it("SOCIAL_XUR", () => {
+            const ACTIVITY = SOCIAL_XUR
+            const chapterText = Activities.computeChapterText(
+                ACTIVITY.Activity,
+                ACTIVITY.Destination,
+                ACTIVITY.Place,
+                ACTIVITY.ActivityMode as any
+            )
+            expect(chapterText).toStrictEqual("Exploration - Magot de Xûr - Espace inconnu")
+        })
+
+        it("GAMBIT_MARS", () => {
+            const ACTIVITY = GAMBIT_MARS
+            const chapterText = Activities.computeChapterText(
+                ACTIVITY.Activity,
+                ACTIVITY.Destination,
+                ACTIVITY.Place,
+                ACTIVITY.ActivityMode as any
+            )
+            expect(chapterText).toStrictEqual("Le Gambit - Nouvelle Arcadia - Bassin d'Hellas, Mars")
         })
     })
 })

@@ -115,9 +115,7 @@ export class Bounties {
 
     static async fetchAllCharactersBounties(q: RWC) {
         const info = await this.fetchData(q) || { characters: {} }
-        const data: AllCharacters = {
-            characters: []
-        }
+        const data: AllCharacters = {characters: []}
 
         for (const characterId of Object.keys(info.characters)) {
 
@@ -129,7 +127,7 @@ export class Bounties {
     }
 }
 
-export type fetchedData = {
+export interface fetchedData {
     inventories: any
     characters: any
     objectives: any

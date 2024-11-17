@@ -2,15 +2,15 @@
 <html>
 {{> header}}
 <body style="background-color:{{backgroundColor}}">
+{{#ws}}{{> websocket}}{{/ws}}
+{{#ws}}{{> cookies}}{{/ws}}
 <div>
 <span style="margin:5px">
 </span>
+{{started}} -> {{chapterName}}
+{{#debug}}
     <ul>
         <li>
-            <ul>
-            {{started}} -> {{chapterName}}
-            </ul>
-            {{#debug}}
             <ul>
             "Activity" : {{at}},
             </ul>
@@ -23,9 +23,22 @@
             <ul>
             "ActivityMode" : {{mt}}
             </ul>
-            {{/debug}}
         </li>
     </ul>
+{{/debug}}
 </div>
+{{#ws}}
+<script>
+function toSendData(){
+    const lastChangeActivity = getCookie("lastChangeActivity")
+    const timestampActivity = "{{started}}"
+    const chapterName = "{{chapterName}}"
+    if (lastChangeActivity !== timestampActivity && chapterName.trim() !== ""){
+        setCookie("lastChangeActivity",timestampActivity)
+        sendTextToTwitch(`!chapter ${chapterName}|${timestampActivity}`)
+    }
+}
+</script>
+{{/ws}}
 </body>
 </html>
