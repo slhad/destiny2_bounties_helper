@@ -32,7 +32,7 @@
 function toSendData(){
     const lastChangeActivity = getCookie("lastChangeActivity")
     const timestampActivity = "{{started}}"
-    const chapterName = "{{chapterName}}"
+    const chapterName = "{{chapterName}}".replaceAll('&#39;',"'")
     if (lastChangeActivity !== timestampActivity && chapterName.trim() !== ""){
         setCookie("lastChangeActivity",timestampActivity)
         sendTextToTwitch(`!chapter ${chapterName}|${timestampActivity}`)
