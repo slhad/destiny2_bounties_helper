@@ -53,7 +53,11 @@ class Manifest {
     t(hash: string, lang = Lang.EN) {
         try {
             for (const definition of this.definitions) {
-                const defined = this.tables[definition][lang][hash]
+                const defO = this.tables[definition]
+                if (!defO) continue
+                const defLO = defO[lang]
+                if (!defLO) continue
+                const defined = defLO[hash]
                 if (defined) {
                     return defined
                 }
@@ -61,6 +65,7 @@ class Manifest {
         } catch (e) {
             return hash
         }
+        return hash
     }
 }
 
