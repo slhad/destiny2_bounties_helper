@@ -143,9 +143,9 @@ export class Activities {
 
         }
 
-        const mainActivity = activity.displayProperties.name !== "" ? activity.displayProperties.name : destination.displayProperties.name
-        const locationActivity = destination.displayProperties.name !== mainActivity ? ` - ${destination.displayProperties.name}` : ""
-        const placeActivity = destination.displayProperties.name !== place.displayProperties.name ? ` - ${place.displayProperties.name}` : ""
+        const mainActivity = activity.displayProperties?.name !== "" ? activity.displayProperties?.name : destination.displayProperties?.name
+        const locationActivity = destination.displayProperties?.name !== mainActivity ? ` - ${destination.displayProperties?.name}` : ""
+        const placeActivity = destination.displayProperties?.name !== place.displayProperties?.name ? ` - ${place.displayProperties?.name}` : ""
         return `${mainActivity}${placeActivity}${locationActivity}`
     }
 }
