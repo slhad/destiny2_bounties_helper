@@ -105,48 +105,80 @@ export class Activities {
         place: BaseDefinition,
         activityMode: ActivityMode
     ) {
+        const chapterText: string[] = []
         if (activityMode?.displayProperties?.name) {
 
-
-            if (activityMode.modeType === ActivityModeType.GAMBIT) {
-                return `${activityMode.displayProperties.name} - ${activity.displayProperties.name} - ${activity.displayProperties.description}`
-            }
-
-            if ([ActivityModeType.SCORED_HEROIC_NIGHTFALL, ActivityModeType.SCORED_NIGHTFALL].includes(activity.directActivityModeType as ActivityModeType)) {
-                return `${activity.originalDisplayProperties?.name} - ${activity.displayProperties.description} - ${activity.selectionScreenDisplayProperties?.name} - ${destination.displayProperties.name}`
-            }
-
-            if (activityMode.modeType === ActivityModeType.OFFENSIVE) {
-
-                if (activity.originalDisplayProperties?.name.includes(activity.selectionScreenDisplayProperties?.name || "")) {
-                    return `${activityMode.displayProperties.name} - ${activity.originalDisplayProperties?.name}`
+            switch (true) {
+                case activityMode.modeType === ActivityModeType.GAMBIT: {
+                    chapterText.push(
+                        activityMode.displayProperties.name,
+                        activity.displayProperties.name,
+                        activity.displayProperties.description
+                    )
+                    break
                 }
-                return `${activityMode.displayProperties.name} - ${activity.selectionScreenDisplayProperties?.name} - ${activity.originalDisplayProperties?.name}`
+                case [ActivityModeType.SCORED_HEROIC_NIGHTFALL, ActivityModeType.SCORED_NIGHTFALL].includes(activity.directActivityModeType as ActivityModeType): {
+                    chapterText.push(
+                        activity.originalDisplayProperties?.name ?? "",
+                        activity.displayProperties.description,
+                        activity.selectionScreenDisplayProperties?.name ?? "",
+                        destination.displayProperties.name
+                    )
+                    break
+                }
+                case activityMode.modeType === ActivityModeType.OFFENSIVE: {
+                    chapterText.push(activityMode.displayProperties.name)
+                    if (activity.originalDisplayProperties?.name.includes(activity.selectionScreenDisplayProperties?.name || "")) {
+                        chapterText.push(activity.originalDisplayProperties?.name)
+                    } else {
+                        chapterText.push(
+                            activity.selectionScreenDisplayProperties?.name ?? "",
+                            activity.originalDisplayProperties?.name ?? ""
+                        )
+                    } break
+                }
+                case !!activity.selectionScreenDisplayProperties?.name: {
+                    chapterText.push(
+                        activityMode.displayProperties.name,
+                        activity.originalDisplayProperties?.name ?? "",
+                        activity.selectionScreenDisplayProperties.name ?? "",
+                        place.displayProperties.name
+                    )
+                    break
+                }
+                case activityMode.modeType === ActivityModeType.SOCIAL: {
+                    chapterText.push(
+                        activityMode.displayProperties.name,
+                        activity.displayProperties?.name
+                    )
+                    break
+                }
+                case activity.isPvP: {
+                    chapterText.push(
+                        place.displayProperties.name,
+                        activityMode.displayProperties.name,
+                        activity.displayProperties.name
+                    )
+                    break
+                }
+                default:
+                    chapterText.push(
+                        activityMode.displayProperties.name,
+                        activity.displayProperties.name,
+                        destination.displayProperties.name
+                    )
             }
-
-            if (activity.selectionScreenDisplayProperties?.name) {
-                return `${activityMode.displayProperties.name} - ${activity.originalDisplayProperties?.name} - ${activity.selectionScreenDisplayProperties?.name} - ${place.displayProperties.name}`
-            }
-
-            if (activityMode.modeType === ActivityModeType.SOCIAL) {
-                return `${activityMode.displayProperties.name} - ${activity.displayProperties.name}`
-
-            }
-
-            if (activity.isPvP) {
-                return `${place.displayProperties.name} - ${activityMode.displayProperties.name} - ${activity.displayProperties.name}`
-            }
-
-
-
-            return `${activityMode.displayProperties.name} - ${activity.displayProperties.name} - ${destination.displayProperties.name}`
-
+        } else {
+            const mainActivity = activity.displayProperties?.name !== "" ? activity.displayProperties?.name : destination.displayProperties?.name
+            chapterText.push(
+                mainActivity,
+                destination.displayProperties?.name !== mainActivity ? destination.displayProperties?.name : "",
+                destination.displayProperties?.name !== place.displayProperties?.name ? place.displayProperties?.name : ""
+            )
         }
 
-        const mainActivity = activity.displayProperties?.name !== "" ? activity.displayProperties?.name : destination.displayProperties?.name
-        const locationActivity = destination.displayProperties?.name !== mainActivity ? ` - ${destination.displayProperties?.name}` : ""
-        const placeActivity = destination.displayProperties?.name !== place.displayProperties?.name ? ` - ${place.displayProperties?.name}` : ""
-        return `${mainActivity}${placeActivity}${locationActivity}`
+
+        return chapterText.filter(a => typeof a === "string").filter(a => a.trim() !== "").join(" - ")
     }
 }
 
