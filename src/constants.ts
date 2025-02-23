@@ -118,7 +118,11 @@ export const mergeDataWOpts = (
             }
         }
     }
-    return { ...{ partials }, ...variables, ...data }
+    return {
+        ...{ partials },
+        ...variables,
+        ...data
+    }
 }
 
 export const sortByLastPlayed = (a: any, b: any) => {
@@ -134,4 +138,70 @@ export const findItemComponentObjective = (objectivesMap: any, ichash: string, o
     return objectives.find((objective: any) => {
         return objectiveHashes.find(hash => objective.objectiveHash === hash)
     })
+}
+
+export const cleanDuplicate = (arr: string[]) => {
+    if (!arr) {
+        return []
+    }
+
+    if (arr.length < 2) {
+        return arr
+    }
+
+    let reCheck = false, iLeft = 0, iRight = 1
+    do {
+        const { result, changed } = removeTooMuchData(arr[iLeft], arr[iRight])
+        reCheck = changed
+        if (changed) {
+            if (result.length === 1) {
+                arr.splice(iRight, 1)
+                arr.splice(iLeft, 1, ...result)
+            }
+        }
+        const lastCheck = iLeft === arr.length - 2 && iRight === arr.length - 1
+        if (!changed && !lastCheck) {
+            if (iRight >= arr.length - 1) {
+                iLeft++
+                iRight = iLeft + 1
+            } else {
+                iRight++
+            }
+            reCheck = true
+        }
+
+        if (changed && iRight === arr.length) {
+            iRight--
+            if (iLeft === iRight) {
+                iLeft--
+            }
+        }
+
+        if (lastCheck) {
+            reCheck = false
+        }
+
+    } while (reCheck)
+    return arr
+}
+
+export const removeTooMuchData = (left: string, right: string) => {
+    let changed = false
+    const result = []
+    switch (true) {
+        case (left === right):
+        case left.includes(right):
+            changed = true
+            result.push(left)
+            break
+        case right.includes(left):
+            result.push(right)
+            changed = true
+            break
+    }
+
+    return {
+        changed,
+        result
+    }
 }
