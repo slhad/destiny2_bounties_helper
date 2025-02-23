@@ -3737,7 +3737,7 @@ describe("Activity Tests", () => {
                 ACTIVITY.Place,
                 ACTIVITY.ActivityMode as any
             )
-            expect(chapterText).toStrictEqual("Histoire - Le Murmure (Expert) - Expert - Io")
+            expect(chapterText).toStrictEqual("Histoire - Le Murmure (Expert) - Io")
         })
 
         it("SOCIAL_XUR", () => {

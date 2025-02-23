@@ -1,5 +1,5 @@
 import { getActivity, getCookies } from "./api"
-import { RWC, sortByLastPlayed } from "./constants"
+import { cleanDuplicate, RWC, sortByLastPlayed } from "./constants"
 import manifest, { Lang } from "./manifest"
 
 export class Activities {
@@ -178,7 +178,8 @@ export class Activities {
         }
 
 
-        return chapterText.filter(a => typeof a === "string").filter(a => a.trim() !== "").join(" - ")
+        const cleanChapters = chapterText.filter(a => typeof a === "string").filter(a => a.trim() !== "")
+        return cleanDuplicate(cleanChapters).join(" - ")
     }
 }
 
