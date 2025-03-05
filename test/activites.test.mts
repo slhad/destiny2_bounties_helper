@@ -3121,6 +3121,168 @@ const ASSAULT_HEIST_BATTLEGROUND_EUROPA = {
     ActivityMode: {}
 }
 
+const NIGTHFALL_ADVANCED_HEIST_BATTLEGROUND_MARS = {
+    "Activity": {
+        "displayProperties": {
+            "description": "Champ de bataille Braquage : Mars",
+            "name": "Nuit noire: Avancé",
+            "icon": "/common/destiny2_content/icons/3642cf9e2acd174dcab5b5f9e3a3a45d.png",
+            "hasIcon": true
+        },
+        "originalDisplayProperties": {
+            "description": "Champ de bataille Braquage : Mars",
+            "name": "Nuit noire",
+            "icon": "/img/misc/missing_icon_d2.png",
+            "hasIcon": false
+        },
+        "selectionScreenDisplayProperties": {
+            "description": "Faites progresser vos compétences pour réussir.\n\nMatchmaking : OUI",
+            "name": "Avancé",
+            "hasIcon": false
+        },
+        "releaseIcon": "/img/misc/missing_icon_d2.png",
+        "releaseTime": 0,
+        "completionUnlockHash": 0,
+        "activityLightLevel": 0,
+        "destinationHash": 2527054255,
+        "placeHash": 2527054255,
+        "activityTypeHash": 575572995,
+        "tier": -1,
+        "pgcrImage": "/img/destiny_content/pgcr/season_19_battleground_polaris.jpg",
+        "rewards": [{
+            "rewardItems": [{
+                "itemHash": 2791741337,
+                "quantity": 0,
+                "hasConditionalVisibility": false
+            }, {
+                "itemHash": 3710069945,
+                "quantity": 0,
+                "hasConditionalVisibility": false
+            }, {
+                "itemHash": 2422680742,
+                "quantity": 0,
+                "hasConditionalVisibility": false
+            }, {
+                "itemHash": 3959886874,
+                "quantity": 0,
+                "hasConditionalVisibility": false
+            }]
+        }],
+        "modifiers": [{ "activityModifierHash": 1651706850 }, { "activityModifierHash": 2288210988 }, { "activityModifierHash": 4226469317 }, { "activityModifierHash": 3240131679 }, { "activityModifierHash": 1783825372 }, { "activityModifierHash": 1783825372 }, { "activityModifierHash": 438106166 }, { "activityModifierHash": 1806568190 }, { "activityModifierHash": 3517267764 }, { "activityModifierHash": 795009574 }, { "activityModifierHash": 745014575 }, { "activityModifierHash": 1171597537 }, { "activityModifierHash": 1783825372 }, { "activityModifierHash": 2691200658 }, { "activityModifierHash": 3196075844 }, { "activityModifierHash": 3810297122 }, { "activityModifierHash": 1783825372 }, { "activityModifierHash": 1783825372 }, { "activityModifierHash": 1783825372 }, { "activityModifierHash": 941999846 }, { "activityModifierHash": 2208550513 }, { "activityModifierHash": 2139004924 }, { "activityModifierHash": 1553444357 }, { "activityModifierHash": 1783825372 }],
+        "isPlaylist": false,
+        "challenges": [{
+            "rewardSiteHash": 0,
+            "inhibitRewardsUnlockHash": 0,
+            "objectiveHash": 1612424695,
+            "dummyRewards": [{
+                "itemHash": 73143230,
+                "quantity": 0,
+                "hasConditionalVisibility": false
+            }]
+        }, {
+            "rewardSiteHash": 0,
+            "inhibitRewardsUnlockHash": 0,
+            "objectiveHash": 1542299784,
+            "dummyRewards": [{
+                "itemHash": 2643364263,
+                "quantity": 0,
+                "hasConditionalVisibility": false
+            }]
+        }, {
+            "rewardSiteHash": 0,
+            "inhibitRewardsUnlockHash": 0,
+            "objectiveHash": 3794117631,
+            "dummyRewards": [{
+                "itemHash": 2643364263,
+                "quantity": 0,
+                "hasConditionalVisibility": false
+            }]
+        }, {
+            "rewardSiteHash": 0,
+            "inhibitRewardsUnlockHash": 0,
+            "objectiveHash": 1270593510,
+            "dummyRewards": [{
+                "itemHash": 2643364263,
+                "quantity": 0,
+                "hasConditionalVisibility": false
+            }]
+        }],
+        "optionalUnlockStrings": [],
+        "inheritFromFreeRoam": false,
+        "suppressOtherRewards": false,
+        "requirements": {
+            "leaderRequirementLabels": [{ "displayString": "PlayStation®Plus Required" }, { "displayString": "Xbox Live Gold Required" }, { "displayString": "" }, { "displayString": "" }, { "displayString": "Reach Power Level 800" }],
+            "fireteamRequirementLabels": [{ "displayString": "Tous les membres de l'escouade doivent avoir au moins {var:1986309345} de Puissance pour participer à cette activité." }, { "displayString": "PlayStation®Plus Required" }, { "displayString": "Xbox Live Gold Required" }, { "displayString": "" }, { "displayString": "" }, { "displayString": "Complete step 4 of the \"A Spark of Hope\" quest." }]
+        },
+        "playlistItems": [],
+        "matchmaking": {
+            "isMatchmade": false,
+            "minParty": 1,
+            "maxParty": 3,
+            "maxPlayers": 3,
+            "requiresGuardianOath": false
+        },
+        "directActivityModeHash": 547513715,
+        "directActivityModeType": 46,
+        "activityModeHashes": [547513715, 2394616003, 1164760493],
+        "activityModeTypes": [46, 18, 7],
+        "isPvP": false,
+        "insertionPoints": [],
+        "activityLocationMappings": [],
+        "hash": 507866985,
+        "index": 1151,
+        "redacted": false,
+        "blacklisted": false
+    },
+    "Destination": {
+        "displayProperties": {
+            "description": "Bassin d'Hellas",
+            "name": "Mars",
+            "icon": "/img/misc/missing_icon_d2.png",
+            "hasIcon": false
+        },
+        "hash": 2527054255,
+        "index": 9,
+        "redacted": false,
+        "blacklisted": false
+    },
+    "Place": {
+        "displayProperties": {
+            "description": "Bassin d'Hellas",
+            "name": "Mars",
+            "icon": "/img/misc/missing_icon_d2.png",
+            "hasIcon": false
+        },
+        "hash": 2527054255,
+        "index": 9,
+        "redacted": false,
+        "blacklisted": false
+    },
+    "ActivityMode": {
+        "displayProperties": {
+            "description": "Combien de fois sommes-nous retournés en orbite en essayant d'améliorer notre score ?",
+            "name": "Nuit noire avec score",
+            "icon": "/common/destiny2_content/icons/DestinyActivityModeDefinition_234e7e18549d5eae2ddb012f2bcb203a.png",
+            "hasIcon": true
+        },
+        "pgcrImage": "/img/theme/destiny/bgs/stats/banner_strikes_1.jpg",
+        "modeType": 46,
+        "activityModeCategory": 1,
+        "isTeamBased": false,
+        "tier": 0,
+        "isAggregateMode": false,
+        "parentHashes": [2394616003],
+        "friendlyName": "scored_nightfall",
+        "supportsFeedFiltering": false,
+        "display": true,
+        "order": 3210,
+        "hash": 547513715,
+        "index": 12,
+        "redacted": false,
+        "blacklisted": false
+    }
+}
+
 const AGGRESSION_DU_SALUT = {
     Activity: {
         displayProperties: {
@@ -3573,6 +3735,17 @@ describe("Activity Tests", () => {
                 ACTIVITY.ActivityMode as any
             )
             expect(chapterText).toStrictEqual("Heist Battleground: Europa - Rathmore Chaos, Europa")
+        })
+
+        it("NIGTHFALL_ADVANCED_HEIST_BATTLEGROUND_MARS",()=>{
+            const ACTIVITY = NIGTHFALL_ADVANCED_HEIST_BATTLEGROUND_MARS
+            const chapterText = Activities.computeChapterText(
+                ACTIVITY.Activity,
+                ACTIVITY.Destination,
+                ACTIVITY.Place,
+                ACTIVITY.ActivityMode as any
+            )
+            expect(chapterText).toStrictEqual("Nuit noire - Champ de bataille Braquage : Mars - Avancé")
         })
 
         it("STRIKE_LIGHT_BLADE", () => {
