@@ -141,7 +141,7 @@ export class Activities {
                     chapterText.push(
                         activityMode.displayProperties.name,
                         activity.originalDisplayProperties?.name ?? "",
-                        activity.selectionScreenDisplayProperties.name ?? "",
+                        activity.selectionScreenDisplayProperties?.name ?? "",
                         place.displayProperties.name
                     )
                     break
