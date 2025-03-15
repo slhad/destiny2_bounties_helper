@@ -35,7 +35,12 @@ function toSendData(){
     const chapterName = "{{chapterName}}".replaceAll('&#39;',"'")
     if (lastChangeActivity !== timestampActivity && chapterName.trim() !== ""){
         setCookie("lastChangeActivity",timestampActivity)
-        sendTextToTwitch(`!chapter ${chapterName}|${timestampActivity}`)
+        if (true){
+            sendChapterToStreamerBot(chapterName,timestampActivity)
+        }
+        if (false){
+            sendTextToTwitch(`!chapter ${chapterName}|${timestampActivity}`)
+        }
     }
 }
 </script>

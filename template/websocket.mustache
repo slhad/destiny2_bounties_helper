@@ -12,8 +12,6 @@ socket.onopen = () => {
         "events": {"Twitch":["Message"]}
     };
 
-    //const s = {"request":"Subscribe","id":"obs-chat2","events":{"Twitch":["ChatMessage","FirstWord","Announcement","UserTimedOut","UserBanned","ChatMessageDeleted"],"YouTube":["Message","MessageDeleted","UserBanned","SuperChat"]}}
-
     socket.send(JSON.stringify(s));
     console.debug(['Connected to Streamer.Bot socket:', socket]);
     setTimeout(()=>{
@@ -40,12 +38,19 @@ function sendData(args){
     const data = {
         request: 'DoAction',
         action: {
-            id: '97495e12-e3a5-4db4-8c79-11901fd8178d'
+            id: args.actionId || '97495e12-e3a5-4db4-8c79-11901fd8178d'
         },
         args,
         id: `${Date.now()}`
         };
     socket.send(JSON.stringify(data));
+}
+function  sendChapterToStreamerBot(chapterName:string,chapterTime:string){
+    sendData({
+        chapterName,
+        chapterTime,
+        actionId:"e02d7a07-8d32-491b-ac9c-81c03b801f4f"
+    })
 }
 function sendTextToTwitch(text){
     sendData({
