@@ -45,7 +45,7 @@ function sendData(args){
         };
     socket.send(JSON.stringify(data));
 }
-function  sendChapterToStreamerBot(chapterName:string,chapterTime:string){
+function  sendChapterToStreamerBot(chapterName,chapterTime){
     sendData({
         chapterName,
         chapterTime,
